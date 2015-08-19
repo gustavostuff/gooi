@@ -646,9 +646,9 @@ function gooi.draw(group)
 		love.graphics.setColor(255, 255, 255)
 	end
 
-	-- Check if a tooltip was generated:
+	-- Check if a tooltip was generated, just for desktop:
 
-	if compWithToolTip then
+	if compWithToolTip and not love.touch then
 		local disp = love.graphics.getWidth() / 100
 		local unit = component.toolTipFont:getHeight() / 5
 		love.graphics.setColor(0, 0, 0, 200)
