@@ -1,6 +1,17 @@
 ![GOOi logo](http://s16.postimg.org/4pvm3xvr9/logo.png)
 
-GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](https://love2d.org/) library which helps you to create _cute_ GUI's, it has events support (pressing, releasing and movement events). GOOi works in desktop computers as well, it currently features:
+GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](https://love2d.org/) library which helps you to create _cute_ GUI's, it has events support (pressing, releasing and movement events). GOOi works in desktop computers as well. What it offers:
+
+* Multitouch support
+* Multilingual support
+* Press and Release events (working on drag)
+* Nice and simple color and shapes
+* For spanish (or others) you can type áéíóú and ÁÉÍÓÚ on textfields, unlike Quickie (awesome GUI too!)
+* Usable on PC as well
+* Nice borders.
+* Viewport coordinates mode, useful for res-independent coords and simplify location of the components.
+
+The components supported are:
 
 * Buttons
 * Check boxes
