@@ -31,7 +31,7 @@ function love.load()
 	gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
-	gooi.newPanel("thePanel", w() / 2 - 250, h() / 2 - 150, 500, 300, "grid 10x3")
+	gooi.newPanel("thePanel", 10, 10, 500, 300, "grid 9x3")
 		:setRowspan(6, 1, 2)
 		:setColspan(6, 2, 2)
 		:add(
@@ -60,14 +60,15 @@ function love.load()
 				gooi.newButton("btn2", "Btn"),
 				gooi.newButton("btn3", "Btn")
 			),
-			gooi.newText(21, "this is editable"),
-			gooi.newText(22, "this is editable"),
 			gooi.newText(24, "this has a Tooltip"):setTooltip("A Tooltip")
 		)
 
+		-- Add component in that row, col:
+		gooi.get("thePanel"):add(gooi.newButton("btn_103", "Button in 9,2"), "9,2")
+
 
 	-- Events:
-	gooi.newCheck("chb_debug", "See grid layout"):onRelease(function(c)
+	gooi.newCheck("chb_debug", "See grid layout", 600, 10):onRelease(function(c)
 		gooi.get("thePanel").layout.debug = c.checked
 		gooi.get("panel_child").layout.debug = c.checked
 	end)

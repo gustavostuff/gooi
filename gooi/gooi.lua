@@ -694,7 +694,46 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 		local params = {...}
 		if self.layout.kind == "grid" then
 			if type(params[2]) == "string" then
+				local row = split(params[2], ",")[1]
+				local col = split(params[2], ",")[2]
+				local cell = self.layout:getCell(tonumber(row), tonumber(col))
 
+				if not cell then
+					error("Row "..row.." and Col "..col.." not defined")
+				end
+
+				local c = params[1]
+				-- Set bounds according to the parent layout:
+				c:setBounds(cell.x, cell.y, cell.w, cell.h)
+
+				-- Save child:
+				table.insert(self.childs,
+				{
+					id = c.id,
+					parentId = self.id,
+					cellRow = cell.row,
+					cellCol = cell.col
+				})
+
+				-- Joysticks are always a square or cirle:
+				if c.type == "joystick" then
+					c.w = c.smallerSide
+					c.h = c.smallerSide
+				end
+
+				if c.rebuild then c:rebuild() end
+
+				-- Set bounds to the childs:
+				if c.childs then
+					for n = 1, #c.childs do
+						local ch = c.childs[n]
+						print("child id: "..ch.id)
+						local comp = gooi.get(ch.id)
+						local cell = c.layout:getCell(ch.cellRow, ch.cellCol)
+						comp:setBounds(cell.x, cell.y, cell.w, cell.h)
+						if comp.rebuild then comp:rebuild() end
+					end
+				end
 			else
 				for i = 1, #params do
 					local c = params[i]
