@@ -24,9 +24,16 @@ THE SOFTWARE.
 
 component = {}
 component.__index = component
-component.defaultBg = {12, 183, 242, 127}
-component.defaultFg = {255, 255, 255, 255}
-component.toolTipFont = love.graphics.newFont(love.graphics.getWidth() / 75)
+component.style = {
+	bgColor = {12, 183, 242, 127},
+	fgColor = {255, 255, 255, 255},
+	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 85),
+	howRound = .5,
+	showBorder = true,
+	borderColor = {12, 183, 242},
+	borderProportion = .1,
+	font = love.graphics.newFont(love.graphics.getWidth() / 80)
+}
 
 ----------------------------------------------------------------------------
 --------------------------   Component creator  ----------------------------
@@ -43,11 +50,18 @@ function component.new(id, t, x, y, w, h, group)
 	c.visible = true
 	c.hasFocus = false
 	c.pressed = false
-	c.bgColor = component.defaultBg
-	c.fgColor = component.defaultFg
+	c.bgColor = component.style.bgColor
+	c.fgColor = component.style.fgColor
 	c.group = group or "default"
-	c.showToolTip = false
-	c.font = nil
+	c.tooltip = nil
+	c.tooltipFont = component.style.tooltipFont
+	c.timerTooltip = 0
+	c.showTooltip = false
+	function c:setTooltip(text)
+		self.tooltip = text
+		return self
+	end
+	c.font = component.style.font
 	c.touch = nil-- Stores the touch which is on this component.
 	c.opaque = true-- If false, the component base will never be drawn.
 	c.events = {p = nil, r = nil, m = nil}
@@ -63,14 +77,12 @@ function component.new(id, t, x, y, w, h, group)
 		c.events.m = f
 		return self
 	end
-	c.borderW = c.h / 15
-	c.radiusCorner = c.h / 8
-	if c.w < c.h then
-		c.borderW = c.w / 20
-		c.radiusCorner = c.w / 8
-	end
+	c.borderProportion = component.style.borderProportion
+	c.howRound = component.style.howRound
+	c.radiusCorner = c.h / 2 * c.howRound
 	-- Experimental:
-	c.showBorder = true
+	c.showBorder = component.style.showBorder
+	c.borderColor = component.style.borderColor
 	c.resCorner = 9
 	function c:setBorderRes(mode)
 		if mode == "high" then
@@ -83,11 +95,6 @@ function component.new(id, t, x, y, w, h, group)
 		end
 		return self
 	end
-	c.toolTip = nil
-	c.timerToolTip = 0
-	function c:setToolTip(text)
-		self.toolTip = text
-	end
 	function c:generateCurveCorner()
 		local t = {}
 		for i = 180, 270, self.resCorner do -- Generate left-upper arc of points:
@@ -99,6 +106,10 @@ function component.new(id, t, x, y, w, h, group)
 		return t
 	end
 	function c:generateBorder()
+		self.smallerSide = self.h
+		if self.w < self.h then self.smallerSide = self.w end 
+		self.borderWidth = component.style.borderProportion * self.smallerSide
+		self.radiusCorner = self.howRound * self.h / 2
 		-- Reset points:
 		self.ptsCorner = self:generateCurveCorner()
 		-- Generate mirror on X:
@@ -131,7 +142,7 @@ function component.new(id, t, x, y, w, h, group)
 	----------------------------------------------------------
 	--print("points of "..c.id..": "..#c.ptsCorner / 2)
 	function c:drawBorder()
-		love.graphics.setLineWidth(self.borderW)
+		love.graphics.setLineWidth(self.borderWidth)
 		if self.showBorder then
 			love.graphics.setColor(self.bgColor[1], self.bgColor[2], self.bgColor[3])
 			if not self.enabled then
@@ -140,6 +151,7 @@ function component.new(id, t, x, y, w, h, group)
 			if self.radiusCorner == 0 then
 				love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
 			else
+				love.graphics.setColor(self.borderColor)
 				love.graphics.polygon("line", self.ptsCorner)
 				love.graphics.setColor(255,255,0)
 				--print(#self.ptsCorner)
@@ -167,15 +179,15 @@ function component:draw()-- Every component has the same base:
 		if self:overIt() and self.type ~= "label" then
 			if not self.pressed then fs = 1 end
 			r, g, b = r + focusColorChange * fs, g + focusColorChange * fs, b + focusColorChange * fs
-			if self.toolTip then
-				self.timerToolTip = self.timerToolTip + love.timer.getDelta()
-				if self.timerToolTip >= 0.5 then
-					self.showToolTip = true
+			if self.tooltip then
+				self.timerTooltip = self.timerTooltip + love.timer.getDelta()
+				if self.timerTooltip >= 0.5 then
+					self.showTooltip = true
 				end
 			end
 		else
-			self.timerToolTip = 0
-			self.showToolTip = false
+			self.timerTooltip = 0
+			self.showTooltip = false
 		end
 		local newColor = self:fixColor(r, g, b, a)
 
@@ -219,6 +231,9 @@ function component:wasReleased()
 end
 
 function component:overIt(x, y)-- x and y if it's the first time pressed (no touch defined yet).
+	if self.type == "panel" or self.type == "label" then
+		return false
+	end
 	if not (self.enabled or self.visible) then return false end
 
 	local xm = love.mouse.getX()
@@ -273,6 +288,8 @@ function component:setBounds(x, y, w, h)
 	self.x, self.y, self.w, self.h = theX, theY, theW, theH
 
 	self:generateBorder()
+
+	return self
 end
 
 function component:fixColor(...)
@@ -295,21 +312,25 @@ function component:setRadiusCorner(value)
 end
 
 function drawRoundRec(x, y, w, h, r)
-	local right = 0
-	local left = math.pi
-	local bottom = math.pi * 0.5
-	local top = math.pi * 1.5
-	
-	local r = r or h / 2
-	if r > h / 2 then r = h / 2 end
-	if r < 0 then r = 0 end
+	if r == 0 then
+		love.graphics.rectangle("fill", x, y, w, h)
+	else
+		local right = 0
+		local left = math.pi
+		local bottom = math.pi * 0.5
+		local top = math.pi * 1.5
+		
+		local r = r or h / 2
+		if r > h / 2 then r = h / 2 end
+		if r < 0 then r = 0 end
 
-	love.graphics.rectangle("fill", x, y + r, w, h - r * 2)
-	love.graphics.rectangle("fill", x + r, y, w - r * 2, r)
-	love.graphics.rectangle("fill", x + r, y + h - r, w - r * 2, r)
+		love.graphics.rectangle("fill", x, y + r, w, h - r * 2)
+		love.graphics.rectangle("fill", x + r, y, w - r * 2, r)
+		love.graphics.rectangle("fill", x + r, y + h - r, w - r * 2, r)
 
-	love.graphics.arc("fill", x + r, y + r, r, left, top)
-	love.graphics.arc("fill", x + w - r, y + r, r, - bottom, right)
-	love.graphics.arc("fill", x + w - r, y + h - r, r, right, bottom)
-	love.graphics.arc("fill", x + r, y + h - r, r, bottom, left)
+		love.graphics.arc("fill", x + r, y + r, r, left, top)
+		love.graphics.arc("fill", x + w - r, y + r, r, - bottom, right)
+		love.graphics.arc("fill", x + w - r, y + h - r, r, right, bottom)
+		love.graphics.arc("fill", x + r, y + h - r, r, bottom, left)
+	end
 end
