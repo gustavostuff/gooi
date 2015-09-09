@@ -22,7 +22,7 @@ function love.load()
 		fgColor = "#ffffff",
 		howRound = 1,
 		showBorder = true,
-		borderColor = "#7A147A",
+		borderColor = "#990044",
 		font = gr.newFont(dirFonts.."Grundschrift-Bold.otf", 16)
 	}
 
@@ -31,9 +31,11 @@ function love.load()
 	gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
-	gooi.newPanel("thePanel", 10, 10, 500, 300, "grid 9x3")
-		:setRowspan(6, 1, 2)
-		:setColspan(6, 2, 2)
+	gooi.newPanel("thePanel", 10, 10, 500, 400, "grid 13x3")
+		:setRowspan(6, 1, 2)-- rowspan for 'super check' checkbox.
+		:setColspan(6, 2, 2)-- colspan for the 'xxx' text field.
+		:setRowspan(10, 1, 4)-- For the giant slider.
+		:setColspan(10, 1, 3)-- For the giant slider.
 		:add(
 			gooi.newLabel(1, "Left Label"):setOrientation("left"),
 			gooi.newLabel(2, "Center Label"):setOrientation("center"),
@@ -50,8 +52,8 @@ function love.load()
 			gooi.newSlider(13),
 			gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
 			gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
-			gooi.newCheck(16, "rowspan 2"),
-			gooi.newText(17, "this text box has a colspan = 2"),
+			gooi.newCheck(16, "super check"),
+			gooi.newText(17, "xxx"),
 			gooi.newBar(18),
 			gooi.newSpinner(19),
 			gooi.newJoy(20),
@@ -59,12 +61,12 @@ function love.load()
 				gooi.newSlider("sli1"),
 				gooi.newButton("btn2", "Btn"),
 				gooi.newButton("btn3", "Btn")
-			),
-			gooi.newText(24, "this has a Tooltip"):setTooltip("A Tooltip")
+			)
 		)
 
 		-- Add component in that row, col:
-		gooi.get("thePanel"):add(gooi.newButton("btn_103", "Button in 9,2"), "9,2")
+		gooi.get("thePanel"):add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
+		gooi.get("thePanel"):add(gooi.newSlider("sli_x"), "10,1")
 
 
 	-- Events:
@@ -75,13 +77,13 @@ function love.load()
 	gooi.get("thePanel").layout.debug = gooi.get("chb_debug").checked
 	gooi.get("panel_child").layout.debug = gooi.get("chb_debug").checked
 
-	gr.setFont(seriousBlack.font)
+	gr.setFont(gooi.font)
 end
 
 function love.update(dt)
 	gooi.update(dt)
 	-- Fill in 10 seconds:
-	gooi.get(18):increase(.1, dt)
+	--gooi.get(18):increase(.1, dt)
 end
 
 function love.draw()
@@ -89,7 +91,7 @@ function love.draw()
 	gooi.draw()
 
 	gr.setColor(255, 255, 255)
-	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - seriousBlack.font:getHeight())
+	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
 end
 
 -- Needed callbacks for this demo:

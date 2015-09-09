@@ -68,11 +68,15 @@ function layout.new(specs)
 		function l:offCellsInTheWay(spanType, row, col, size)
 			if spanType == "rowspan" then
 				for i = row + 1, row + size - 1 do
-					self.gridCells[i][col].on = false
+					for j = col, col + self.gridCells[row][col].colspan - 1 do
+						self.gridCells[i][j].on = false
+					end
 				end
 			elseif spanType == "colspan" then
 				for i = col + 1, col + size - 1 do
-					self.gridCells[row][i].on = false
+					for j = row, row + self.gridCells[row][col].rowspan - 1 do
+						self.gridCells[j][i].on = false
+					end
 				end
 			end
 		end
