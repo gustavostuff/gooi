@@ -21,6 +21,6 @@ GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](h
 
 ```lua
 gooi.newButton("btn_1", "The button"):onRealease(function()
-  foo();
-end);
+  foo()
+end)
 ```
