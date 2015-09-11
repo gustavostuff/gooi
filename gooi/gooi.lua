@@ -878,7 +878,7 @@ function gooi.update(dt)
 				timerBackspaceText = timerBackspaceText + dt
 				if timerBackspaceText >= 0.5 then
 					timerStepChar = timerStepChar + dt
-					if timerStepChar >= 0.05 then
+					if timerStepChar >= 0.025 then
 						timerStepChar = 0
 						c:moveCursor("backspace")
 					end
