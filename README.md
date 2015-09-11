@@ -4,7 +4,7 @@
 
 GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](https://love2d.org/) library which helps you to create _cute_ GUI's, it has events support (pressing, releasing and movement events). GOOi works in desktop computers as well.
 
-## GOOi has:
+### GOOi has:
 
 * Labels
 * Buttons
@@ -17,8 +17,9 @@ GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](h
 * Joysticks
 * Panels (_new_)
 
-## This is how you create a Button set an event to it:
+### This is how you create a Button set an event to it:
 
+´´´lua
 gooi.newButton("btn_1", "The button"):onRealease(function()
   foo();
-end);
+end);´´´
