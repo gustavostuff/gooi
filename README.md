@@ -20,7 +20,7 @@ GOOi (Good-sized Optional Open interface) is a simple Android-oriented [LÖVE](h
 ### This is how you create a Button and set an event to it:
 
 ```lua
-gooi.newButton("btn_1", "The button"):onRealease(function()
+gooi.newButton("btn_1", "The button"):onRelease(function()
   foo()
 end)
 ```
