@@ -226,6 +226,7 @@ function gooi.newSlider(id, x, y, w, h, value, group)
 			newValue = v * self.w
 		end
 		self:updateValue((self.x + newValue))
+		return self
 	end
 	function s:rebuild()
 		self:generateBorder()
@@ -436,12 +437,19 @@ function gooi.newBar(id, x, y, w, h, value, color1, color2, group)
 		self.value = self.value + amount * delta * sense
 		if self.value > 1 then self.value = 1 end
 		if self.value < 0 then self.value = 0 end
+		return self
 	end
 	function p:increase(amount, dt)
 		self:changeValue(amount, dt, 1)
+		return self
+	end
+	function p:setLength(l)
+		self.w = l
+		return self
 	end
 	function p:decrease(amount, dt)
 		self:changeValue(amount, dt, -1)
+		return self
 	end
 	return gooi.storeComponent(p, id)
 end
@@ -525,6 +533,7 @@ function gooi.newSpinner(id, x, y, w, h, value, min, max, step, group)
 
 		if self.value > self.max then self.value = self.max end
 		if self.value < self.min then self.value = self.min end
+		return self
 	end
 	function s:update(dt)
 		self.timerPreChange = self.timerPreChange + dt
@@ -566,11 +575,11 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 	s.spring = true
 	function s:drawSpecifics(fg)
 		love.graphics.setColor(fg)
-		self.rStick = self.r / 2-- radius of the Stick.
 		self:drawStick()
 	end
 	function s:rebuild()
 		self.r = self.smallerSide / 2
+		self.rStick = self.r / 2-- radius of the Stick.
 		self.xStick, self.yStick = self.x + self.r, self.y + self.r
 		self:generateBorder()
 	end
@@ -579,7 +588,7 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 		love.graphics.circle("fill", self.xStick, self.yStick, self.rStick, circleRes)
 		love.graphics.circle("line", self.xStick, self.yStick, self.rStick, circleRes)
 	end
-	function s:move()
+	function s:move(direction)
 		if (self.pressed or self.touch) and self.stickPressed then
 			local daX, daY = love.mouse.getPosition()
 			if self:butting() then
@@ -664,6 +673,10 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 			if l:sub(0, 4) == "grid" then
 				p.layout = layout.new(l)
 				p.layout:init(p)
+			elseif l:sub(0, 4) == "game" then
+				p.layout = layout.new(l)
+			else
+				error("Layout definition must be 'grid NxM', 'game' or 'absolute'")
 			end
 			--print(unpack(split(theLayout, " ")))
 		else
@@ -682,6 +695,10 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 			love.graphics.setLineStyle("rough")
 			self.layout:drawCells()
 		end
+		love.graphics.setColor(0, 0, 0, 127)
+		love.graphics.setLineWidth(1)
+		love.graphics.setLineStyle("rough")
+		love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
 	end
 	function p:rebuild()
 		self:generateBorder()
@@ -776,6 +793,11 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 					end
 				end
 			end
+		elseif self.layout.kind == "game" then
+			local ref = params[1]
+			local position = params[2]
+			self.layout:suit(self, ref, position)
+			if ref.rebuild then ref:rebuild() end
 		end
 		return self
 	end
@@ -1009,6 +1031,9 @@ end
 
 -- Get any component by its id:
 function gooi.get(id)
+	if not gooi.components[id] then
+		error("Component '"..id.."' does not exist!")
+	end
 	return gooi.components[id]
 end
 

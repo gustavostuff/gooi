@@ -101,6 +101,38 @@ function layout.new(specs)
 				end
 			end
 		end
+	elseif l.specs:sub(0, 4) == "game" then
+		l.kind = "game"
+		l.components =
+		{
+			["t-l"] = {},
+			["t-r"] = {},
+			["b-l"] = {},
+			["b-r"] = {}
+		}
+		function l:suit(panel, ref, position)
+			local padding = 15
+			local widthAccrued = padding
+			for i = 1, #self.components[position] do
+				widthAccrued = widthAccrued + (self.components[position][i].w + padding)
+			end
+			table.insert(self.components[position], ref)
+
+			-- Set bounds according to position:
+
+			local x, y = panel.x, panel.y + padding
+			if position == "t-l" or position == "b-l" then
+				widthAccrued = widthAccrued
+				x = x + widthAccrued
+			elseif position == "t-r" or position == "b-r" then
+				x = x + panel.w - widthAccrued - ref.w
+			end
+			if position == "b-l" or position == "b-r" then
+				y = y + panel.h - (ref.h + padding * 2)
+			end
+
+			ref:setBounds(x, y, ref.w, ref.h)
+		end
 	end
 	return setmetatable(l, layout)
 end
