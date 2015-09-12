@@ -695,10 +695,12 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 			love.graphics.setLineStyle("rough")
 			self.layout:drawCells()
 		end
+		--[[
 		love.graphics.setColor(0, 0, 0, 127)
 		love.graphics.setLineWidth(1)
 		love.graphics.setLineStyle("rough")
 		love.graphics.rectangle("line", self.x, self.y, self.w, self.h)
+		]]
 	end
 	function p:rebuild()
 		self:generateBorder()
@@ -796,10 +798,21 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 		elseif self.layout.kind == "game" then
 			local ref = params[1]
 			local position = params[2]
+			if not(
+				position == "t-l" or
+				position == "t-r" or
+				position == "b-l" or
+				position == "b-r")
+			then
+				error("valid positions are: 't-l', 't-r', 'b-l' and 'b-r'")
+			end
 			self.layout:suit(self, ref, position)
 			if ref.rebuild then ref:rebuild() end
 		end
 		return self
+	end
+	function p:changePadding(padding)
+		-- body
 	end
 	function p:changeSpan(spanType, row, col, size)
 		local l = self.layout

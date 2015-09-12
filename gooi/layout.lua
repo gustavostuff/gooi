@@ -1,9 +1,10 @@
 layout = {}
 layout.__index = layout
-
+local padding = 3
 function layout.new(specs)
 	local l ={}
 	l.specs = specs
+	l.padding = padding
 	if l.specs:sub(0, 4) == "grid" then
 		local function split(inputstr, sep)
 			if sep == nil then
@@ -84,19 +85,18 @@ function layout.new(specs)
 			for theRow = 1, self.gridRows do
 				self.gridCells[theRow] = {}
 				for theCol = 1, self.gridCols do
-					local thePadding = 3
 					self.gridCells[theRow][theCol] =
 					{
 						on = true,
-						x = panel.x + ((theCol - 1) * panel.w / self.gridCols + thePadding),
-						y = panel.y + ((theRow - 1) * panel.h / self.gridRows + thePadding),
-						w = panel.w / self.gridCols - thePadding * 2,
-						h = panel.h / self.gridRows - thePadding * 2,
+						x = panel.x + ((theCol - 1) * panel.w / self.gridCols + self.padding),
+						y = panel.y + ((theRow - 1) * panel.h / self.gridRows + self.padding),
+						w = panel.w / self.gridCols - self.padding * 2,
+						h = panel.h / self.gridRows - self.padding * 2,
 						row = theRow,
 						col = theCol,
 						rowspan = 1,
 						colspan = 1,
-						padding = thePadding
+						padding = self.padding
 					}
 				end
 			end
@@ -111,16 +111,15 @@ function layout.new(specs)
 			["b-r"] = {}
 		}
 		function l:suit(panel, ref, position)
-			local padding = 15
-			local widthAccrued = padding
+			local widthAccrued = self.padding
 			for i = 1, #self.components[position] do
-				widthAccrued = widthAccrued + (self.components[position][i].w + padding)
+				widthAccrued = widthAccrued + (self.components[position][i].w + self.padding)
 			end
 			table.insert(self.components[position], ref)
 
 			-- Set bounds according to position:
 
-			local x, y = panel.x, panel.y + padding
+			local x, y = panel.x, panel.y + self.padding
 			if position == "t-l" or position == "b-l" then
 				widthAccrued = widthAccrued
 				x = x + widthAccrued
@@ -128,7 +127,7 @@ function layout.new(specs)
 				x = x + panel.w - widthAccrued - ref.w
 			end
 			if position == "b-l" or position == "b-r" then
-				y = y + panel.h - (ref.h + padding * 2)
+				y = y + panel.h - (ref.h + self.padding * 2)
 			end
 
 			ref:setBounds(x, y, ref.w, ref.h)

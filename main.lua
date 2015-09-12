@@ -9,6 +9,7 @@ function love.load()
 	dirFonts = "/fonts/"
 	dirImgs = "/imgs/"
 	timerBomb = 0
+	timerExplosion = 0
 
 	imgBg1 = gr.newImage(dirImgs.."bg.png")
 	-- Create styles:
@@ -31,7 +32,7 @@ function love.load()
 	-- Choose one of them:
 
 	gooi.setStyle(seriousBlack)
-	--gooi.setStyle(roshita)
+	gooi.setStyle(roshita)
 
 	-- Panel with grid layout:
 	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
@@ -82,6 +83,7 @@ function love.load()
 	pGame:add(gooi.newJoy("joy_1"), "b-l")-- Bottom-left
 	pGame:add(gooi.newLabel("lbl_score", "Score: 0"), "t-l")-- Top-left
 	pGame:add(gooi.newBar("bar_1"):setLength(pGame.w / 3):increase(1), "t-r")-- Top-right
+	pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
 
 	-- Mini game in the game panel:
 
@@ -97,6 +99,7 @@ function love.load()
 	}
 	bullets = {}
 	bomb = nil
+	explosion = nil
 	function shotBullet()
 		table.insert(bullets,
 			{
@@ -133,9 +136,13 @@ function love.update(dt)
 	-- Mini game:
 	ship.x = ship.x + 300 * gooi.get("joy_1"):xValue() * dt
 	ship.y = ship.y + 300 * gooi.get("joy_1"):yValue() * dt
-	if ship.x > pGame.x + pGame.w then ship.x = pGame.x + pGame.w end
+	if ship.x + imgShip:getWidth() > pGame.x + pGame.w then
+		ship.x = pGame.x + pGame.w - imgShip:getWidth()
+	end
 	if ship.x < pGame.x then ship.x = pGame.x end
-	if ship.y > pGame.y + pGame.h then ship.y = pGame.y + pGame.h end
+	if ship.y + imgShip:getHeight() > pGame.y + pGame.h then
+		ship.y = pGame.y + pGame.h - imgShip:getHeight()
+	end
 	if ship.y < pGame.y then ship.y = pGame.y end
 
 	for i = #bullets, 1, -1 do
@@ -148,7 +155,19 @@ function love.update(dt)
 		timerBomb = timerBomb + dt
 		if timerBomb >= 0.9 then
 			timerBomb = 0
+			explosion = 
+			{
+				x = bomb.x + imgBomb:getWidth() / 2,
+				y = bomb.y + imgBomb:getHeight() / 2
+			}
 			bomb = nil
+		end
+	end
+	if explosion then
+		timerExplosion = timerExplosion + dt
+		if timerExplosion > 0.8 then
+			timerExplosion = 0
+			explosion = nil
 		end
 	end
 end
@@ -163,6 +182,12 @@ function love.draw()
 		gr.draw(imgBullet, b.x, b.y)
 	end
 	if bomb then gr.draw(imgBomb, bomb.x, bomb.y) end
+	if explosion then
+		gr.draw(imgExplosion, explosion.x, explosion.y, 0,
+			love.math.random(50, 100) / 25, love.math.random(75, 100) / 25,
+			imgExplosion:getWidth() / 2,
+			imgExplosion:getHeight() / 2)
+	end
 
 	gooi.draw()
 
@@ -180,3 +205,7 @@ function love.keypressed(key)
 end
 function love.mousepressed(x, y, button)  gooi.pressed() end
 function love.mousereleased(x, y, button) gooi.released() end
+
+--unction love.touchpressed(id, x, y, pressure) gooi.pressed(id, x, y) end
+--function love.touchreleased(id, x, y, pressure) gooi.released(id, x, y) end
+--function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
