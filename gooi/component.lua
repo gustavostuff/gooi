@@ -144,7 +144,7 @@ function component.new(id, t, x, y, w, h, group)
 	function c:drawBorder()
 		love.graphics.setLineWidth(self.borderWidth)
 		if self.showBorder then
-			love.graphics.setColor(self.bgColor[1], self.bgColor[2], self.bgColor[3])
+			love.graphics.setColor(self.borderColor)
 			if not self.enabled then
 				love.graphics.setColor(63, 63, 63)
 			end

@@ -103,6 +103,7 @@ function layout.new(specs)
 		end
 	elseif l.specs:sub(0, 4) == "game" then
 		l.kind = "game"
+		l.padding = l.padding * 2
 		l.components =
 		{
 			["t-l"] = {},

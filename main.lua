@@ -15,9 +15,8 @@ function love.load()
 	-- Create styles:
 	seriousBlack = {
 		bgColor = {0, 0, 0, 127},
-		fgColor = {255, 255, 255, 255},
+		fgColor = {255, 255, 255},
 		howRound = 0,
-		showBorder = false,
 		font = gr.newFont(dirFonts.."ProggySquare.ttf", 16)
 	}
 	roshita = {
@@ -32,7 +31,7 @@ function love.load()
 	-- Choose one of them:
 
 	gooi.setStyle(seriousBlack)
-	gooi.setStyle(roshita)
+	--gooi.setStyle(roshita)
 
 	-- Panel with grid layout:
 	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
@@ -173,7 +172,11 @@ function love.update(dt)
 end
 
 function love.draw()
+	-- Draw panel shapes:
 	gr.draw(imgBg1, 0, 0)
+	gr.setColor(0, 0, 0, 63)
+	gr.rectangle("fill", pGrid.x, pGrid.y, pGrid.w, pGrid.h)
+	gr.rectangle("fill", pGame.x, pGame.y, pGame.w, pGame.h)
 	-- Draw mini game:
 	gr.setColor(255, 255, 255)
 	gr.draw(imgShip, ship.x, ship.y)

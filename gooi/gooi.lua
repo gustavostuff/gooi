@@ -895,7 +895,7 @@ function gooi.setStyle(style)
 	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 75)
 	component.style.howRound = style.howRound or 1
 	component.style.showBorder = style.showBorder
-	component.style.borderColor = style.borderColor or {0, 0, 0}
+	component.style.borderColor = style.borderColor or {255, 255, 255}
 	component.style.borderProportion = style.borderProportion or .1
 	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 100)
 	gooi.font = style.font
