@@ -89,7 +89,7 @@ function love.load()
 	imgShip = gr.newImage(dirImgs.."ship.png")
 	imgBullet = gr.newImage(dirImgs.."bullet.png")
 	imgBomb = gr.newImage(dirImgs.."bomb.png")
-	imgExplosion = gr.newImage(dirImgs.."explosion.png")
+	imgBoom = gr.newImage(dirImgs.."boom.png")
 	
 	ship =
 	{
@@ -186,10 +186,10 @@ function love.draw()
 	end
 	if bomb then gr.draw(imgBomb, bomb.x, bomb.y) end
 	if explosion then
-		gr.draw(imgExplosion, explosion.x, explosion.y, 0,
-			love.math.random(50, 100) / 25, love.math.random(75, 100) / 25,
-			imgExplosion:getWidth() / 2,
-			imgExplosion:getHeight() / 2)
+		gr.draw(imgBoom, explosion.x, explosion.y, 0,
+			love.math.random(75, 100) / 25, love.math.random(75, 100) / 25,
+			imgBoom:getWidth() / 2,
+			imgBoom:getHeight() / 2)
 	end
 
 	gooi.draw()
