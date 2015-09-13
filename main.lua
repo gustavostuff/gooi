@@ -172,7 +172,7 @@ function love.update(dt)
 end
 
 function love.draw()
-	-- Draw panel shapes:
+	-- Draw panel shapes:--[[
 	gr.draw(imgBg1, 0, 0)
 	gr.setColor(0, 0, 0, 63)
 	gr.rectangle("fill", pGrid.x, pGrid.y, pGrid.w, pGrid.h)

@@ -47,7 +47,9 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 		if type(image) == "string" then
 			l.image = love.graphics.newImage(image)
 		end
-		l.w = l.w + l.image:getWidth()
+		if l.text:len() > 0 then
+			l.w = l.w + l.image:getWidth()
+		end
 	end
 	function l:rebuild()
 		self:generateBorder()
@@ -114,15 +116,17 @@ end
 ----------------------------------------------------------------------------
 function gooi.newButton(id, text, x, y, w, h, image, group)
 	local b = {}
-	x, y, w, h = gooi.checkBounds(text, x, y, w, h, "button")
+	x, y, w, h = gooi.checkBounds(text or "", x, y, w, h, "button")
 	b = component.new(id, "button", x, y, w, h, group)
-	b.text = text
+	b.text = text or "" --todo
 	b.image = image
 	if b.image then
 		if type(image) == "string" then
 			b.image = love.graphics.newImage(image)
 		end
-		b.w = b.w + b.image:getWidth()
+		if b.text:len() > 0 then
+			b.w = b.w + b.image:getWidth()
+		end
 	end
 	b.pressedMove = 0
 	function b:rebuild()
@@ -135,7 +139,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 			self.pressedMove = 2
 		end
 		-- Center text:
-		local t = self.text or ""
+		local t = self.text
 		local x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
 		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
 		if self.orientation == "left" then
