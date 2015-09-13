@@ -48,7 +48,7 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 			l.image = love.graphics.newImage(image)
 		end
 		if l.text:len() > 0 then
-			l.w = math.floor(l.w + l.image:getWidth())
+			l.w = l.w + l.image:getWidth()
 		end
 	end
 	function l:rebuild()
@@ -74,7 +74,7 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 			if not self.enabled then love.graphics.setColor(0, 0, 0) end
 
 			if t:len() == 0 then
-				xImg = self.x + self.w / 2
+				xImg = math.floor(self.x + self.w / 2)
 			end
 			
 			love.graphics.draw(self.image, xImg, math.floor(self.y + self.h / 2), 0, 1, 1,
@@ -125,7 +125,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 			b.image = love.graphics.newImage(image)
 		end
 		if b.text:len() > 0 then
-			b.w = math.floor(b.w + b.image:getWidth())
+			b.w = b.w + b.image:getWidth()
 		end
 	end
 	b.pressedMove = 0
@@ -153,7 +153,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 		if self.image then
 			local xImg = math.floor(self.x + self.h / 2)
 			if t:len() == 0 then
-				xImg = self.x + self.w / 2
+				xImg = math.floor(self.x + self.w / 2)
 			end
 			love.graphics.setColor(255, 255, 255)
 			if not self.enabled then love.graphics.setColor(0, 0, 0) end
