@@ -49,7 +49,7 @@ function love.load()
 			gooi.newButton(7, "Left Button"):setOrientation("left"),
 			gooi.newButton(8, "Center Button"),
 			gooi.newButton(9, "Right Button"):setOrientation("right"),
-			gooi.newButton(10, "Left Button"):setOrientation("left"):setImage(dirImgs.."coin.png"),
+			gooi.newButton(10, ""):setOrientation("left"):setImage(dirImgs.."coin.png"),
 			gooi.newButton(11, "Center Button"):setImage(dirImgs.."coin.png"),
 			gooi.newButton(12, "Right Button"):setOrientation("right"):setImage(dirImgs.."coin.png"),
 			gooi.newSlider(13),

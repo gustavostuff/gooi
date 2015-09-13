@@ -48,7 +48,7 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 			l.image = love.graphics.newImage(image)
 		end
 		if l.text:len() > 0 then
-			l.w = l.w + l.image:getWidth()
+			l.w = math.floor(l.w + l.image:getWidth())
 		end
 	end
 	function l:rebuild()
@@ -125,7 +125,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 			b.image = love.graphics.newImage(image)
 		end
 		if b.text:len() > 0 then
-			b.w = b.w + b.image:getWidth()
+			b.w = math.floor(b.w + b.image:getWidth())
 		end
 	end
 	b.pressedMove = 0
