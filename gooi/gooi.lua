@@ -884,6 +884,20 @@ function gooi.storeComponent(c, id)
 end
 
 
+function gooi.removeComponent(id)
+	if gooi.components[id] ~= nil then
+    local c = gooi.components[id]
+    if c.childs then
+      for n = 1, #c.childs do
+        local ch = c.childs[n]
+        gooi.removeComponent(ch.id)
+      end          
+    end          
+		gooi.components[id] = nil
+	end
+end
+
+
 function gooi.setStyle(style)
 	if style.bgColor and type(style.bgColor) == "string" then
 		style.bgColor = gooi.toRGB(style.bgColor)
