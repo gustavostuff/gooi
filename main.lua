@@ -70,6 +70,7 @@ function love.load()
 		-- Add component in a given cell:
 		pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
 		pGrid:add(gooi.newSlider("sli_x"), "10,1")
+		gooi.removeComponent("btn2")
 
 
 
