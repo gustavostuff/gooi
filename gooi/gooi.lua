@@ -1036,6 +1036,11 @@ function gooi.toRGB(hex)
     return {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))}
 end
 
+function gooi.toRGBA(hex)
+    hex = hex:gsub("#","")
+    return {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)), tonumber("0x"..hex:sub(7,8))}
+end
+
 function gooi.setGroupVisible(group, b)
 	local group = gooi.getByGroup(group)
 	for i=1, #group do
