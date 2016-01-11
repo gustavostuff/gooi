@@ -81,7 +81,7 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 				self.image:getWidth() / 2, self.image:getHeight() / 2)
 		end
 		love.graphics.setColor(fg)
-		love.graphics.print(self.text, x, y)
+		love.graphics.print(self.text, math.floor(x), math.floor(y))
 	end
 	function l:setOrientation(o)
 		if o == "left" then
@@ -163,7 +163,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 				self.image:getWidth() / 2, self.image:getHeight() / 2)
 		end
 		love.graphics.setColor(fg)
-		love.graphics.print(t, x, y + self.pressedMove)
+		love.graphics.print(t, math.floor(x), math.floor(y + self.pressedMove))
 	end
 	function b:setOrientation(o)
 		if o == "left" then
@@ -270,7 +270,9 @@ function gooi.newCheck(id, text, x, y, w, h, checked, group)
 		love.graphics.circle("line", self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
 		-- text of the checkbox:
 		love.graphics.setColor(fg)
-		love.graphics.print(self.text, self.x + self.h * 1.1, self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2)
+		love.graphics.print(self.text, 
+			math.floor(self.x + self.h * 1.1),
+			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
 	end
 	function chb:change()
 		self.checked = not self.checked
@@ -307,7 +309,9 @@ function gooi.newRadio(id, text, x, y, w, h, selected, radioGroup, group)
 			love.graphics.circle("fill", self.x + self.h / 2, self.y + self.h / 2, self.h * rad / 2, circleRes)
 			love.graphics.circle("line", self.x + self.h / 2, self.y + self.h / 2, self.h * rad / 2, circleRes)
 		end
-		love.graphics.print(self.text, self.x + self.h * 1.1, self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2)
+		love.graphics.print(self.text,
+			math.floor(self.x + self.h * 1.1),
+			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
 	end
 	function r:setRadioGroup(g)
 		self.radioGroup = g
@@ -403,7 +407,9 @@ function gooi.newText(id, text, x, y, w, h, group)
 	end
 
 	function f:drawChars()
-		love.graphics.print(self.text, self.x + self.h / 2 * 1.1, self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2)
+		love.graphics.print(self.text,
+			math.floor(self.x + self.h / 2 * 1.1),
+			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
 	end
 
 	return gooi.storeComponent(f, id)
@@ -516,7 +522,7 @@ function gooi.newSpinner(id, x, y, w, h, value, min, max, step, group)
 		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
 
 		love.graphics.setColor(fg)
-		love.graphics.print(t, x, y)
+		love.graphics.print(t, math.floor(x), math.floor(y))
 	end
 	function s:overMinus(x, y)
 		local dx, dy = self.xMin - love.mouse.getX(), self.yMin - love.mouse.getY()
@@ -1027,7 +1033,7 @@ function gooi.draw(group)
 		end
 		love.graphics.rectangle("fill", xRect, yRect, wRect, hRect)
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.print(compWithTooltip.tooltip, xText, yText)
+		love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
 	end
 end
 
