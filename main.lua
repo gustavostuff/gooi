@@ -124,8 +124,6 @@ function love.load()
 	end)
 	pGrid.layout.debug = gooi.get("chb_debug").checked
 	gooi.get("panel_child").layout.debug = gooi.get("chb_debug").checked
-
-	gr.setFont(gooi.font)
 end
 
 function love.update(dt)

@@ -969,6 +969,8 @@ end
 function gooi.draw(group)
 	local actualGroup = group or "default"
 
+	local prevFont  = love.graphics.getFont()
+
 	local compWithTooltip = nil -- Just for desktop.
 
 	for k, comp in pairs(gooi.components) do
@@ -1035,6 +1037,8 @@ function gooi.draw(group)
 		love.graphics.setColor(255, 255, 255)
 		love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
 	end
+
+	love.graphics.setFont(prevFont)
 end
 
 function gooi.toRGB(hex)
