@@ -1,6 +1,6 @@
 # _GÖÖi_, an Android-Oriented GUI Library
 
-GÖÖi (Good-sized Öptional Öpen interface) is a simple Android-oriented [LÖVE](https://love2d.org/) library which helps you to create GUI's, it has multitouch, multilingual and layout support. GÖÖi works in desktop computers as well.
+GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library which helps you to create GUI's, it has multitouch, multilingual and layout support. GÖÖi works in desktop computers as well.
 
 This is the default GÖÖi look, using a _game_ layout:
 
