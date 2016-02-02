@@ -8,6 +8,6 @@ Default GÖÖi style:
 
 Here's GÖÖi with a serious black theme:
 
-![GÖÖi black](http://s23.postimg.org/gp9ly7y63/image.png)
+![GÖÖi black](http://s18.postimg.org/40dr5wwjd/demo1.gif)
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
