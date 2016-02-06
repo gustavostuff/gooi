@@ -1,4 +1,5 @@
 require "gooi"
+
 function love.load()
 	gr = love.graphics
 	kb = love.keyboard
@@ -17,12 +18,14 @@ function love.load()
 		bgColor = {0, 0, 0, 127},
 		fgColor = {255, 255, 255},
 		howRound = 0,
+		howRoundInternally = 0,
 		font = gr.newFont(dirFonts.."ProggySquare.ttf", 16)
 	}
 	roshita = {
 		bgColor = "#AD00AD",
 		fgColor = "#ffffff",
 		howRound = 1,
+		howRoundInternally = 1,
 		showBorder = true,
 		borderColor = "#990044",
 		font = gr.newFont(dirFonts.."Grundschrift-Bold.otf", 16)
@@ -30,12 +33,12 @@ function love.load()
 
 	-- Choose one of them:
 
-	gooi.setStyle(seriousBlack)
+	--gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
 	-- Panel with grid layout:
 	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
-		:setRowspan(6, 1, 2)-- rowspan for 'super check' checkbox.
+		:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
 		:setColspan(6, 2, 2)-- colspan for the 'xxx' text field.
 		:setRowspan(10, 1, 4)-- For the giant slider.
 		:setColspan(10, 1, 3)-- For the giant slider.
@@ -55,7 +58,7 @@ function love.load()
 			gooi.newSlider(13),
 			gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
 			gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
-			gooi.newCheck(16, "super check"),
+			gooi.newCheck(16, "checkbox"),
 			gooi.newText(17, "xxx"),
 			gooi.newBar(18),
 			gooi.newSpinner(19),
@@ -205,9 +208,11 @@ function love.keypressed(key)
 		love.event.quit()
 	end
 end
-function love.mousepressed(x, y, button)  gooi.pressed() end
 function love.mousereleased(x, y, button) gooi.released() end
+function love.mousepressed(x, y, button)  gooi.pressed() end
+--[[
+function love.touchpressed(id, x, y, pressure) gooi.pressed(id, x, y) end
+function love.touchreleased(id, x, y, pressure) gooi.released(id, x, y) end
+function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
 
---unction love.touchpressed(id, x, y, pressure) gooi.pressed(id, x, y) end
---function love.touchreleased(id, x, y, pressure) gooi.released(id, x, y) end
---function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
+]]

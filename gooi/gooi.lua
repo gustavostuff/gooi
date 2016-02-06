@@ -31,6 +31,24 @@ gooi.components = {}
 
 local circleRes = 50
 
+local minusID = love.image.newImageData(3, 3)
+local plusID = love.image.newImageData(3, 3)
+
+minusID:setPixel(0, 1, 255, 255, 255, 255)
+minusID:setPixel(1, 1, 255, 255, 255, 255)
+minusID:setPixel(2, 1, 255, 255, 255, 255)
+
+plusID:setPixel(0, 1, 255, 255, 255, 255)
+plusID:setPixel(1, 1, 255, 255, 255, 255)
+plusID:setPixel(2, 1, 255, 255, 255, 255)
+plusID:setPixel(1, 0, 255, 255, 255, 255)
+plusID:setPixel(1, 2, 255, 255, 255, 255)
+
+local imgMinus = love.graphics.newImage(minusID)
+local imgPlus = love.graphics.newImage(plusID)
+imgMinus:setFilter("nearest", "nearest")
+imgPlus:setFilter("nearest", "nearest")
+
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 --------------------------   Label creator  --------------------------------
@@ -52,7 +70,7 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 		end
 	end
 	function l:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	l:rebuild()
 	function l:drawSpecifics(fg)
@@ -130,7 +148,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 	end
 	b.pressedMove = 0
 	function b:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	b:rebuild()
 	function b:drawSpecifics(fg)
@@ -210,13 +228,28 @@ function gooi.newSlider(id, x, y, w, h, value, group)
 
 	s.displacement = (s.w - s.h) * s.value
 	function s:drawSpecifics(fg)
+		local mC = math.floor(self.h / 8) -- Margin corner.
 		local rad = self.h * .4 -- Normal radius for the white circles.
+		local side = math.floor(self.h - mC * 2)
 		love.graphics.setColor(fg)
-		love.graphics.line(self.x + self.h / 2, self.y + self.h / 2, self.x + self.w - self.h / 2, self.y + self.h / 2)
-		local fill = "fill"
 		if self.pressed or self.touch then rad = rad * .5 end
-		love.graphics.circle("fill", self.x + self.h / 2 + self.displacement, self.y + self.h / 2, rad, circleRes)
-		love.graphics.circle("line", self.x + self.h / 2 + self.displacement, self.y + self.h / 2, rad, circleRes)
+		love.graphics.rectangle("fill",
+			math.floor(self.x + mC + self.displacement),
+			math.floor(self.y + mC),
+			math.floor(side),
+			math.floor(side),
+			self.howRoundInternally * side / 2,
+			self.howRoundInternally * side / 2,
+			circleRes)
+		local x1Line = self.x + self.h / 2
+		local x2Line = self.x + self.h / 2 + (self.w - self.h) * self.value - side / 2
+		if x2Line > x1Line then
+			love.graphics.line(
+				x1Line,
+				self.y + self.h / 2 - 1,
+				x2Line,
+				self.y + self.h / 2 - 1)
+		end
 	end
 	function s:updateValue(theX)
 		self.displacement = (theX - (self.x + self.h / 2))
@@ -233,7 +266,7 @@ function gooi.newSlider(id, x, y, w, h, value, group)
 		return self
 	end
 	function s:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 		self:setValue(0.5)
 	end
 	s:rebuild()
@@ -253,21 +286,43 @@ function gooi.newCheck(id, text, x, y, w, h, checked, group)
 	chb.checked = checked or false
 	chb.text = text
 	function chb:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	chb:rebuild()
 	function chb:drawSpecifics(fg)
 		local rad = .4 -- Normal radius for the white circles.
-		love.graphics.setColor(0, 0, 0)
-		love.graphics.circle("fill", self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
-		--rad = rad * .7
+		local mC = math.floor(self.h / 8) -- Margin corner.
+		local side = math.floor(self.h - mC * 2)
+		love.graphics.setColor(255, 255, 255)
+		local recWhite = {
+			math.floor(self.x + mC),
+			math.floor(self.y + mC),
+			math.floor(side),
+			math.floor(side),
+		}
+		love.graphics.rectangle("fill",
+				recWhite[1],
+				recWhite[2],
+				recWhite[3],
+				recWhite[4],
+				self.howRoundInternally * side / 2,
+				self.howRoundInternally * side / 2,
+				circleRes)
 		local fill = "line"
-		if self.checked then
-			fill = "fill"
-		end
 		love.graphics.setColor(fg)
-		love.graphics.circle(fill, self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
-		love.graphics.circle("line", self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
+		local marginRecWhite = math.floor(recWhite[3] / 6)
+		if not self.checked then
+			fill = "fill"
+			love.graphics.setColor(0, 0, 0)
+			love.graphics.rectangle("fill",
+				recWhite[1] + marginRecWhite,
+				recWhite[2] + marginRecWhite,
+				recWhite[3] - marginRecWhite * 2,
+				recWhite[4] - marginRecWhite * 2,
+				self.howRoundInternally * side * .7 / 2,
+				self.howRoundInternally * side * .7 / 2,
+				circleRes)
+		end
 		-- text of the checkbox:
 		love.graphics.setColor(fg)
 		love.graphics.print(self.text, 
@@ -296,18 +351,39 @@ function gooi.newRadio(id, text, x, y, w, h, selected, radioGroup, group)
 	r.text = text
 	r.radioGroup = radioGroup or "default"
 	function r:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	r:rebuild()
 	function r:drawSpecifics(fg)
 		local rad = .4 -- Normal radius for the white circles.
+		local mC = math.floor(self.h / 8) -- Margin corner.
+		local side = math.floor(self.h - mC * 2)
 		love.graphics.setColor(0, 0, 0)
-		love.graphics.circle("fill", self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
-		love.graphics.circle("line", self.x + self.h / 2, self.y + self.h / 2, self.h * rad, circleRes)
+		local recBlack = {
+			math.floor(self.x + mC),
+			math.floor(self.y + mC),
+			math.floor(side),
+			math.floor(side),
+		}
+		love.graphics.rectangle("fill",
+			recBlack[1],
+			recBlack[2],
+			recBlack[3],
+			recBlack[4],
+			self.howRoundInternally * side / 2,
+			self.howRoundInternally * side / 2,
+			circleRes)
 		love.graphics.setColor(fg)
+		local marginRecBlack = math.floor(recBlack[3] / 4)
 		if self.selected then
-			love.graphics.circle("fill", self.x + self.h / 2, self.y + self.h / 2, self.h * rad / 2, circleRes)
-			love.graphics.circle("line", self.x + self.h / 2, self.y + self.h / 2, self.h * rad / 2, circleRes)
+			love.graphics.rectangle("fill",
+			recBlack[1] + marginRecBlack,
+			recBlack[2] + marginRecBlack,
+			recBlack[3] - marginRecBlack * 2,
+			recBlack[4] - marginRecBlack * 2,
+			self.howRoundInternally * side / 2,
+			self.howRoundInternally * side / 2,
+			circleRes)
 		end
 		love.graphics.print(self.text,
 			math.floor(self.x + self.h * 1.1),
@@ -344,14 +420,22 @@ function gooi.newText(id, text, x, y, w, h, group)
 	f.indexCursor = string.utf8len(f.text)
 	function f:rebuild()
 		self.displacementCursor = self.x + self.h / 2 * 1.1 + gooi.getFont(self):getWidth(self.text)
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	f:rebuild()
 	
 	function f:drawSpecifics(fg)
 		local rad = .4 -- Normal radius for the white circles.
 		love.graphics.setColor(0, 0, 0)
-		love.graphics.rectangle("fill", self.x + self.h / 2, self.y + self.h * .1, self.w - self.h, self.h * .8)
+		local marginRecBlack = math.floor(self.h / 6)
+		love.graphics.rectangle("fill",
+			math.floor(self.x) + marginRecBlack,
+			math.floor(self.y) + marginRecBlack,
+			math.floor(self.w - marginRecBlack * 2),
+			math.floor(self.h) - marginRecBlack * 2,
+			self.howRoundInternally * self.h / 2,
+			self.howRoundInternally * self.h / 2,
+			circleRes)
 		love.graphics.setColor(fg)
 		if self.hasFocus then
 			self:drawCursor()
@@ -430,14 +514,29 @@ function gooi.newBar(id, x, y, w, h, value, color1, color2, group)
 	if p.value > 1 then p.value = 1 end
 	if p.value < 0 then p.value = 0 end
 	function p:rebuild()
-		self:generateBorder()
+		--self:generateBorder()
 	end
 	p:rebuild()
 	function p:drawSpecifics(fg)
 		love.graphics.setColor(0, 0, 0)
-		love.graphics.rectangle("fill", self.x + self.h / 2, self.y + self.h * .1, self.w - self.h, self.h * .8)
+		local marginBars = math.floor(self.h / 6)
+		love.graphics.rectangle("fill",
+			math.floor(self.x + marginBars),
+			math.floor(self.y) + marginBars,
+			math.floor(self.w - marginBars * 2), 
+			math.floor(self.h) - marginBars * 2,
+			self.howRoundInternally * self.h / 2,
+			self.howRoundInternally * self.h / 2,
+			circleRes)
 		love.graphics.setColor(self.fgColor)
-		love.graphics.rectangle("fill", self.x + self.h / 2, self.y + self.h * .1, self.value * (self.w - self.h), self.h * .8)
+		love.graphics.rectangle("fill",
+			math.floor(self.x + marginBars),
+			math.floor(self.y) + marginBars,
+			math.floor(self.value * (self.w - marginBars * 2)),
+			math.floor(self.h) - marginBars * 2,
+			self.howRoundInternally * self.h / 2,
+			self.howRoundInternally * self.h / 2,
+			circleRes)
 	end
 	function p:changeValue(amount, dt, sense)
 		if amount > 1 then amount = 1 end
@@ -505,18 +604,17 @@ function gooi.newSpinner(id, x, y, w, h, value, min, max, step, group)
 	s:rebuild()
 	function s:drawSpecifics(fg)
 		love.graphics.setColor(fg)
-		love.graphics.circle("fill", self.xMin, self.yMin, self.radCirc, circleRes)
-		love.graphics.circle("line", self.xMin, self.yMin, self.radCirc, circleRes)
-		love.graphics.circle("fill", self.xPlus, self.yPlus, self.radCirc, circleRes)
-		love.graphics.circle("line", self.xPlus, self.yPlus, self.radCirc, circleRes)
+		love.graphics.draw(imgMinus, self.xMin, self.yMin, 0, 5, 5,
+			imgMinus:getWidth() / 2,
+			imgMinus:getHeight() / 2)
+		love.graphics.draw(imgPlus, self.xPlus, self.yPlus, 0, 5, 5,
+			imgPlus:getWidth() / 2,
+			imgPlus:getHeight() / 2)
 
 		love.graphics.setColor(self:fixColor(self.bgColor[1], self.bgColor[2], self.bgColor[3]))
 		if not self.enabled then
 			love.graphics.setColor(0, 0, 0)
 		end
-		love.graphics.line(self.xMin - self.radCirc / 2, self.y + self.h / 2, self.xMin + self.radCirc / 2, self.y + self.h / 2)
-		love.graphics.line(self.xPlus - self.radCirc / 2, self.y + self.h / 2, self.xPlus + self.radCirc / 2, self.y + self.h / 2)
-		love.graphics.line(self.xPlus, self.yPlus - self.radCirc / 2, self.xPlus, self.yPlus + self.radCirc / 2)
 		local t = tostring(self.value)
 		local x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
 		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
@@ -590,13 +688,17 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 	function s:rebuild()
 		self.r = self.smallerSide / 2
 		self.rStick = self.r / 2-- radius of the Stick.
-		self.xStick, self.yStick = self.x + self.r, self.y + self.r
-		self:generateBorder()
+		self.xStick = math.floor(self.x) + math.floor(self.r)
+		self.yStick = math.floor(self.y) + math.floor(self.r)
+		--self:generateBorder()
 	end
 	s:rebuild()
 	function s:drawStick()
-		love.graphics.circle("fill", self.xStick, self.yStick, self.rStick, circleRes)
-		love.graphics.circle("line", self.xStick, self.yStick, self.rStick, circleRes)
+		love.graphics.circle("fill",
+			math.floor(self.xStick),
+			math.floor(self.yStick),
+			math.floor(self.rStick),
+			circleRes)
 	end
 	function s:move(direction)
 		if (self.pressed or self.touch) and self.stickPressed then
@@ -702,7 +804,6 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 		if self.layout.kind == "grid" then
 			love.graphics.setLineWidth(1)
 			love.graphics.setColor(0, 0, 0, 127)
-			love.graphics.setLineStyle("rough")
 			self.layout:drawCells()
 		end
 		--[[
@@ -713,7 +814,6 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 		]]
 	end
 	function p:rebuild()
-		self:generateBorder()
 		if self.layout.kind == "grid" then
 			self.layout:init(self)
 		end
@@ -914,13 +1014,14 @@ function gooi.setStyle(style)
 	if style.borderColor and type(style.borderColor) == "string" then
 		style.borderColor = gooi.toRGB(style.borderColor)
 	end
-	component.style.bgColor = style.bgColor or {12, 183, 242, 127}
+	component.style.bgColor = style.bgColor or {0, 0, 0, 127}
 	component.style.fgColor = style.fgColor or {255, 255, 255, 255}
 	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 75)
 	component.style.howRound = style.howRound or 1
+	component.style.howRoundInternally = style.howRoundInternally or 0.5
 	component.style.showBorder = style.showBorder
 	component.style.borderColor = style.borderColor or {255, 255, 255}
-	component.style.borderProportion = style.borderProportion or .1
+	component.style.borderWidth = style.borderWidth or .1
 	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 100)
 	gooi.font = style.font
 end
@@ -970,6 +1071,7 @@ function gooi.draw(group)
 	local actualGroup = group or "default"
 
 	local prevFont  = love.graphics.getFont()
+	local lineW = love.graphics.getLineWidth()
 
 	local compWithTooltip = nil -- Just for desktop.
 
@@ -977,8 +1079,10 @@ function gooi.draw(group)
 	--for i = 1, #gooi.components do
 		--local comp = gooi.components[i]
 
-		love.graphics.setLineStyle("smooth")
-		love.graphics.setLineWidth(comp.smallerSide / 10)
+		love.graphics.setLineStyle("rough")
+		local lineW = comp.smallerSide / 10
+		if lineW < 1 then lineW = 1 end
+		love.graphics.setLineWidth(lineW)
 		if actualGroup == comp.group and comp.visible then
 			comp:draw()-- Draw the base.
 
@@ -1039,6 +1143,7 @@ function gooi.draw(group)
 	end
 
 	love.graphics.setFont(prevFont)
+	love.graphics.setLineStyle("smooth")
 end
 
 function gooi.toRGB(hex)
@@ -1112,10 +1217,6 @@ function gooi.setViewportMode(b)
 end
 ---------------------------------------------------------------------------------------------
 function gooi.pressed(id, x, y)
-	if id and x and y then
-		x = x * love.graphics.getWidth()
-		y = y * love.graphics.getHeight()
-	end
 	for k, c in pairs(gooi.components) do
 		if c.enabled and c.visible then
 			if c.type == "joystick" then
@@ -1154,8 +1255,8 @@ end
 function gooi.moved(id, x, y)
 	local comp = gooi.getCompWithTouch(id)
 	if comp and comp.touch then-- Update touch for every component which has it.
-		comp.touch.x = x * love.graphics.getWidth()
-		comp.touch.y = y * love.graphics.getHeight()
+		comp.touch.x = x
+		comp.touch.y = y
 	end
 end
 ---------------------------------------------------------------------------------------------
