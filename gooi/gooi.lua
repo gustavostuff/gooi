@@ -604,12 +604,25 @@ function gooi.newSpinner(id, x, y, w, h, value, min, max, step, group)
 	s:rebuild()
 	function s:drawSpecifics(fg)
 		love.graphics.setColor(fg)
-		love.graphics.draw(imgMinus, self.xMin, self.yMin, 0, 5, 5,
-			imgMinus:getWidth() / 2,
-			imgMinus:getHeight() / 2)
-		love.graphics.draw(imgPlus, self.xPlus, self.yPlus, 0, 5, 5,
-			imgPlus:getWidth() / 2,
-			imgPlus:getHeight() / 2)
+		local btnGap = math.floor(self.h / 6)
+		local btnSize = btnGap * 4
+
+		-- Minus button:
+		love.graphics.rectangle("fill",
+			math.floor(self.x) + btnGap,
+			math.floor(self.y) + btnGap,
+			btnSize, btnSize,
+			self.howRoundInternally * self.h / 2,
+			self.howRoundInternally * self.h / 2,
+			circleRes)
+		-- PLus button:
+		love.graphics.rectangle("fill",
+			math.floor(self.x) + math.floor(self.w) - btnGap - btnSize,
+			math.floor(self.y) + btnGap,
+			btnSize, btnSize,
+			self.howRoundInternally * self.h / 2,
+			self.howRoundInternally * self.h / 2,
+			circleRes)
 
 		love.graphics.setColor(self:fixColor(self.bgColor[1], self.bgColor[2], self.bgColor[3]))
 		if not self.enabled then
