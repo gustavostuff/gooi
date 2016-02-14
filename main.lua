@@ -198,7 +198,7 @@ function love.draw()
 
 	gr.setColor(255, 255, 255)
 	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
-	gr.print("joy_1: "..gooi.get("joy_1"):xValue()..", "..gooi.get("joy_1"):yValue(), 400, 400)
+	--gr.print("joy_1: "..gooi.get("joy_1"):xValue()..", "..gooi.get("joy_1"):yValue(), 400, 400)
 end
 
 -- Needed callbacks for this demo:
