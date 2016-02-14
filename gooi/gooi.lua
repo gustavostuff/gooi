@@ -770,8 +770,10 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 		local dx, dy = self:theX() - self.xStick, self:theY() - self.yStick
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
-	function s:theX() return self.x + self.r end
-	function s:theY() return self.y + self.r end
+	function s:theX() return math.floor(self.x) + math.floor(self.r) end
+	function s:theY() return math.floor(self.y) + math.floor(self.r) end
+
+	s:overStick() 
 
 	return gooi.storeComponent(s, id)
 end
