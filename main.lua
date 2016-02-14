@@ -33,7 +33,7 @@ function love.load()
 
 	-- Choose one of them:
 
-	--gooi.setStyle(seriousBlack)
+	--math.floor(gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
 	-- Panel with grid layout:
@@ -132,7 +132,7 @@ end
 function love.update(dt)
 	gooi.update(dt)
 	-- Fill in 10 seconds:
-	gooi.get(18):increase(.01, dt)
+	gooi.get(18):increase(.1, dt)
 	
 	-- Mini game:
 	ship.x = ship.x + 300 * gooi.get("joy_1"):xValue() * dt

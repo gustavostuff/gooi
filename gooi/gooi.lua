@@ -770,10 +770,8 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 		local dx, dy = self:theX() - self.xStick, self:theY() - self.yStick
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
-	function s:theX() return self.x + self.r end
-	function s:theY() return self.y + self.r end
-
-	s:overStick() 
+	function s:theX() return math.ceil(self.x) + math.floor(self.r) end
+	function s:theY() return math.ceil(self.y) + math.floor(self.r) end
 
 	return gooi.storeComponent(s, id)
 end
@@ -1038,7 +1036,7 @@ function gooi.setStyle(style)
 	component.style.borderColor = style.borderColor or {12, 183, 242}
 	component.style.borderWidth = style.borderWidth or 2
 	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
-	gooi.font = style.font
+	gooi.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
 end
 
 
