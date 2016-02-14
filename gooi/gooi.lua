@@ -770,8 +770,8 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 		local dx, dy = self:theX() - self.xStick, self:theY() - self.yStick
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
-	function s:theX() return math.floor(self.x) + math.floor(self.r) end
-	function s:theY() return math.floor(self.y) + math.floor(self.r) end
+	function s:theX() return self.x + self.r end
+	function s:theY() return self.y + self.r end
 
 	s:overStick() 
 
@@ -1029,15 +1029,15 @@ function gooi.setStyle(style)
 	if style.borderColor and type(style.borderColor) == "string" then
 		style.borderColor = gooi.toRGB(style.borderColor)
 	end
-	component.style.bgColor = style.bgColor or {0, 0, 0, 127}
+	component.style.bgColor = style.bgColor or {12, 183, 242, 127}
 	component.style.fgColor = style.fgColor or {255, 255, 255, 255}
-	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 75)
-	component.style.howRound = style.howRound or 1
-	component.style.howRoundInternally = style.howRoundInternally or 0.5
+	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 85)
+	component.style.howRound = style.howRound or .25
+	component.style.howRoundInternally = style.howRoundInternally or .25
 	component.style.showBorder = style.showBorder
-	component.style.borderColor = style.borderColor or {255, 255, 255}
-	component.style.borderWidth = style.borderWidth or .1
-	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 100)
+	component.style.borderColor = style.borderColor or {12, 183, 242}
+	component.style.borderWidth = style.borderWidth or 2
+	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
 	gooi.font = style.font
 end
 

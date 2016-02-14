@@ -33,7 +33,7 @@ function love.load()
 
 	-- Choose one of them:
 
-	gooi.setStyle(seriousBlack)
+	--gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
 	-- Panel with grid layout:

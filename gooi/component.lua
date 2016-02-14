@@ -26,7 +26,6 @@ component = {}
 component.__index = component
 component.style = {
 	bgColor = {12, 183, 242, 127}, -- LOVE blue
-	--bgColor = {0, 0, 0, 127},
 	fgColor = {255, 255, 255, 255},
 	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 85),
 	howRound = .25,
@@ -89,17 +88,6 @@ function component.new(id, t, x, y, w, h, group)
 	-- Experimental:
 	c.showBorder = component.style.showBorder
 	c.borderColor = component.style.borderColor
-	function c:setBorderRes(mode)
-		if mode == "high" then
-			c.resCorner = 5
-		elseif mode == "low" then
-			c.resCorner = 19
-		else
-			c.resCorner = 5
-			error("Invalid border resolution mode '"..mode.."', expecting 'high' or 'low'")
-		end
-		return self
-	end
 	
 	return setmetatable(c, component)
 end
