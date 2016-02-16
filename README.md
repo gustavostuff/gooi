@@ -4,11 +4,11 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 
 This is the default GÖÖi look, using a _game_ layout:
 
-![GÖÖi game layout](http://s22.postimg.org/854t5kv7l/game.gif)
+![GÖÖi game layout](http://s23.postimg.org/65aniynbf/game_gooi.gif)
 
 Here's GÖÖi with a serious black theme, using a _grid_ layout:
 
-![GÖÖi grid layout](http://s8.postimg.org/bt8vd9y4l/image.gif)
+![GÖÖi grid layout](http://s27.postimg.org/4cymi0x43/grid_gooi.gif)
 
 The code needed for the first image would be this: (omitting some things like the shot functions)
 

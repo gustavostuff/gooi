@@ -776,6 +776,100 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 	return gooi.storeComponent(s, id)
 end
 
+----------------------------------------------------------------------------
+----------------------------------------------------------------------------
+----------------------------------------------------------------------------
+--------------------------   Knob creator   -------------------------------
+----------------------------------------------------------------------------
+
+function gooi.newKnob(id, x, y, w, h, group)
+	local k = {}
+	x, y, w, h = gooi.checkBounds("aNiceKnob", x, y, w, h, "knob")
+	k = component.new(id, "knob", x, y, w, h, group)
+	k.radKnob = math.floor(k.h * .4)
+	k.xKnob = math.floor(k.x + k.w / 2)
+	k.yKnob = math.floor(k.y + k.h / 2)
+	k.pivotY = k.yKnob
+	k.pivotValue = 0.5
+	k.changedValue = 0.5
+	k.value = k.pivotValue
+
+	k.initialAngle = 0
+	k.finalAngle = 180
+
+	function k:setValue(v)
+		if v > 1 then v = 1 end
+		if v < 0 then v = 0 end
+
+		k.pivotValue = v
+		k.changedValue = v
+		k.value = v
+	end
+
+	function k:drawSpecifics(fg)
+		love.graphics.setColor(fg)
+
+		love.graphics.arc("fill",
+			self.xKnob,
+			self.yKnob,
+			self.radKnob,
+			math.rad(180 + self.initialAngle),
+			math.rad(180 + self.finalAngle * 2 * self.value),
+			circleRes
+			)
+
+		love.graphics.setColor(self.bgColor[1], self.bgColor[2], self.bgColor[3])
+		love.graphics.circle("fill",
+			self.xKnob,
+			self.yKnob,
+			self.radKnob / 2,
+			circleRes)
+	end
+
+	function k:insideKnob()
+		local x = love.mouse.getX()
+		local y = love.mouse.getY()
+		
+		if self.touch then
+			x = self.touch.x
+			y = self.touch.y
+		end
+
+		local dx = math.abs(x - self.xKnob)
+		local dy = math.abs(y - self.yKnob)
+		local hyp = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
+		local rad = self.radKnob
+
+		return hyp < rad
+	end
+
+	function k:turn()
+		local y = love.mouse.getY()
+		
+		if self.touch then
+			y = self.touch.y
+		end
+
+		local dy = self.pivotY - y
+
+		self.changedValue = self.pivotValue + dy / 180
+
+		if self.changedValue > 1 then self.changedValue = 1 end
+		if self.changedValue < 0 then self.changedValue = 0 end
+
+		self.value = self.changedValue
+	end
+
+	function k:rebuild()
+		self.radKnob = math.floor(self.h * .4)
+		self.xKnob = math.floor(self.x + self.w / 2)
+		self.yKnob = math.floor(self.y + self.h / 2)
+	end
+	k:rebuild()
+
+	return gooi.storeComponent(k, id)
+end
+
 
 
 ----------------------------------------------------------------------------
@@ -869,7 +963,7 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 				if c.childs then
 					for n = 1, #c.childs do
 						local ch = c.childs[n]
-						print("child id: "..ch.id)
+						--print("child id: "..ch.id)
 						local comp = gooi.get(ch.id)
 						local cell = c.layout:getCell(ch.cellRow, ch.cellCol)
 						comp:setBounds(cell.x, cell.y, cell.w, cell.h)
@@ -909,7 +1003,7 @@ function gooi.newPanel(id, x, y, w, h, theLayout, group)
 					if c.childs then
 						for n = 1, #c.childs do
 							local ch = c.childs[n]
-							print("child id: "..ch.id)
+							--print("child id: "..ch.id)
 							local comp = gooi.get(ch.id)
 							local cell = c.layout:getCell(ch.cellRow, ch.cellCol)
 							comp:setBounds(cell.x, cell.y, cell.w, cell.h)
@@ -1073,6 +1167,8 @@ function gooi.update(dt)
 				c:move()
 			elseif c.type == "spinner" then
 				c:update(dt)
+			elseif c.type == "knob" then
+				c:turn()
 			end
 		end
 	end
@@ -1248,6 +1344,8 @@ function gooi.pressed(id, x, y)
 					c.minPressed = false
 					c.plusPressed = true
 				end
+			elseif c.type == "knob" then
+				c.pivotY = (y or love.mouse.getY())
 			end
 		end
 		if c.enabled and c.visible then
@@ -1258,7 +1356,7 @@ function gooi.pressed(id, x, y)
 					c.pressed = true-- Pressed just on PC (one pressed at once).
 				end
 				if c.events.p then
-					c.events.p(c)
+					c.events.p(c)-- onPress event.
 				end
 			end
 		end
@@ -1271,6 +1369,9 @@ function gooi.moved(id, x, y)
 		comp.touch.x = x
 		comp.touch.y = y
 	end
+	if c.events.m then
+		c.events.m(c)-- Moven event.
+	end
 end
 ---------------------------------------------------------------------------------------------
 function gooi.released(id, x, y)
@@ -1279,6 +1380,10 @@ function gooi.released(id, x, y)
 	if c then
 		if c.type == "joystick" then
 			c:restore()
+		end
+		if c.type == "knob" then
+			c.pivotY = c.yKnob
+			c.pivotValue = c.changedValue
 		end
 		if c:wasReleased() then
 			if c.type == "radio" then
@@ -1291,7 +1396,7 @@ function gooi.released(id, x, y)
 				c.timerChange, c.timerPreChange, c.amountChange = 0, 0, .1
 			end
 			if c.events.r then
-				c.events.r(c)-- Release.
+				c.events.r(c)-- onRelease event.
 			end
 		end
 		c.pressed = false

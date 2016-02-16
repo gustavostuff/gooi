@@ -33,15 +33,17 @@ function love.load()
 
 	-- Choose one of them:
 
-	--math.floor(gooi.setStyle(seriousBlack)
+	--gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
 
 	-- Panel with grid layout:
 	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
 		:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
-		:setColspan(6, 2, 2)-- colspan for the 'xxx' text field.
+		:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
 		:setRowspan(10, 1, 4)-- For the giant slider.
-		:setColspan(10, 1, 3)-- For the giant slider.
+		:setColspan(10, 1, 2)-- For the giant slider.
+		:setRowspan(10, 3, 2)-- For the knob.
+		:setRowspan(12, 3, 2)-- For the other knob.
 		:add(
 			gooi.newLabel(1, "Left Label"):setOrientation("left"),
 			gooi.newLabel(2, "Center Label"):setOrientation("center"),
@@ -59,7 +61,7 @@ function love.load()
 			gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
 			gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
 			gooi.newCheck(16, "checkbox"),
-			gooi.newText(17, "xxx"),
+			gooi.newText(17, "This is a text field"),
 			gooi.newBar(18),
 			gooi.newSpinner(19),
 			gooi.newJoy(20),
@@ -73,6 +75,11 @@ function love.load()
 		-- Add component in a given cell:
 		pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
 		pGrid:add(gooi.newSlider("sli_x"), "10,1")
+		pGrid:add(gooi.newPanel("panelKnobs", 0, 0, 0, 0):add(
+				gooi.newKnob("knob_1"),
+				gooi.newKnob("knob_2"),
+				gooi.newKnob("knob_3")
+			), "10,3")
 		gooi.removeComponent("btn2")
 
 
@@ -124,6 +131,7 @@ function love.load()
 	gooi.newCheck("chb_debug", "See grid layout", 10, 440):onRelease(function(c)
 		pGrid.layout.debug = c.checked
 		gooi.get("panel_child").layout.debug = c.checked
+		gooi.get("panelKnobs").layout.debug = c.checked
 	end)
 	pGrid.layout.debug = gooi.get("chb_debug").checked
 	gooi.get("panel_child").layout.debug = gooi.get("chb_debug").checked
@@ -197,7 +205,8 @@ function love.draw()
 	gooi.draw()
 
 	gr.setColor(255, 255, 255)
-	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
+	--gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
+	gr.print("knob: "..gooi.get("knob_1").value, 0, love.graphics.getHeight() - gooi.font:getHeight())
 	--gr.print("joy_1: "..gooi.get("joy_1"):xValue()..", "..gooi.get("joy_1"):yValue(), 400, 400)
 end
 
