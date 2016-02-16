@@ -852,7 +852,7 @@ function gooi.newKnob(id, x, y, w, h, group)
 
 		local dy = self.pivotY - y
 
-		self.changedValue = self.pivotValue + dy / 180
+		self.changedValue = self.pivotValue + dy / self.h / 3
 
 		if self.changedValue > 1 then self.changedValue = 1 end
 		if self.changedValue < 0 then self.changedValue = 0 end
