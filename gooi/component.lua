@@ -97,6 +97,18 @@ function component.new(id, t, x, y, w, h, group)
 		self.fgColor = color
 		return self
 	end
+	function c:round(r)
+		if r < 0 then r = 0 end
+		if r > 1 then r = 1 end
+		self.howRound = 1
+		return self
+	end
+	function c:innerRound(r)
+		if r < 0 then r = 0 end
+		if r > 1 then r = 1 end
+		self.howRoundInternally = r
+		return self
+	end
 	c.borderWidth = component.style.borderWidth
 	c.howRound = component.style.howRound
 	c.howRoundInternally = component.style.howRoundInternally

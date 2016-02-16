@@ -101,14 +101,15 @@ function love.load()
 	pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
 
 	-- Change some styles individually:
-	gooi.get(16):bg({255, 127, 0, 127})
-	gooi.get(9):bg({255, 0, 0, 127}).howRound = 0
+	gooi.get(16):bg({255, 127, 0, 127}):innerRound(1)
+	gooi.get(9):bg({255, 0, 0, 127}):round(1)
 	gooi.get(12):bg({255, 0, 255, 127})
-	gooi.get(13).howRoundInternally = 1
+	gooi.get(13):innerRound(1)
 	gooi.get("knob_2"):bg({127, 255, 31, 127}):fg({0, 0, 0})
-	gooi.get("knob_3"):bg({31, 255, 127, 127}).howRound = 1
+	gooi.get("knob_3"):bg({31, 255, 127, 127}):innerRound(1)
 	gooi.get("sli_x"):bg({255, 255, 31, 127})
 	gooi.get(18):fg({255, 127, 0})
+	gooi.get(19):round(2):innerRound(1)
 	gooi.get(11):fg({255, 0, 0})
 	gooi.get(14):fg({255, 255, 0}):bg({127, 0, 127, 127})
 	gooi.get("joy_1"):fg({255, 127, 0})
