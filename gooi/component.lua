@@ -82,6 +82,21 @@ function component.new(id, t, x, y, w, h, group)
 		c.events.m = f
 		return self
 	end
+	function c:bg(color)
+		if not color then
+			return self.bgColor
+		end
+		self.bgColor = color
+		self.borderColor = {color[1], color[2], color[3]}
+		return self
+	end
+	function c:fg(color)
+		if not color then
+			return self.fgColor
+		end
+		self.fgColor = color
+		return self
+	end
 	c.borderWidth = component.style.borderWidth
 	c.howRound = component.style.howRound
 	c.howRoundInternally = component.style.howRoundInternally

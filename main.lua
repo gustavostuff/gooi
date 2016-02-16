@@ -30,11 +30,18 @@ function love.load()
 		borderColor = "#990044",
 		font = gr.newFont(dirFonts.."Grundschrift-Bold.otf", 16)
 	}
+	greenStyle = {
+		font = gr.newFont(dirFonts.."ProggySquare.ttf", 16),
+		showBorder = true,
+		bgColor = {0, 127, 127, 127},
+		borderColor = "#000000"
+	}
 
 	-- Choose one of them:
 
 	--gooi.setStyle(seriousBlack)
 	--gooi.setStyle(roshita)
+	gooi.setStyle(greenStyle)
 
 	-- Panel with grid layout:
 	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
@@ -74,13 +81,12 @@ function love.load()
 		-- Add component in a given cell:
 		pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
 		pGrid:add(gooi.newSlider("sli_x"), "10,1")
-		pGrid:add(gooi.newPanel("panelKnobs", 0, 0, 0, 0):add(
+		pGrid:add(gooi.newPanel("panelKnobs"):add(
 				gooi.newKnob("knob_1"),
 				gooi.newKnob("knob_2"),
 				gooi.newKnob("knob_3")
 			), "10,3")
 		gooi.removeComponent("btn2")
-
 
 
 	-- Panel with Game layout:
@@ -93,6 +99,20 @@ function love.load()
 	pGame:add(gooi.newLabel("lbl_score", "Score: 0"), "t-l")-- Top-left
 	pGame:add(gooi.newBar("bar_1"):setLength(pGame.w / 3):increase(1), "t-r")-- Top-right
 	pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
+
+	-- Change some styles individually:
+	gooi.get(16):bg({255, 127, 0, 127})
+	gooi.get(9):bg({255, 0, 0, 127}).howRound = 0
+	gooi.get(12):bg({255, 0, 255, 127})
+	gooi.get(13).howRoundInternally = 1
+	gooi.get("knob_2"):bg({127, 255, 31, 127})
+	gooi.get("knob_3"):bg({31, 255, 127, 127}).howRound = 1
+	gooi.get("sli_x"):bg({255, 255, 31, 127})
+	gooi.get(18):fg({255, 127, 0})
+	gooi.get(11):fg({255, 0, 0})
+	gooi.get(14):fg({255, 255, 0})
+	gooi.get("joy_1"):fg({255, 127, 0})
+	gooi.get("btn_shot"):bg({0, 255, 0, 127})
 
 	-- Mini game in the game panel:
 
@@ -181,7 +201,7 @@ function love.update(dt)
 end
 
 function love.draw()
-	-- Draw panel shapes:--[[
+	-- Draw panel shapes:
 	gr.draw(imgBg1, 0, 0)
 	gr.setColor(0, 0, 0, 63)
 	gr.rectangle("fill", pGrid.x, pGrid.y, pGrid.w, pGrid.h)

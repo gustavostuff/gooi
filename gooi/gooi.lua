@@ -293,7 +293,7 @@ function gooi.newCheck(id, text, x, y, w, h, checked, group)
 		local rad = .4 -- Normal radius for the white circles.
 		local mC = math.floor(self.h / 8) -- Margin corner.
 		local side = math.floor(self.h - mC * 2)
-		love.graphics.setColor(255, 255, 255)
+		love.graphics.setColor(fg)
 		local recWhite = {
 			math.floor(self.x + mC),
 			math.floor(self.y + mC),
@@ -568,7 +568,7 @@ end
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
---------------------------   Spinner creator   -------------------------------
+--------------------------   Spinner creator   -----------------------------
 ----------------------------------------------------------------------------
 function gooi.newSpinner(id, x, y, w, h, value, min, max, step, group)
 	local s = {}
@@ -770,6 +770,7 @@ function gooi.newJoy(id, x, y, size, deadZone, group)
 		local dx, dy = self:theX() - self.xStick, self:theY() - self.yStick
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
+	-- TODO this is a temporal fix for the joystick "moving" by itself when setting a style:
 	function s:theX() return math.ceil(self.x) + math.floor(self.r) end
 	function s:theY() return math.ceil(self.y) + math.floor(self.r) end
 
