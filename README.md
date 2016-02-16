@@ -25,51 +25,49 @@ pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
 And for the _grid_ layout in the other image:
 
 ```lua
--- Panel with grid layout:
-	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
-	:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
-	:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
-	:setRowspan(10, 1, 4)-- For the giant slider.
-	:setColspan(10, 1, 2)-- For the giant slider.
-	:setRowspan(10, 3, 2)-- For the knob.
-	:setRowspan(12, 3, 2)-- For the other knob.
-	:add(
-		gooi.newLabel(1, "Left Label"):setOrientation("left"),
-		gooi.newLabel(2, "Center Label"):setOrientation("center"),
-		gooi.newLabel(3, "Right Label"),
-		gooi.newLabel(4, "Left Label"):setOrientation("left"):setImage(dirImgs.."h.png"),
-		gooi.newLabel(5, "Center Label"):setOrientation("center"):setImage(dirImgs.."h.png"),
-		gooi.newLabel(6, "Right Label"):setImage(dirImgs.."h.png"),
-		gooi.newButton(7, "Left Button"):setOrientation("left"),
-		gooi.newButton(8, "Center Button"),
-		gooi.newButton(9, "Right Button"):setOrientation("right"),
-		gooi.newButton(10, ""):setOrientation("left"):setImage(dirImgs.."coin.png"),
-		gooi.newButton(11, "Center Button"):setImage(dirImgs.."coin.png"),
-		gooi.newButton(12, "Right Button"):setOrientation("right"):setImage(dirImgs.."coin.png"),
-		gooi.newSlider(13),
-		gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
-		gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
-		gooi.newCheck(16, "checkbox"),
-		gooi.newText(17, "This is a text field"),
-		gooi.newBar(18),
-		gooi.newSpinner(19),
-		gooi.newJoy(20),
-		gooi.newPanel("panel_child"):add(
-			gooi.newSlider("sli1"),
-			gooi.newButton("btn2", "Btn"),
-			gooi.newButton("btn3", "Btn")
-		)
+pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
+:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
+:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
+:setRowspan(10, 1, 4)-- For the giant slider.
+:setColspan(10, 1, 2)-- For the giant slider.
+:setRowspan(10, 3, 2)-- For the knobs panel.
+:add(
+	gooi.newLabel(1, "Left Label"):setOrientation("left"),
+	gooi.newLabel(2, "Center Label"):setOrientation("center"),
+	gooi.newLabel(3, "Right Label"),
+	gooi.newLabel(4, "Left Label"):setOrientation("left"):setImage(dirImgs.."h.png"),
+	gooi.newLabel(5, "Center Label"):setOrientation("center"):setImage(dirImgs.."h.png"),
+	gooi.newLabel(6, "Right Label"):setImage(dirImgs.."h.png"),
+	gooi.newButton(7, "Left Button"):setOrientation("left"),
+	gooi.newButton(8, "Center Button"),
+	gooi.newButton(9, "Right Button"):setOrientation("right"),
+	gooi.newButton(10, ""):setOrientation("left"):setImage(dirImgs.."coin.png"),
+	gooi.newButton(11, "Center Button"):setImage(dirImgs.."coin.png"),
+	gooi.newButton(12, "Right Button"):setOrientation("right"):setImage(dirImgs.."coin.png"),
+	gooi.newSlider(13),
+	gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
+	gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
+	gooi.newCheck(16, "checkbox"),
+	gooi.newText(17, "This is a text field"),
+	gooi.newBar(18),
+	gooi.newSpinner(19),
+	gooi.newJoy(20),
+	gooi.newPanel("panel_child"):add(
+		gooi.newSlider("sli1"),
+		gooi.newButton("btn2", "Btn"),
+		gooi.newButton("btn3", "Btn")
 	)
+)
 
-	-- Add component in a given cell:
-	pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
-	pGrid:add(gooi.newSlider("sli_x"), "10,1")
-	pGrid:add(gooi.newPanel("panelKnobs", 0, 0, 0, 0):add(
-			gooi.newKnob("knob_1"),
-			gooi.newKnob("knob_2"),
-			gooi.newKnob("knob_3")
-		), "10,3")
-	gooi.removeComponent("btn2")
+-- Add component in a given cell:
+pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
+pGrid:add(gooi.newSlider("sli_x"), "10,1")
+pGrid:add(gooi.newPanel("panelKnobs", 0, 0, 0, 0):add(
+		gooi.newKnob("knob_1"),
+		gooi.newKnob("knob_2"),
+		gooi.newKnob("knob_3")
+	), "10,3")
+gooi.removeComponent("btn2")
 ```
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751

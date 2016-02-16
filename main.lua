@@ -42,8 +42,7 @@ function love.load()
 		:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
 		:setRowspan(10, 1, 4)-- For the giant slider.
 		:setColspan(10, 1, 2)-- For the giant slider.
-		:setRowspan(10, 3, 2)-- For the knob.
-		:setRowspan(12, 3, 2)-- For the other knob.
+		:setRowspan(10, 3, 2)-- For the knobs panel.
 		:add(
 			gooi.newLabel(1, "Left Label"):setOrientation("left"),
 			gooi.newLabel(2, "Center Label"):setOrientation("center"),
