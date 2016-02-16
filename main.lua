@@ -105,12 +105,12 @@ function love.load()
 	gooi.get(9):bg({255, 0, 0, 127}).howRound = 0
 	gooi.get(12):bg({255, 0, 255, 127})
 	gooi.get(13).howRoundInternally = 1
-	gooi.get("knob_2"):bg({127, 255, 31, 127})
+	gooi.get("knob_2"):bg({127, 255, 31, 127}):fg({0, 0, 0})
 	gooi.get("knob_3"):bg({31, 255, 127, 127}).howRound = 1
 	gooi.get("sli_x"):bg({255, 255, 31, 127})
 	gooi.get(18):fg({255, 127, 0})
 	gooi.get(11):fg({255, 0, 0})
-	gooi.get(14):fg({255, 255, 0})
+	gooi.get(14):fg({255, 255, 0}):bg({127, 0, 127, 127})
 	gooi.get("joy_1"):fg({255, 127, 0})
 	gooi.get("btn_shot"):bg({0, 255, 0, 127})
 
@@ -120,6 +120,13 @@ function love.load()
 	imgBullet = gr.newImage(dirImgs.."bullet.png")
 	imgBomb = gr.newImage(dirImgs.."bomb.png")
 	imgBoom = gr.newImage(dirImgs.."boom.png")
+
+	-- Free components (not in a layout):
+
+	gooi.newButton("btn_free", "Free button", 200, 440)
+	gooi.newSlider("sli_free", 300, 440)
+	gooi.newCheck("chb_free", "Free checkbox", 400, 440, 200, 50)
+	gooi.newJoy("joy_free", 620, 440, 50, 50)
 	
 	ship =
 	{

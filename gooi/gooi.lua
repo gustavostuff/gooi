@@ -228,6 +228,7 @@ function gooi.newSlider(id, x, y, w, h, value, group)
 
 	s.displacement = (s.w - s.h) * s.value
 	function s:drawSpecifics(fg)
+		love.graphics.setLineStyle("smooth")
 		local mC = math.floor(self.h / 8) -- Margin corner.
 		local rad = self.h * .4 -- Normal radius for the white circles.
 		local side = math.floor(self.h - mC * 2)
@@ -250,6 +251,7 @@ function gooi.newSlider(id, x, y, w, h, value, group)
 				x2Line,
 				self.y + self.h / 2 - 1)
 		end
+		love.graphics.setLineStyle("rough")
 	end
 	function s:updateValue(theX)
 		self.displacement = (theX - (self.x + self.h / 2))
