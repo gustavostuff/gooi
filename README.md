@@ -64,7 +64,7 @@ pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
 -- Add component in a given cell:
 pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
 pGrid:add(gooi.newSlider("sli_x"), "10,1")
-pGrid:add(gooi.newPanel("panelKnobs", 0, 0, 0, 0):add(
+pGrid:add(gooi.newPanel("panelKnobs"):add(
 		gooi.newKnob("knob_1"),
 		gooi.newKnob("knob_2"),
 		gooi.newKnob("knob_3")
