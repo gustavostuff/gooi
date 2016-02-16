@@ -26,7 +26,6 @@ THE SOFTWARE.
 gooi = {}
 gooi.__index = gooi
 gooi.font = love.graphics.newFont(love.graphics.getWidth() / 80)
-gooi.viewPortMode = false
 gooi.components = {}
 
 local circleRes = 50
@@ -1324,9 +1323,6 @@ function gooi.deselectOtherRadios(group, id)
 	end
 end
 
-function gooi.setViewportMode(b)
-	gooi.viewPortMode = b
-end
 ---------------------------------------------------------------------------------------------
 function gooi.pressed(id, x, y)
 	for k, c in pairs(gooi.components) do
@@ -1556,17 +1552,6 @@ function gooi.checkBounds(text, x, y, w, h, t)
 				--newX, newY, newW, newH = 0, 0, love.graphics.getWidth(), love.graphics.getHeight()
 			end
 		end
-	end
-	if gooi.viewPortMode then
-		if newX > 1 then newX = 1 end   if newX < 0 then newX = 0 end
-		if newY > 1 then newY = 1 end   if newY < 0 then newY = 0 end
-		if newW > 1 then newW = 1 end   if newW < 0 then newW = 0 end
-		if newH > 1 then newH = 1 end   if newH < 0 then newH = 0 end
-
-		newX = newX * love.graphics.getWidth()
-		newY = newY * love.graphics.getHeight()
-		newW = newW * love.graphics.getWidth()
-		newH = newH * love.graphics.getHeight()
 	end
 	return newX, newY, newW, newH
 end
