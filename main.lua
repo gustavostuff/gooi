@@ -139,7 +139,7 @@ end
 function love.update(dt)
 	gooi.update(dt)
 	-- Fill in 10 seconds:
-	gooi.get(18):increase(.1, dt)
+	gooi.get(18):increase(.02, dt)
 	
 	-- Mini game:
 	ship.x = ship.x + 300 * gooi.get("joy_1"):xValue() * dt
