@@ -1368,9 +1368,9 @@ function gooi.moved(id, x, y)
 	if comp and comp.touch then-- Update touch for every component which has it.
 		comp.touch.x = x
 		comp.touch.y = y
-	end
-	if c.events.m then
-		c.events.m(c)-- Moven event.
+		if comp.events.m then
+			comp.events.m(comp)-- Moven event.
+		end
 	end
 end
 ---------------------------------------------------------------------------------------------

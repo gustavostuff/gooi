@@ -204,8 +204,8 @@ function love.draw()
 	gooi.draw()
 
 	gr.setColor(255, 255, 255)
-	--gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
-	gr.print("knob: "..gooi.get("knob_1").value, 0, love.graphics.getHeight() - gooi.font:getHeight())
+	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
+	--gr.print("knob: "..gooi.get("knob_1").value, 0, love.graphics.getHeight() - gooi.font:getHeight())
 	--gr.print("joy_1: "..gooi.get("joy_1"):xValue()..", "..gooi.get("joy_1"):yValue(), 400, 400)
 end
 
@@ -217,11 +217,11 @@ function love.keypressed(key)
 		love.event.quit()
 	end
 end
+
 function love.mousereleased(x, y, button) gooi.released() end
 function love.mousepressed(x, y, button)  gooi.pressed() end
 --[[
+function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
 function love.touchpressed(id, x, y, pressure) gooi.pressed(id, x, y) end
 function love.touchreleased(id, x, y, pressure) gooi.released(id, x, y) end
-function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
-
 ]]
