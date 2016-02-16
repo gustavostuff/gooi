@@ -72,4 +72,8 @@ pGrid:add(gooi.newPanel("panelKnobs"):add(
 gooi.removeComponent("btn2")
 ```
 
+Most of the components use this contructor:
+
+gooi.newXXXX(id, [,label], x, y, width, height, [, other parameters here])
+
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
