@@ -128,6 +128,7 @@ function love.load()
 	gooi.newSlider("sli_free", 300, 440)
 	gooi.newCheck("chb_free", "Free checkbox", 400, 440, 200, 50)
 	gooi.newJoy("joy_free", 620, 440, 50, 50)
+	gooi.newLabel("lbl_free", "First knob: ", 700, 440, 70, 25):setOrientation("left")
 	
 	ship =
 	{
@@ -168,6 +169,9 @@ function love.update(dt)
 	gooi.update(dt)
 	-- Fill in 10 seconds:
 	gooi.get(18):increase(.1, dt)
+
+	-- Free label:
+	gooi.get("lbl_free").text = "First knob: "..gooi.get("knob_1").value
 	
 	-- Mini game:
 	ship.x = ship.x + 300 * gooi.get("joy_1"):xValue() * dt
