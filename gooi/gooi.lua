@@ -30,24 +30,6 @@ gooi.components = {}
 
 local circleRes = 50
 
-local minusID = love.image.newImageData(3, 3)
-local plusID = love.image.newImageData(3, 3)
-
-minusID:setPixel(0, 1, 255, 255, 255, 255)
-minusID:setPixel(1, 1, 255, 255, 255, 255)
-minusID:setPixel(2, 1, 255, 255, 255, 255)
-
-plusID:setPixel(0, 1, 255, 255, 255, 255)
-plusID:setPixel(1, 1, 255, 255, 255, 255)
-plusID:setPixel(2, 1, 255, 255, 255, 255)
-plusID:setPixel(1, 0, 255, 255, 255, 255)
-plusID:setPixel(1, 2, 255, 255, 255, 255)
-
-local imgMinus = love.graphics.newImage(minusID)
-local imgPlus = love.graphics.newImage(plusID)
-imgMinus:setFilter("nearest", "nearest")
-imgPlus:setFilter("nearest", "nearest")
-
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 --------------------------   Label creator  --------------------------------
