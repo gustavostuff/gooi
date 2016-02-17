@@ -88,12 +88,11 @@ function gooi.newLabel(id, text, x, y, w, h, image, orientation,  group)
 		if self.image then
 			local xImg = math.floor(self.x + self.h / 2)
 			love.graphics.setColor(255, 255, 255)
-			if not self.enabled then love.graphics.setColor(0, 0, 0) end
+			if not self.enabled then love.graphics.setColor(63, 63, 63) end
 
 			if t:len() == 0 then
 				xImg = math.floor(self.x + self.w / 2)
 			end
-			
 			love.graphics.draw(self.image, xImg, math.floor(self.y + self.h / 2), 0, 1, 1,
 				self.image:getWidth() / 2, self.image:getHeight() / 2)
 		end
@@ -173,7 +172,7 @@ function gooi.newButton(id, text, x, y, w, h, image, group)
 				xImg = math.floor(self.x + self.w / 2)
 			end
 			love.graphics.setColor(255, 255, 255)
-			if not self.enabled then love.graphics.setColor(0, 0, 0) end
+			if not self.enabled then love.graphics.setColor(63, 63, 63) end
 			love.graphics.draw(self.image,
 				xImg,
 				math.floor(self.y + self.h / 2) + self.pressedMove, 0, 1, 1,
@@ -530,6 +529,9 @@ function gooi.newBar(id, x, y, w, h, value, color1, color2, group)
 			self.howRoundInternally * self.h / 2,
 			circleRes)
 		love.graphics.setColor(self.fgColor)
+		if not self.enabled then
+			love.graphics.setColor(63, 63, 63)
+		end
 		love.graphics.rectangle("fill",
 			math.floor(self.x + marginBars),
 			math.floor(self.y) + marginBars,
@@ -810,6 +812,9 @@ function gooi.newKnob(id, x, y, w, h, group)
 
 	function k:drawSpecifics(fg)
 		love.graphics.setColor(fg)
+		if not self.enabled then
+			love.graphics.setColor(63, 63, 63)
+		end
 
 		love.graphics.arc("fill",
 			self.xKnob,
@@ -821,6 +826,9 @@ function gooi.newKnob(id, x, y, w, h, group)
 			)
 
 		love.graphics.setColor(self.bgColor[1], self.bgColor[2], self.bgColor[3])
+		if not self.enabled then
+			love.graphics.setColor(63, 63, 63)
+		end
 		love.graphics.circle("fill",
 			self.xKnob,
 			self.yKnob,

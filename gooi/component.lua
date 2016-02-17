@@ -167,6 +167,9 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setLineStyle("smooth")
 		if self.showBorder then
 			love.graphics.setColor(self.borderColor)
+			if not self.enabled then
+				love.graphics.setColor(63, 63, 63)
+			end
 			local prevLineW = love.graphics.getLineWidth()
 			love.graphics.setLineWidth(self.borderWidth)
 			love.graphics.rectangle("line",
