@@ -114,6 +114,11 @@ function love.load()
 	gooi.get(14):fg({255, 255, 0}):bg({127, 0, 127, 127})
 	gooi.get("joy_1"):fg({255, 127, 0})
 	gooi.get("btn_shot"):bg({0, 255, 0, 127})
+	gooi.get("sli1"):bg({0, 0, 0, 0}).showBorder = false
+	gooi.get(14):bg({0, 0, 0, 0})
+	gooi.get(9):bg({255, 0, 0, 0})
+	gooi.get(7).font = gr.newFont(dirFonts.."Grundschrift-Bold.otf")
+	gooi.get(9).font = gr.newFont(dirFonts.."Grundschrift-Bold.otf")
 
 	-- Mini game in the game panel:
 

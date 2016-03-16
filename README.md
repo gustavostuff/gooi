@@ -12,6 +12,10 @@ Here's GÖÖi with a serious black theme, using a _grid_ layout:
 
 ![GÖÖi grid layout](http://s23.postimg.org/jqvr0s51n/ggggg.gif)
 
+GÖÖi is highly customizable:
+
+![GÖÖi customized](http://s9.postimg.org/3jyni0jjz/Captura.png)
+
 The code needed for the first image would be this: (omitting some things like the shot functions)
 
 ```lua
@@ -24,7 +28,7 @@ pGame:add(gooi.newBar("bar_1"):setLength(pGame.w / 3):increase(1), "t-r")-- Top-
 pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
 ```
 
-And for the _grid_ layout in the other image:
+And for the _grid_ layout in the second image:
 
 ```lua
 pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
