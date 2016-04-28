@@ -4,7 +4,7 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](http://doge.mit-license.org)
 
-*** Examples:
+### Examples:
 
 This is how you create a button with an event (desktop example):
 
@@ -42,7 +42,7 @@ gooi.newButton({
 })
 ```
 
-*** More Examples:
+### More Examples:
 
 ![free components](http://s32.postimg.org/owuec96j9/no_layout.gif)
 Code:
