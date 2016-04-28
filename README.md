@@ -45,7 +45,7 @@ gooi.newButton({
 	w = 150,
 	h = 25,
 	orientation = "right",
-	icon = "imgs/icon.png"
+	icon = "/imgs/icon.png"
 })
 ```
 
