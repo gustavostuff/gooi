@@ -151,6 +151,12 @@ pGrid
 )
 ```
 
+### Limitations:
+
+* A panel can't be added inside another panel, just normal components
+* In text fields, the text can't be larger than the component width
+* There's no responsiveness (yet)
+
 GÖÖi is still a work in progress, thanks for you feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
