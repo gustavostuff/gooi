@@ -51,6 +51,7 @@ gooi.newButton({
 ### More Examples:
 
 ![free components](http://s32.postimg.org/owuec96j9/no_layout.gif)
+
 Code:
 ```lua
 lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
@@ -88,6 +89,7 @@ joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
 ```
 
 ![GÖÖi game layout](http://s32.postimg.org/6rw56691x/game_layout.gif)
+
 Code:
 ```lua
 joyShip = gooi.newJoy({size = 60})
@@ -110,6 +112,7 @@ pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF"
 GÖÖi is highly customizable:
 
 ![GÖÖi grid layout](http://s32.postimg.org/qs06qkgnp/grid_layout.gif)
+
 Code:
 ```lua
 pGrid = gooi.newPanel(350, 290, 420, 290, "grid 10x3")
