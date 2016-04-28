@@ -209,3 +209,47 @@ function quit()
 end
 
 function r() return love.math.random(0, 255) end
+
+-- Android:
+
+--[[
+require "gooi"
+
+function love.load()
+	gr = love.graphics
+
+	ball = {
+		x = 300,
+		y = 300,
+		color = {255, 255, 255},
+		radius = 50
+	}
+
+	joy = gooi.newJoy()
+	panel = gooi.newPanel(0, 0, gr.getWidth(), gr.getHeight(), "game")
+	panel:add(joy, "b-l")
+	panel:add(gooi.newButton({text = "Color", w = 120}):onRelease(function()
+		ball.color = {r(), r(), r()}
+	end), "b-r")
+	panel:add(gooi.newButton({text = "Size", w = 120}):onRelease(function()
+		ball.radius = r() / 2
+	end), "b-r")
+end
+
+function love.update(dt)
+	gooi.update(dt)
+	ball.x = ball.x + joy:xValue() * 200 * dt
+	ball.y = ball.y + joy:yValue() * 200 * dt
+end
+
+function love.draw()
+	gooi.draw()
+	gr.setColor(ball.color)
+	gr.circle("fill", ball.x, ball.y, ball.radius)
+end
+
+function r() return love.math.random(0, 255) end
+
+function love.touchpressed(id, x, y)  gooi.pressed(id, x, y) end
+function love.touchreleased(id, x, y) gooi.released(id, x, y) end
+]]
