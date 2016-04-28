@@ -26,7 +26,6 @@ function love.mousereleased(x, y, button) gooi.released() end
 -- Use these for Android:
 --[[
 	function love.touchpressed(id, x, y)  gooi.pressed(id, x, y)
-	function love.touchmoved(id, x, y)    gooi.moved(id, x, y)
 	function love.touchreleased(id, x, y) gooi.released(id, x, y)
 ]]
 ```
