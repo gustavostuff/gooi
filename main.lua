@@ -3,262 +3,208 @@ require "gooi"
 function love.load()
 	gr = love.graphics
 	kb = love.keyboard
-	ma = love.math
-	function w() return gr.getWidth() end
-	function h() return gr.getHeight() end
+	mo = love.mouse
 
-	dirFonts = "/fonts/"
-	dirImgs = "/imgs/"
-	timerBomb = 0
-	timerExplosion = 0
+	gr.setBackgroundColor(0, 63, 127)
 
-	imgBg1 = gr.newImage(dirImgs.."bg.png")
-	-- Create styles:
-	seriousBlack = {
-		bgColor = {0, 0, 0, 127},
-		fgColor = {255, 255, 255},
-		howRound = 0,
-		howRoundInternally = 0,
-		font = gr.newFont(dirFonts.."ProggySquare.ttf", 16)
+	function width() return gr.getWidth() end
+	function height() return gr.getHeight() end
+
+	imgDir = "/imgs/"
+	fontDir = "/fonts/"
+	gooiFont = gr.newFont(fontDir.."ProggySquare.ttf", 16)
+	style= {
+		font = gooiFont,
+		fgColor = "#FFFFFF",
+		bgColor = {0, 0, 40, 200}
 	}
-	roshita = {
-		bgColor = "#AD00AD",
-		fgColor = "#ffffff",
-		howRound = 1,
-		howRoundInternally = 1,
-		showBorder = true,
-		borderColor = "#990044",
-		font = gr.newFont(dirFonts.."Grundschrift-Bold.otf", 16)
-	}
-	greenStyle = {
-		font = gr.newFont(dirFonts.."ProggySquare.ttf", 16),
-		showBorder = true,
-		bgColor = {0, 127, 127, 127},
-		borderColor = "#000000"
+	gooi.setStyle(style)
+	gr.setDefaultFilter("nearest", "nearest")
+
+	ship = {
+		img = gr.newImage(imgDir.."ship.png"),
+		x = 480,
+		y = 200
 	}
 
-	-- Choose one of them:
-
-	--gooi.setStyle(seriousBlack)
-	--gooi.setStyle(roshita)
-	gooi.setStyle(greenStyle)
-
-	-- Panel with grid layout:
-	pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
-		:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
-		:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
-		:setRowspan(10, 1, 4)-- For the giant slider.
-		:setColspan(10, 1, 2)-- For the giant slider.
-		:setRowspan(10, 3, 2)-- For the knobs panel.
-		:add(
-			gooi.newLabel(1, "Left Label"):setOrientation("left"),
-			gooi.newLabel(2, "Center Label"):setOrientation("center"),
-			gooi.newLabel(3, "Right Label"),
-			gooi.newLabel(4, "Left Label"):setOrientation("left"):setImage(dirImgs.."h.png"),
-			gooi.newLabel(5, "Center Label"):setOrientation("center"):setImage(dirImgs.."h.png"),
-			gooi.newLabel(6, "Right Label"):setImage(dirImgs.."h.png"),
-			gooi.newButton(7, "Left Button"):setOrientation("left"),
-			gooi.newButton(8, "Center Button"),
-			gooi.newButton(9, "Right Button"):setOrientation("right"),
-			gooi.newButton(10, ""):setOrientation("left"):setImage(dirImgs.."coin.png"),
-			gooi.newButton(11, "Center Button"):setImage(dirImgs.."coin.png"),
-			gooi.newButton(12, "Right Button"):setOrientation("right"):setImage(dirImgs.."coin.png"),
-			gooi.newSlider(13),
-			gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
-			gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
-			gooi.newCheck(16, "checkbox"),
-			gooi.newText(17, "This is a text field"),
-			gooi.newBar(18),
-			gooi.newSpinner(19),
-			gooi.newJoy(20),
-			gooi.newPanel("panel_child"):add(
-				gooi.newSlider("sli1"),
-				gooi.newButton("btn2", "Btn"),
-				gooi.newButton("btn3", "Btn")
-			)
-		)
-
-		-- Add component in a given cell:
-		pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
-		pGrid:add(gooi.newSlider("sli_x"), "10,1")
-		pGrid:add(gooi.newPanel("panelKnobs"):add(
-				gooi.newKnob("knob_1"),
-				gooi.newKnob("knob_2"),
-				gooi.newKnob("knob_3")
-			), "10,3")
-		gooi.removeComponent("btn2")
-
-
-	-- Panel with Game layout:
-
-	pGame = gooi.newPanel("panelGameLayout", 520, 10, 500, 400, "game")
-
-	pGame:add(gooi.newButton("btn_shot", "Shot", 0, 0, 80, 50):onRelease(function() shotBullet() end), "b-r")-- Bottom-right
-	pGame:add(gooi.newButton("btn_bomb", "Bomb", 0, 0, 80, 50):onRelease(function() shotBomb() end), "b-r")-- Bottom-right
-	pGame:add(gooi.newJoy("joy_1"), "b-l")-- Bottom-left
-	pGame:add(gooi.newLabel("lbl_score", "Score: 0"), "t-l")-- Top-left
-	pGame:add(gooi.newBar("bar_1"):setLength(pGame.w / 3):increase(1), "t-r")-- Top-right
-	pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
-
-	-- Change some styles individually:
-	gooi.get(16):bg({255, 127, 0, 127}):innerRound(1)
-	gooi.get(9):bg({255, 0, 0, 127}):round(1)
-	gooi.get(12):bg({255, 0, 255, 127})
-	gooi.get(13):innerRound(1)
-	gooi.get("knob_2"):bg({127, 255, 31, 127}):fg({0, 0, 0})
-	gooi.get("knob_3"):bg({31, 255, 127, 127}):round(1)
-	gooi.get("sli_x"):bg({255, 255, 31, 127})
-	gooi.get(18):fg({255, 127, 0})
-	gooi.get(19):round(2):innerRound(1)
-	gooi.get(11):fg({255, 0, 0})
-	gooi.get(14):fg({255, 255, 0}):bg({127, 0, 127, 127})
-	gooi.get("joy_1"):fg({255, 127, 0})
-	gooi.get("btn_shot"):bg({0, 255, 0, 127})
-	gooi.get("sli1"):bg({0, 0, 0, 0}).showBorder = false
-	gooi.get(14):bg({0, 0, 0, 0})
-	gooi.get(9):bg({255, 0, 0, 0})
-	gooi.get(7).font = gr.newFont(dirFonts.."Grundschrift-Bold.otf")
-	gooi.get(9).font = gr.newFont(dirFonts.."Grundschrift-Bold.otf")
-
-	-- Mini game in the game panel:
-
-	imgShip = gr.newImage(dirImgs.."ship.png")
-	imgBullet = gr.newImage(dirImgs.."bullet.png")
-	imgBomb = gr.newImage(dirImgs.."bomb.png")
-	imgBoom = gr.newImage(dirImgs.."boom.png")
-
-	-- Free components (not in a layout):
-
-	gooi.newButton("btn_free", "Free button", 200, 440)
-	gooi.newSlider("sli_free", 300, 440)
-	gooi.newCheck("chb_free", "Free checkbox", 400, 440, 200, 50)
-	gooi.newJoy("joy_free", 620, 440, 50, 50)
-	gooi.newLabel("lbl_free", "First knob: ", 700, 440, 70, 25):setOrientation("left")
-	
-	ship =
-	{
-		x = pGame.x + pGame.w / 2,
-		y = pGame.y + pGame.h / 2
-	}
 	bullets = {}
-	bomb = nil
-	explosion = nil
-	function shotBullet()
-		table.insert(bullets,
-			{
-				x = ship.x,
-				y = ship.y
-			})
-	end
-	function shotBomb()
-		if not bomb then
-			bomb =
-			{
-				x = ship.x,
-				y = ship.y - imgShip:getHeight()
-			}
-		end
-	end
+	imgBullet = gr.newImage(imgDir.."bullet.png")
+	imgBg = gr.newImage(imgDir.."bg.png")
 
-	-- Events:
-	gooi.newCheck("chb_debug", "See grid layout", 10, 440):onRelease(function(c)
-		pGrid.layout.debug = c.checked
-		gooi.get("panel_child").layout.debug = c.checked
-		gooi.get("panelKnobs").layout.debug = c.checked
+	-----------------------------------------------
+	-----------------------------------------------
+	-- Free elements with no layout:
+	-----------------------------------------------
+	-----------------------------------------------
+
+	lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
+	lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
+
+	btn1 = gooi.newButton("Exit", 120, 40, 150, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
+	:onRelease(function()
+		quit()
 	end)
-	pGrid.layout.debug = gooi.get("chb_debug").checked
-	gooi.get("panel_child").layout.debug = gooi.get("chb_debug").checked
+
+	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
+	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
+
+	chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(function(c)
+		if c.checked then
+			gr.setBackgroundColor(127, 63, 0)
+		else
+			gr.setBackgroundColor(0, 63, 127)
+		end
+	end)
+
+	-- Radio group:
+	rad1 = gooi.newRadio({ y = 100, text = "one", radioGroup = "g1", selected = true})
+	rad2 = gooi.newRadio({ y = 130, text = "two", radioGroup = "g1"})
+	rad3 = gooi.newRadio({ y = 160, text = "three", radioGroup = "g1"})
+	knob1 = gooi.newKnob({ x = 120, y = 110, value = 0.9, size = 60})
+	-- Anoher radio group:
+	rad4 = gooi.newRadio({ y = 100, x = 200, text = "Apr", radioGroup = "g2", selected = true})
+	rad5 = gooi.newRadio({ y = 130, x = 200, text = "May", radioGroup = "g2"})
+	rad6 = gooi.newRadio({ y = 160, x = 200, text = "Jun", radioGroup = "g2"})
+
+	txt1 = gooi.newText({ y = 260, w = 200})
+	bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
+	joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
+
+
+
+
+	-----------------------------------------------
+	-----------------------------------------------
+	-- Game layout:
+	-----------------------------------------------
+	-----------------------------------------------
+
+	joyShip = gooi.newJoy({size = 60})
+	btnShot = gooi.newButton("Shot"):onRelease(function()
+		table.insert(bullets, {
+			x = ship.x,
+			y = ship.y
+		})
+	end)
+
+	pGame = gooi.newPanel(350, 10, 420, 270, "game")
+	pGame:add(gooi.newButton("Bomb"), "b-r")
+	pGame:add(btnShot, "b-r")
+	pGame:add(joyShip, "b-l")
+	pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
+	pGame:add(gooi.newLabel("Score: 702013"), "t-l")
+	pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
+
+
+
+	-----------------------------------------------
+	-----------------------------------------------
+	-- Grid layout:
+	-----------------------------------------------
+	-----------------------------------------------
+
+	pGrid = gooi.newPanel(350, 290, 420, 290, "grid 10x3")
+	-- Add in the specified cell:
+	pGrid:add(gooi.newRadio({text = "Radio 1", selected = true}), "7,1")
+	pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
+	pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
+	pGrid
+	:setColspan(1, 1, 3)
+	:setRowspan(6, 3, 2)
+	:setColspan(8, 2, 2)
+	:setRowspan(8, 2, 3)
+	:add(
+		gooi.newLabel({text = "(Grid Layout demo)", orientation = "center"}),
+		gooi.newLabel({text = "Left label", orientation = "left"}),
+		gooi.newLabel({text = "Centered", orientation = "center"}),
+		gooi.newLabel({text = "Right", orientation = "right"}),
+		gooi.newButton({text = "Left button", orientation = "left"}),
+		gooi.newButton("Centered"),
+		gooi.newButton({text = "Right", orientation = "right"}),
+		gooi.newLabel({text = "Left label", orientation = "left", icon = imgDir.."coin.png"}),
+		gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
+		gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
+		gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}),
+		gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}),
+		gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}),
+		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
+		gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00"):onRelease(function(c)
+			pGrid.layout.debug = not pGrid.layout.debug
+		end),
+		gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
+		gooi.newSpinner(-10, 30, 3):roundness(.65, .8):bg("#ff00ff"),
+		gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
+		gooi.newKnob(0.2)
+	)
+
+	-- Salute:
+	gooi.newLabel("This is a demonstration of the different\n"..
+		"components, styles and layouts supported", 30, 400)
+
 end
 
 function love.update(dt)
 	gooi.update(dt)
-	-- Fill in 10 seconds:
-	gooi.get(18):increase(.1, dt)
+	lbl2:setText(string.sub(sli1:getValue(), 0, 4))
 
-	-- Free label:
-	gooi.get("lbl_free").text = "First knob: "..gooi.get("knob_1").value
+	chb1.x = chb1.x + joy1:xValue() * dt * 200
+	chb1.y = chb1.y + joy1:yValue() * dt * 200
+
+	ship.x = math.floor(ship.x + joyShip:xValue() * dt * 150)
+	ship.y = math.floor(ship.y + joyShip:yValue() * dt * 150)
 	
-	-- Mini game:
-	ship.x = ship.x + 300 * gooi.get("joy_1"):xValue() * dt
-	ship.y = ship.y + 300 * gooi.get("joy_1"):yValue() * dt
-	if ship.x + imgShip:getWidth() > pGame.x + pGame.w then
-		ship.x = pGame.x + pGame.w - imgShip:getWidth()
-	end
-	if ship.x < pGame.x then ship.x = pGame.x end
-	if ship.y + imgShip:getHeight() > pGame.y + pGame.h then
-		ship.y = pGame.y + pGame.h - imgShip:getHeight()
-	end
-	if ship.y < pGame.y then ship.y = pGame.y end
+	if ship.x > width() then ship.x = width() end
+	if ship.x < 0 then ship.x = width() end
 
+	-- Move bullets:
 	for i = #bullets, 1, -1 do
-		bullets[i].y = bullets[i].y - 1000 * dt
-		if bullets[i].y < 0 then table.remove(bullets, i) end
-	end
-
-	if bomb then
-		bomb.y = bomb.y - 100 * dt
-		timerBomb = timerBomb + dt
-		if timerBomb >= 0.9 then
-			timerBomb = 0
-			explosion = 
-			{
-				x = bomb.x + imgBomb:getWidth() / 2,
-				y = bomb.y + imgBomb:getHeight() / 2
-			}
-			bomb = nil
-		end
-	end
-	if explosion then
-		timerExplosion = timerExplosion + dt
-		if timerExplosion > 0.8 then
-			timerExplosion = 0
-			explosion = nil
+		bullets[i].y = bullets[i].y - dt * 800
+		if bullets[i].y < -100 then
+			table.remove(bullets, i)
 		end
 	end
 end
 
 function love.draw()
-	-- Draw panel shapes:
-	gr.draw(imgBg1, 0, 0)
-	gr.setColor(0, 0, 0, 63)
-	gr.rectangle("fill", pGrid.x, pGrid.y, pGrid.w, pGrid.h)
-	gr.rectangle("fill", pGame.x, pGame.y, pGame.w, pGame.h)
-	-- Draw mini game:
-	gr.setColor(255, 255, 255)
-	gr.draw(imgShip, ship.x, ship.y)
+	-- Background:
+	gr.draw(imgBg, 0, 0, 0, width() / imgBg:getWidth(), height() / imgBg:getHeight())
+	-- Bullets:
 	for i = 1, #bullets do
 		local b = bullets[i]
-		gr.draw(imgBullet, b.x, b.y)
+		gr.draw(imgBullet, b.x, b.y, 0, 5, 5,
+			imgBullet:getWidth() / 2,
+			imgBullet:getHeight() / 2)
 	end
-	if bomb then gr.draw(imgBomb, bomb.x, bomb.y) end
-	if explosion then
-		gr.draw(imgBoom, explosion.x, explosion.y, 0,
-			love.math.random(75, 100) / 25, love.math.random(75, 100) / 25,
-			imgBoom:getWidth() / 2,
-			imgBoom:getHeight() / 2)
-	end
+
+	gr.setColor(0, 0, 0, 127)
+	gr.rectangle("line", pGame.x, pGame.y, pGame.w, pGame.h)
+	gr.rectangle("line", pGrid.x, pGrid.y, pGrid.w, pGrid.h)
+	
+	gr.setColor(255, 255, 255)
+	gr.draw(ship.img, ship.x, ship.y, 0, 5, 5,
+		ship.img:getWidth() / 2,
+		ship.img:getHeight() / 2)
 
 	gooi.draw()
 
-	gr.setColor(255, 255, 255)
-	gr.print("FPS: "..love.timer.getFPS(), 0, love.graphics.getHeight() - gooi.font:getHeight())
-	--gr.print("knob: "..gooi.get("knob_1").value, 0, love.graphics.getHeight() - gooi.font:getHeight())
-	--gr.print("joy_1: "..gooi.get("joy_1"):xValue()..", "..gooi.get("joy_1"):yValue(), 400, 400)
-end
-
--- Needed callbacks for this demo:
-function love.textinput(key, code) gooi.textinput(key, code) end
-function love.keypressed(key)
-	gooi.keypressed(key)
-	if key == "escape" then
-		love.event.quit()
-	end
+	gr.print("FPS: "..love.timer.getFPS())
 end
 
 function love.mousereleased(x, y, button) gooi.released() end
 function love.mousepressed(x, y, button)  gooi.pressed() end
---[[
-function love.touchmoved(id, x, y, pressure) gooi.moved(id, x, y) end
-function love.touchpressed(id, x, y, pressure) gooi.pressed(id, x, y) end
-function love.touchreleased(id, x, y, pressure) gooi.released(id, x, y) end
-]]
+
+function love.textinput(text)
+	gooi.textinput(text)
+end
+function love.keypressed(key)
+	gooi.keypressed(key)
+	if key == "escape" then
+		quit()
+	end
+end
+
+function quit()
+	love.event.quit()
+end
+
+function r() return love.math.random(0, 255) end

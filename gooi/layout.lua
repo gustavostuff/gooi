@@ -51,6 +51,7 @@ function layout.new(specs)
 					self.indexRow = self.indexRow + 1
 				end
 				if self.gridCells[self.indexRow] and self.gridCells[self.indexRow][self.indexCol] then
+					--print(c.text or "(nil)", self.indexRow, self.indexCol)
 					return self.gridCells[self.indexRow][self.indexCol].on
 				end
 			end

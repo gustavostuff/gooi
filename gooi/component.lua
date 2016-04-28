@@ -28,20 +28,26 @@ component.style = {
 	bgColor = {12, 183, 242, 127}, -- LOVE blue
 	fgColor = {255, 255, 255, 255},
 	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 85),
-	howRound = .25,
-	howRoundInternally = .25,
+	round = .25,
+	roundInside = .25,
 	showBorder = false,
 	borderColor = {12, 183, 242},
 	borderWidth = 2,
 	font = love.graphics.newFont(love.graphics.getWidth() / 80)
 }
 
+local currId = -1
+function genId()
+	currId = currId + 1
+	return currId;
+end
+
 ----------------------------------------------------------------------------
 --------------------------   Component creator  ----------------------------
 ----------------------------------------------------------------------------
 function component.new(id, t, x, y, w, h, group)
 	local c = {}
-	c.id = id
+	c.id = genId()
 	c.type = t
 	c.x = x
 	c.y = y
@@ -87,6 +93,12 @@ function component.new(id, t, x, y, w, h, group)
 			return self.bgColor
 		end
 		self.bgColor = color
+		if type(color) == "string" then
+			self.bgColor = gooi.toRGB(color)
+			if #color > 7 then
+				self.bgColor = gooi.toRGBA(color)
+			end
+		end
 		self.borderColor = {color[1], color[2], color[3]}
 		return self
 	end
@@ -95,23 +107,46 @@ function component.new(id, t, x, y, w, h, group)
 			return self.fgColor
 		end
 		self.fgColor = color
+		if type(color) == "string" then
+			self.fgColor = gooi.toRGB(color)
+			if #color > 7 then
+				self.fgColor = gooi.toRGBA(color)
+			end
+		end
 		return self
 	end
-	function c:round(r)
+	function c:roundness(r, ri)
+		if not r then return self.round, self.roundInside; end
+
 		if r < 0 then r = 0 end
 		if r > 1 then r = 1 end
-		self.howRound = 1
+		self.round = r
+		if ri then
+			if ri < 0 then ri = 0 end
+			if ri > 1 then ri = 1 end
+			self.roundInside = ri
+		end
+
 		return self
 	end
-	function c:innerRound(r)
-		if r < 0 then r = 0 end
-		if r > 1 then r = 1 end
-		self.howRoundInternally = r
+	function c:border(w, color,style)
+		if not w then return self.borderWidth, self.borderColor; end
+
+		self.borderWidth = w
+		self.borderColor = color or {255, 255, 255}
+		if type(color) == "string" then
+			self.borderColor = gooi.toRGB(color)
+			if #color > 7 then
+				self.borderColor = gooi.toRGBA(color)
+			end
+		end
+		self.borderStyle = style or "smooth"
+		self.showBorder = true
 		return self
 	end
 	c.borderWidth = component.style.borderWidth
-	c.howRound = component.style.howRound
-	c.howRoundInternally = component.style.howRoundInternally
+	c.round = component.style.round
+	c.roundInside = component.style.roundInside
 	-- Experimental:
 	c.showBorder = component.style.showBorder
 	c.borderColor = component.style.borderColor
@@ -151,7 +186,7 @@ function component:draw()-- Every component has the same base:
 			love.graphics.setColor(63, 63, 63, self.bgColor[4])
 		end
 
-		local radiusCorner = self.howRound * self.h / 2
+		local radiusCorner = self.round * self.h / 2
 
 		--drawRoundRec(self.x, self.y, self.w, self.h, self.radiusCorner)-- Magic function (thanks to Boolsheet!)
 		love.graphics.rectangle("fill",
@@ -164,7 +199,7 @@ function component:draw()-- Every component has the same base:
 			50)
 
 		-- Border:
-		love.graphics.setLineStyle("smooth")
+		love.graphics.setLineStyle(self.borderStyle or "smooth")
 		if self.showBorder then
 			love.graphics.setColor(self.borderColor)
 			if not self.enabled then
@@ -196,10 +231,29 @@ end
 
 function component:setEnabled(b)
 	self.enabled = b
+	if self.sons then
+		for i = 1, #self.sons do
+			self.sons[i]:setEnabled(b)
+		end
+	end
 end
 
 function component:setVisible(b)
 	self.visible = b
+	if self.sons then
+		for i = 1, #self.sons do
+			self.sons[i]:setVisible(b)
+		end
+	end
+end
+
+function component:setGroup(g)
+	self.group = g
+	if self.sons then
+		for i = 1, #self.sons do
+			self.sons[i]:setGroup(g)
+		end
+	end
 end
 
 function component:wasReleased()
@@ -229,7 +283,7 @@ function component:overIt(x, y)-- x and y if it's the first time pressed (no tou
 		xm, ym = x, y
 	end
 
-	local radiusCorner = self.howRound * self.h / 2
+	local radiusCorner = self.round * self.h / 2
 
 	-- Check if one of the "two" rectangles is on the mouse/finger:
 	local b = not (
@@ -271,14 +325,20 @@ function component:setBounds(x, y, w, h)
 
 	self.x, self.y, self.w, self.h = theX, theY, theW, theH
 
-	if self.type == "joystick" then
+	if self.type == "joystick" or self.type == "knob" then
 		self.smallerSide = self.h
 		if self.w < self.h then
 			self.smallerSide = self.w
 		end
+		self.w, self.h = self.smallerSide, self.smallerSide
+		self:rebuild()
 	end
 
+	return self
+end
 
+function component:setOpaque(b)
+	self.opaque = b
 	return self
 end
 
@@ -289,4 +349,16 @@ function component:fixColor(...)
 		if comps[i] < 0   then comps[i] = 0   end
 	end
 	return comps
+end
+
+-- Thanks to Boolsheet:
+function roundRect(x, y, w, h, r)
+	r = r or h / 4
+	love.graphics.rectangle("fill", x, y+r, w, h-r*2)
+	love.graphics.rectangle("fill", x+r, y, w-r*2, r)
+	love.graphics.rectangle("fill", x+r, y+h-r, w-r*2, r)
+	love.graphics.arc("fill", x+r, y+r, r, left, top)
+	love.graphics.arc("fill", x + w-r, y+r, r, -bottom, right)
+	love.graphics.arc("fill", x + w-r, y + h-r, r, right, bottom)
+	love.graphics.arc("fill", x+r, y + h-r, r, bottom, left)
 end

@@ -4,82 +4,143 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](http://doge.mit-license.org)
 
-This is the default GÖÖi look, using a _game_ layout:
+*** Examples:
 
-![GÖÖi game layout](http://s23.postimg.org/mi0bjf1jf/gif2.gif)
+This is how you create a button with an event (desktop example):
 
-Here's GÖÖi with a serious black theme, using a _grid_ layout:
+```lua
+require "gooi"
+function love.load()
+	gooi.newButton("Exit"):onRelease(function()
+		love.event.quit()
+	end)
+end
 
-![GÖÖi grid layout](http://s23.postimg.org/jqvr0s51n/ggggg.gif)
+function love.draw()
+	gooi.draw()
+end
+
+function love.mousepressed(x, y, button)  gooi.pressed() end
+function love.mousereleased(x, y, button) gooi.released() end
+```
+
+These are other ways of creating a button:
+
+```lua
+gooi.newButton()
+gooi.newButton("A button")
+gooi.newButton("A button", 100, 100)
+gooi.newButton("A button", 100, 100, 150, 25)
+gooi.newButton({
+	text = "A button",
+	x = 100,
+	y = 100,
+	w = 150,
+	h = 25,
+	orientation = "right",
+	icon = "imgs/icon.png"
+})
+```
+
+*** More Examples:
+
+![free components](http://s32.postimg.org/owuec96j9/no_layout.gif)
+Code:
+```lua
+lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
+lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
+
+btn1 = gooi.newButton("Exit", 120, 40, 150, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
+:onRelease(function()
+	quit()
+end)
+
+sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
+spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
+
+chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(function(c)
+	if c.checked then
+		gr.setBackgroundColor(127, 63, 0)
+	else
+		gr.setBackgroundColor(0, 63, 127)
+	end
+end)
+
+-- Radio group:
+rad1 = gooi.newRadio({ y = 100, text = "one", radioGroup = "g1", selected = true})
+rad2 = gooi.newRadio({ y = 130, text = "two", radioGroup = "g1"})
+rad3 = gooi.newRadio({ y = 160, text = "three", radioGroup = "g1"})
+knob1 = gooi.newKnob({ x = 120, y = 110, value = 0.9, size = 60})
+-- Anoher radio group:
+rad4 = gooi.newRadio({ y = 100, x = 200, text = "Apr", radioGroup = "g2", selected = true})
+rad5 = gooi.newRadio({ y = 130, x = 200, text = "May", radioGroup = "g2"})
+rad6 = gooi.newRadio({ y = 160, x = 200, text = "Jun", radioGroup = "g2"})
+
+txt1 = gooi.newText({ y = 260, w = 200})
+bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
+joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
+```
+
+![GÖÖi game layout](http://s32.postimg.org/6rw56691x/game_layout.gif)
+Code:
+```lua
+joyShip = gooi.newJoy({size = 60})
+btnShot = gooi.newButton("Shot"):onRelease(function()
+	table.insert(bullets, {
+		x = ship.x,
+		y = ship.y
+	})
+end)
+
+pGame = gooi.newPanel(350, 10, 420, 270, "game")
+pGame:add(gooi.newButton("Bomb"), "b-r")
+pGame:add(btnShot, "b-r")
+pGame:add(joyShip, "b-l")
+pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
+pGame:add(gooi.newLabel("Score: 702013"), "t-l")
+pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
+```
 
 GÖÖi is highly customizable:
 
-![GÖÖi customized](http://s9.postimg.org/3jyni0jjz/Captura.png)
-
-The code needed for the first image would be this: (omitting some things like the shot functions)
-
+![GÖÖi grid layout](http://s32.postimg.org/qs06qkgnp/grid_layout.gif)
+Code:
 ```lua
-pGame = gooi.newPanel("panelGameLayout", 520, 10, 500, 400, "game")
-pGame:add(gooi.newButton("btn_shot", "Shot", 0, 0, 80, 50):onRelease(function() shotBullet() end), "b-r")-- Bottom-right
-pGame:add(gooi.newButton("btn_bomb", "Bomb", 0, 0, 80, 50):onRelease(function() shotBomb() end), "b-r")-- Bottom-right
-pGame:add(gooi.newJoy("joy_1"), "b-l")-- Bottom-left
-pGame:add(gooi.newLabel("lbl_score", "Score: 0"), "t-l")-- Top-left
-pGame:add(gooi.newBar("bar_1"):setLength(pGame.w / 3):increase(1), "t-r")-- Top-right
-pGame:add(gooi.newLabel("lbl_life", "Life:"), "t-r")-- Top-right
-```
-
-And for the _grid_ layout in the second image:
-
-```lua
-pGrid = gooi.newPanel("panelGrid", 10, 10, 500, 400, "grid 13x3")
-:setRowspan(6, 1, 2)-- rowspan for 'checkbox!' checkbox.
-:setColspan(6, 2, 2)-- colspan for the 'This is a text field' text field.
-:setRowspan(10, 1, 4)-- For the giant slider.
-:setColspan(10, 1, 2)-- For the giant slider.
-:setRowspan(10, 3, 2)-- For the knobs panel.
+pGrid = gooi.newPanel(350, 290, 420, 290, "grid 10x3")
+-- Add in the specified cell:
+pGrid:add(gooi.newRadio({text = "Radio 1", selected = true}), "7,1")
+pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
+pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
+pGrid
+:setColspan(1, 1, 3)
+:setRowspan(6, 3, 2)
+:setColspan(8, 2, 2)
+:setRowspan(8, 2, 3)
 :add(
-	gooi.newLabel(1, "Left Label"):setOrientation("left"),
-	gooi.newLabel(2, "Center Label"):setOrientation("center"),
-	gooi.newLabel(3, "Right Label"),
-	gooi.newLabel(4, "Left Label"):setOrientation("left"):setImage(dirImgs.."h.png"),
-	gooi.newLabel(5, "Center Label"):setOrientation("center"):setImage(dirImgs.."h.png"),
-	gooi.newLabel(6, "Right Label"):setImage(dirImgs.."h.png"),
-	gooi.newButton(7, "Left Button"):setOrientation("left"),
-	gooi.newButton(8, "Center Button"),
-	gooi.newButton(9, "Right Button"):setOrientation("right"),
-	gooi.newButton(10, ""):setOrientation("left"):setImage(dirImgs.."coin.png"),
-	gooi.newButton(11, "Center Button"):setImage(dirImgs.."coin.png"),
-	gooi.newButton(12, "Right Button"):setOrientation("right"):setImage(dirImgs.."coin.png"),
-	gooi.newSlider(13),
-	gooi.newRadio(14, "Radio 1"):setRadioGroup("g1"):select(),
-	gooi.newRadio(15, "Radio 2"):setRadioGroup("g1"),
-	gooi.newCheck(16, "checkbox"),
-	gooi.newText(17, "This is a text field"),
-	gooi.newBar(18),
-	gooi.newSpinner(19),
-	gooi.newJoy(20),
-	gooi.newPanel("panel_child"):add(
-		gooi.newSlider("sli1"),
-		gooi.newButton("btn2", "Btn"),
-		gooi.newButton("btn3", "Btn")
-	)
+	gooi.newLabel({text = "(Grid Layout demo)", orientation = "center"}),
+	gooi.newLabel({text = "Left label", orientation = "left"}),
+	gooi.newLabel({text = "Centered", orientation = "center"}),
+	gooi.newLabel({text = "Right", orientation = "right"}),
+	gooi.newButton({text = "Left button", orientation = "left"}),
+	gooi.newButton("Centered"),
+	gooi.newButton({text = "Right", orientation = "right"}),
+	gooi.newLabel({text = "Left label", orientation = "left", icon = imgDir.."coin.png"}),
+	gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
+	gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
+	gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}),
+	gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}),
+	gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}),
+	gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
+	gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00"):onRelease(function(c)
+		pGrid.layout.debug = not pGrid.layout.debug
+	end),
+	gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
+	gooi.newSpinner(-10, 30, 3):roundness(.65, .8):bg("#ff00ff"),
+	gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
+	gooi.newKnob(0.2)
 )
-
--- Add component in a given cell:
-pGrid:add(gooi.newButton("btn_x", "Button in 9,2"), "9,2")
-pGrid:add(gooi.newSlider("sli_x"), "10,1")
-pGrid:add(gooi.newPanel("panelKnobs"):add(
-		gooi.newKnob("knob_1"),
-		gooi.newKnob("knob_2"),
-		gooi.newKnob("knob_3")
-	), "10,3")
-gooi.removeComponent("btn2")
 ```
 
-Most of the components use this contructor:
-
-```lua
-gooi.newXXXX(id, [,label], x, y, width, height, [, other parameters here])
-```
+GÖÖi is still a work in progress, thanks for you feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
