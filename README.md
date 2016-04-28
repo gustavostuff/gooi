@@ -140,7 +140,8 @@ pGrid
 	gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}),
 	gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}),
 	gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
-	gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00"):onRelease(function(c)
+	gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
+	:onRelease(function(c)
 		pGrid.layout.debug = not pGrid.layout.debug
 	end),
 	gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
