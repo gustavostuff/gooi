@@ -121,7 +121,7 @@ pGrid:add(gooi.newRadio({text = "Radio 1", selected = true}), "7,1")
 pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
 pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
 pGrid
-:setColspan(1, 1, 3)-- In row 1, col 1, cover 3 colums.
+:setColspan(1, 1, 3)-- In row 1, col 1, cover 3 columns.
 :setRowspan(6, 3, 2)
 :setColspan(8, 2, 2)
 :setRowspan(8, 2, 3)
