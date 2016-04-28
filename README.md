@@ -6,7 +6,7 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 
 ### Examples:
 
-This is how you create a button with an event (desktop example):
+This is how you create a button with an event:
 
 ```lua
 require "gooi"
@@ -22,6 +22,13 @@ end
 
 function love.mousepressed(x, y, button)  gooi.pressed() end
 function love.mousereleased(x, y, button) gooi.released() end
+
+-- Use these for Android:
+--[[
+	function love.touchpressed(id, x, y)  gooi.pressed(id, x, y)
+	function love.touchmoved(id, x, y)    gooi.moved(id, x, y)
+	function love.touchreleased(id, x, y) gooi.released(id, x, y)
+]]
 ```
 
 These are other ways of creating a button:
