@@ -864,7 +864,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 			self.roundInside * btnSize / 2,
 			circleRes)
 
-		love.graphics.setColor(self:fixColor(self.bgColor[1], self.bgColor[2], self.bgColor[3]))
+		--love.graphics.setColor(self:fixColor(self.bgColor[1], self.bgColor[2], self.bgColor[3]))
 		if not self.enabled then
 			love.graphics.setColor(0, 0, 0)
 		end
@@ -1445,8 +1445,15 @@ function gooi.setStyle(style)
 	component.style.showBorder = style.showBorder
 	component.style.borderColor = style.borderColor or {12, 183, 242}
 	component.style.borderWidth = style.borderWidth or 2
+	component.style.mode3d = style.mode3d or false
 	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
 	gooi.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
+
+	if component.style.round < 0 then component.style.round = 0 end
+	if component.style.roundInside < 0 then component.style.roundInside = 0 end
+
+	if component.style.round > 1 then component.style.round = 1 end
+	if component.style.roundInside > 1 then component.style.roundInside = 1 end
 end
 
 

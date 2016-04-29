@@ -16,7 +16,8 @@ function love.load()
 	style= {
 		font = gooiFont,
 		fgColor = "#FFFFFF",
-		bgColor = {0, 0, 40, 200}
+		bgColor = {22, 99, 140, 250},
+        mode3d = false-- Working on this.
 	}
 	gooi.setStyle(style)
 	gr.setDefaultFilter("nearest", "nearest")
@@ -44,6 +45,8 @@ function love.load()
 	:onRelease(function()
 		quit()
 	end)
+
+    lbln = gooi.newLabel({x = 230, y = 20, text = "sss", orientation = "right"})
 
 	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
 	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
@@ -148,8 +151,8 @@ function love.update(dt)
 	gooi.update(dt)
 	lbl2:setText(string.sub(sli1:getValue(), 0, 4))
 
-	chb1.x = chb1.x + joy1:xValue() * dt * 200
-	chb1.y = chb1.y + joy1:yValue() * dt * 200
+	chb1.x = math.floor(chb1.x + joy1:xValue() * dt * 200)
+	chb1.y = math.floor(chb1.y + joy1:yValue() * dt * 200)
 
 	ship.x = math.floor(ship.x + joyShip:xValue() * dt * 150)
 	ship.y = math.floor(ship.y + joyShip:yValue() * dt * 150)
@@ -164,6 +167,8 @@ function love.update(dt)
 			table.remove(bullets, i)
 		end
 	end
+
+    lbln:setText(chb1.x..", "..chb1.y)
 end
 
 function love.draw()

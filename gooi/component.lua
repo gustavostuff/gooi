@@ -33,7 +33,8 @@ component.style = {
 	showBorder = false,
 	borderColor = {12, 183, 242},
 	borderWidth = 2,
-	font = love.graphics.newFont(love.graphics.getWidth() / 80)
+	font = love.graphics.newFont(love.graphics.getWidth() / 80),
+	mode3d = false
 }
 
 local currId = -1
@@ -57,6 +58,7 @@ function component.new(id, t, x, y, w, h, group)
 	c.visible = true
 	c.hasFocus = false
 	c.pressed = false
+	c.mode3d = component.style.mode3d
 	c.bgColor = component.style.bgColor
 	c.fgColor = component.style.fgColor
 	c.group = group or "default"
@@ -100,6 +102,7 @@ function component.new(id, t, x, y, w, h, group)
 			end
 		end
 		self.borderColor = {color[1], color[2], color[3]}
+		self:make3d()
 		return self
 	end
 	function c:fg(color)
@@ -147,12 +150,25 @@ function component.new(id, t, x, y, w, h, group)
 	c.borderWidth = component.style.borderWidth
 	c.round = component.style.round
 	c.roundInside = component.style.roundInside
-	-- Experimental:
 	c.showBorder = component.style.showBorder
 	c.borderColor = component.style.borderColor
+
+	function c:make3d()
+		-- For a 3D look:
+		self.colorTop = changeBrig(self.bgColor, 15)
+		self.colorBot = changeBrig(self.bgColor, -15)
+		self.imgData3D = love.image.newImageData(1, 2)
+		self.imgData3D:setPixel(0, 0, self.colorTop[1], self.colorTop[2], self.colorTop[3], self.colorTop[4])
+		self.imgData3D:setPixel(0, 1, self.colorBot[1], self.colorBot[2], self.colorBot[3], self.colorBot[4])
+		self.img3D = love.graphics.newImage(self.imgData3D)
+		self.img3D:setFilter("linear", "linear")
+	end
+
+	c:make3d()
 	
 	return setmetatable(c, component)
 end
+
 
 ----------------------------------------------------------------------------
 --------------------------   Draw the component  ---------------------------
@@ -164,10 +180,11 @@ function component:draw()-- Every component has the same base:
 		local focusColorChange = 20
 		local fs = - 1
 		if not self.enabled then focusColorChange = 0 end
+		local newColor = self.bgColor
 		-- Generate bgColor for over and pressed:
 		if self:overIt() and self.type ~= "label" then
 			if not self.pressed then fs = 1 end
-			r, g, b = r + focusColorChange * fs, g + focusColorChange * fs, b + focusColorChange * fs
+			newColor = changeBrig(newColor, 20 * fs)
 			if self.tooltip then
 				self.timerTooltip = self.timerTooltip + love.timer.getDelta()
 				if self.timerTooltip >= 0.5 then
@@ -178,7 +195,6 @@ function component:draw()-- Every component has the same base:
 			self.timerTooltip = 0
 			self.showTooltip = false
 		end
-		local newColor = self:fixColor(r, g, b, a)
 
 		love.graphics.setColor(newColor)
 
@@ -188,15 +204,50 @@ function component:draw()-- Every component has the same base:
 
 		local radiusCorner = self.round * self.h / 2
 
-		--drawRoundRec(self.x, self.y, self.w, self.h, self.radiusCorner)-- Magic function (thanks to Boolsheet!)
-		love.graphics.rectangle("fill",
-			math.floor(self.x),
-			math.floor(self.y),
-			math.floor(self.w),
-			math.floor(self.h),
-			radiusCorner,
-			radiusCorner,
-			50)
+		if self.mode3d then
+			function mask()
+				love.graphics.rectangle("fill",
+					math.floor(self.x),
+					math.floor(self.y),
+					math.floor(self.w),
+					math.floor(self.h),
+					radiusCorner,
+					radiusCorner,
+					50)
+			end
+			love.graphics.stencil(mask, "replace", 1)
+			love.graphics.setStencilTest("greater", 0)
+
+			local scaleY = 1
+			if self:overIt() then
+				--self.colorB = changeBrig(self.colorB, 20)
+				if self.pressed then
+					--self.colorB = changeBrig(self.colorB, -20)
+					scaleY = scaleY * -1
+				end
+			end
+
+			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
+			love.graphics.draw(self.img3D,
+				self.x + self.w / 2,
+				self.y + self.h / 2,
+				0,
+				math.floor(self.w),
+				self.h / 2 * scaleY,
+				self.img3D:getWidth() / 2,
+				self.img3D:getHeight() / 2)
+
+			love.graphics.setStencilTest()
+		else
+			love.graphics.rectangle("fill",
+				math.floor(self.x),
+				math.floor(self.y),
+				math.floor(self.w),
+				math.floor(self.h),
+				radiusCorner,
+				radiusCorner,
+				50)
+		end
 
 		-- Border:
 		love.graphics.setLineStyle(self.borderStyle or "smooth")
@@ -342,15 +393,6 @@ function component:setOpaque(b)
 	return self
 end
 
-function component:fixColor(...)
-	local comps = {...}
-	for i=1,#comps do
-		if comps[i] > 255 then comps[i] = 255 end
-		if comps[i] < 0   then comps[i] = 0   end
-	end
-	return comps
-end
-
 -- Thanks to Boolsheet:
 function roundRect(x, y, w, h, r)
 	r = r or h / 4
@@ -361,4 +403,27 @@ function roundRect(x, y, w, h, r)
 	love.graphics.arc("fill", x + w-r, y+r, r, -bottom, right)
 	love.graphics.arc("fill", x + w-r, y + h-r, r, right, bottom)
 	love.graphics.arc("fill", x+r, y + h-r, r, bottom, left)
+end
+
+function changeBrig(color, amount)
+	local r, g, b, a = color[1], color[2], color[3], color[4] or 255
+
+	r = r + amount
+	g = g + amount
+	b = b + amount
+	--a = a + amount
+
+	if r < 0 then r = 0 end
+	if r > 255 then r = 255 end
+
+	if g < 0 then g = 0 end
+	if g > 255 then g = 255 end
+
+	if b < 0 then b = 0 end
+	if b > 255 then b = 255 end
+
+	if a < 0 then a = 0 end
+	if a > 255 then a = 255 end
+
+	return {r, g, b, a}
 end
