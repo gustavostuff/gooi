@@ -63,10 +63,10 @@ function colorManager.hslToRgb(h, s, l, a)
 end
 
 function colorManager.setBrightness(c, v)
-	local h, s, l, a = colorManager.rgbToHsl(c[1], c[2], c[3], c[4])
+	local h, s, l, a = colorManager.rgbToHsl(c[1], c[2], c[3], c[4] or 255)
 	l = v
 	local r, g, b, a = colorManager.hslToRgb(h, s, l, a)
 	
-	local color = {r, g, b, a}
+	local color = {r, g, b, 255 - a}
 	return color
 end

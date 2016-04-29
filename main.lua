@@ -16,7 +16,7 @@ function love.load()
 	style= {
 		font = gooiFont,
 		fgColor = "#FFFFFF",
-		bgColor = {22, 99, 140, 250},
+		bgColor = {22, 99, 140, 240},
         mode3d = false-- Working on this.
 	}
 	gooi.setStyle(style)
