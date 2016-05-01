@@ -151,6 +151,20 @@ pGrid
 )
 ```
 
+GÖÖi has also a "3D mode" for components, here's the difference:
+
+![3d mode](http://s32.postimg.org/vif04i1np/comparison_3d_normal.png)
+
+And this is the style used:
+```lua
+style= {
+	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
+	fgColor = "#FFFFFF",
+	bgColor = {22, 99, 140, 240},
+    mode3d = true -- Or false for plain aspect
+}
+```
+
 ### Limitations:
 
 * A panel can't be added inside another panel, just normal components
