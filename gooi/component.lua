@@ -157,13 +157,26 @@ function component.new(id, t, x, y, w, h, group)
 		-- For a 3D look:
 		self.colorTop = self.bgColor
 		self.colorBot = self.bgColor
+
 		self.colorTop = colorManager.setBrightness(self.colorTop, 0.45)--changeBrig(self.bgColor, 15)
 		self.colorBot = colorManager.setBrightness(self.colorBot, 0.35)--changeBrig(self.bgColor, -15)
+
+		self.colorTopHL = colorManager.setBrightness(self.colorTop, 0.55)--changeBrig(self.bgColor, 15)
+		self.colorBotHL = colorManager.setBrightness(self.colorBot, 0.45)--changeBrig(self.bgColor, -15)
+
 		self.imgData3D = love.image.newImageData(1, 2)
 		self.imgData3D:setPixel(0, 0, self.colorTop[1], self.colorTop[2], self.colorTop[3], self.colorTop[4])
 		self.imgData3D:setPixel(0, 1, self.colorBot[1], self.colorBot[2], self.colorBot[3], self.colorBot[4])
+
+		self.imgData3DHL = love.image.newImageData(1, 2)
+		self.imgData3DHL:setPixel(0, 0, self.colorTopHL[1], self.colorTopHL[2], self.colorTopHL[3], self.colorTopHL[4])
+		self.imgData3DHL:setPixel(0, 1, self.colorBotHL[1], self.colorBotHL[2], self.colorBotHL[3], self.colorBotHL[4])
+
 		self.img3D = love.graphics.newImage(self.imgData3D)
+		self.img3DHL = love.graphics.newImage(self.imgData3DHL)
+
 		self.img3D:setFilter("linear", "linear")
+		self.img3DHL:setFilter("linear", "linear")
 	end
 
 	c:make3d()
@@ -221,10 +234,11 @@ function component:draw()-- Every component has the same base:
 			love.graphics.setStencilTest("greater", 0)
 
 			local scaleY = 1
+			local img = self.img3D
 			if self:overIt() then
-				--self.colorB = changeBrig(self.colorB, 20)
+				img = self.img3DHL
 				if self.pressed then
-					--self.colorB = changeBrig(self.colorB, -20)
+					img = self.img3D
 					if self.type == "button" then
 						scaleY = scaleY * -1
 					end
@@ -232,14 +246,14 @@ function component:draw()-- Every component has the same base:
 			end
 
 			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
-			love.graphics.draw(self.img3D,
+			love.graphics.draw(img,
 				self.x + self.w / 2,
 				self.y + self.h / 2,
 				0,
 				math.floor(self.w),
 				self.h / 2 * scaleY,
-				self.img3D:getWidth() / 2,
-				self.img3D:getHeight() / 2)
+				img:getWidth() / 2,
+				img:getHeight() / 2)
 
 			love.graphics.setStencilTest()
 		else

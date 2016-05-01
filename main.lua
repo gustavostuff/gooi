@@ -17,7 +17,7 @@ function love.load()
 		font = gooiFont,
 		fgColor = "#FFFFFF",
 		bgColor = {22, 99, 140, 240},
-        mode3d = false-- Working on this.
+        mode3d = true
 	}
 	gooi.setStyle(style)
 	gr.setDefaultFilter("nearest", "nearest")
@@ -214,8 +214,10 @@ function quit()
 end
 
 function r() return love.math.random(0, 255) end
+--[[
+]]
 
--- Android:
+-- Android test:
 
 --[[
 require "gooi"
@@ -230,13 +232,13 @@ function love.load()
 		radius = 50
 	}
 
-	joy = gooi.newJoy()
+	joy = gooi.newJoy({size = 200})
 	panel = gooi.newPanel(0, 0, gr.getWidth(), gr.getHeight(), "game")
 	panel:add(joy, "b-l")
-	panel:add(gooi.newButton({text = "Color", w = 120}):onRelease(function()
+	panel:add(gooi.newButton({text = "Color", w = 220, h = 70}):onRelease(function()
 		ball.color = {r(), r(), r()}
 	end), "b-r")
-	panel:add(gooi.newButton({text = "Size", w = 120}):onRelease(function()
+	panel:add(gooi.newButton({text = "Size", w = 220, h = 70}):onRelease(function()
 		ball.radius = r() / 2
 	end), "b-r")
 end
@@ -256,5 +258,12 @@ end
 function r() return love.math.random(0, 255) end
 
 function love.touchpressed(id, x, y)  gooi.pressed(id, x, y) end
+function love.touchmoved(id, x, y)  gooi.moved(id, x, y) end
 function love.touchreleased(id, x, y) gooi.released(id, x, y) end
+
+function love.keypressed(key)
+	if key == "escape" then
+		love.event.quit()
+	end
+end
 ]]
