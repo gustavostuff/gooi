@@ -153,7 +153,7 @@ pGrid
 
 GÖÖi has also a "3D mode" for components, here's the difference:
 
-![3d mode](http://s32.postimg.org/6gclq9wpx/comparison_3d_normal.png)
+![3d mode](http://s32.postimg.org/xk3tm7691/comparison_3d_normal.png)
 
 And this is the style used:
 ```lua
