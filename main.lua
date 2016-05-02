@@ -15,8 +15,8 @@ function love.load()
 	gooiFont = gr.newFont(fontDir.."ProggySquare.ttf", 16)
 	style= {
 		font = gooiFont,
-		fgColor = "#FFFFFF",
-		bgColor = {22, 99, 140, 240},
+		fgColor = "#ffffff",
+		bgColor = "#218AB8",
         mode3d = true
 	}
 	gooi.setStyle(style)

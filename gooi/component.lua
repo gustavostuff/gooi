@@ -158,11 +158,11 @@ function component.new(id, t, x, y, w, h, group)
 		self.colorTop = self.bgColor
 		self.colorBot = self.bgColor
 
-		self.colorTop = colorManager.setBrightness(self.colorTop, 0.45)--changeBrig(self.bgColor, 15)
-		self.colorBot = colorManager.setBrightness(self.colorBot, 0.35)--changeBrig(self.bgColor, -15)
+		self.colorTop = changeBrig(self.bgColor, 15)--colorManager.setBrightness(self.colorTop, 0.5)
+		self.colorBot = changeBrig(self.bgColor, -15)--colorManager.setBrightness(self.colorBot, 0.5)
 
-		self.colorTopHL = colorManager.setBrightness(self.colorTop, 0.5)--changeBrig(self.bgColor, 15)
-		self.colorBotHL = colorManager.setBrightness(self.colorBot, 0.4)--changeBrig(self.bgColor, -15)
+		self.colorTopHL = changeBrig(self.bgColor, 25)--colorManager.setBrightness(self.colorTop, 0.5)
+		self.colorBotHL = changeBrig(self.bgColor, -5)--colorManager.setBrightness(self.colorBot, 0.5)
 
 		self.imgData3D = love.image.newImageData(1, 2)
 		self.imgData3D:setPixel(0, 0, self.colorTop[1], self.colorTop[2], self.colorTop[3], self.colorTop[4])

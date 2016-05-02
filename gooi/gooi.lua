@@ -581,7 +581,7 @@ function gooi.newText(text, x, y, w, h)
 	f.accentuationComing = false -- Support for typing á, é, í, ó, ú and Á, É, Í, Ó, Ú (on PC).
 	f.indexCursor = string.utf8len(f.text)
 	function f:rebuild()
-		self.displacementCursor = self.x + self.h / 2 + gooi.getFont(self):getWidth(self.text)
+		self.displacementCursor = math.floor(self.x + self.h / 3 + gooi.getFont(self):getWidth(self.text))
 		--self:generateBorder()
 	end
 	f:rebuild()
@@ -608,6 +608,8 @@ function gooi.newText(text, x, y, w, h)
 
 	function f:drawCursor()
 		if self.hasFocus then
+			local prevLineW = love.graphics.getLineWidth()
+			love.graphics.setLineWidth(1)
 			if self.showingCursor then
 				love.graphics.line(
 					self.displacementCursor,
@@ -615,6 +617,7 @@ function gooi.newText(text, x, y, w, h)
 					self.displacementCursor,
 					self.y + self.h - self.h / 5)
 			end
+			love.graphics.setLineWidth(prevLineW)
 		end
 	end
 
@@ -627,6 +630,7 @@ function gooi.newText(text, x, y, w, h)
 	end
 
 	function f:moveCursor(key)
+		local marginText = math.floor(self.h / 3)
 		if key then
 			if key == "backspace" then
 				self.text = string.utf8sub(self.text, 1, string.utf8len(self.text) - 1)
@@ -638,10 +642,10 @@ function gooi.newText(text, x, y, w, h)
 			if self.indexCursor < 0 then
 				self.indexCursor = 0
 			end
-			self.displacementCursor = self.x + self.h / 2 + gooi.getFont(self):getWidth(string.utf8sub(self.text, 1, self.indexCursor))
+			self.displacementCursor = self.x + marginText + gooi.getFont(self):getWidth(string.utf8sub(self.text, 1, self.indexCursor))
 		else
 			self.indexCursor = self.indexCursor + 1
-			self.displacementCursor = self.x + self.h / 2 + gooi.getFont(self):getWidth(self.text)
+			self.displacementCursor = self.x + marginText + gooi.getFont(self):getWidth(self.text)
 		end
 	end
 
