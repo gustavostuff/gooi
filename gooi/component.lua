@@ -31,7 +31,7 @@ component.style = {
 	round = .25,
 	roundInside = .25,
 	showBorder = false,
-	borderColor = {12, 183, 242},
+	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
 	font = love.graphics.newFont(love.graphics.getWidth() / 80),
 	mode3d = false
@@ -94,14 +94,11 @@ function component.new(id, t, x, y, w, h, group)
 		if not color then
 			return self.bgColor
 		end
-		self.bgColor = color
 		if type(color) == "string" then
-			self.bgColor = gooi.toRGB(color)
-			if #color > 7 then
-				self.bgColor = gooi.toRGBA(color)
-			end
+			color = gooi.toRGBA(color)
 		end
-		self.borderColor = {color[1], color[2], color[3]}
+		self.bgColor = color
+		self.borderColor = {color[1], color[2], color[3], color[4] or 255}
 		self:make3d()
 		return self
 	end
@@ -111,10 +108,7 @@ function component.new(id, t, x, y, w, h, group)
 		end
 		self.fgColor = color
 		if type(color) == "string" then
-			self.fgColor = gooi.toRGB(color)
-			if #color > 7 then
-				self.fgColor = gooi.toRGBA(color)
-			end
+			self.fgColor = gooi.toRGBA(color)
 		end
 		return self
 	end
@@ -136,12 +130,9 @@ function component.new(id, t, x, y, w, h, group)
 		if not w then return self.borderWidth, self.borderColor; end
 
 		self.borderWidth = w
-		self.borderColor = color or {255, 255, 255}
+		self.borderColor = color or {12, 183, 242, 255}
 		if type(color) == "string" then
-			self.borderColor = gooi.toRGB(color)
-			if #color > 7 then
-				self.borderColor = gooi.toRGBA(color)
-			end
+			self.borderColor = gooi.toRGBA(color)
 		end
 		self.borderStyle = style or "smooth"
 		self.showBorder = true
@@ -424,6 +415,10 @@ function roundRect(x, y, w, h, r)
 end
 
 function changeBrig(color, amount)
+	if type(color) == "string" then
+		color = gooi.toRGBA(color)
+	end
+
 	local r, g, b, a = color[1], color[2], color[3], color[4] or 255
 
 	r = r + amount
@@ -440,8 +435,8 @@ function changeBrig(color, amount)
 	if b < 0 then b = 0 end
 	if b > 255 then b = 255 end
 
-	if a < 0 then a = 0 end
-	if a > 255 then a = 255 end
+	--if a < 0 then a = 0 end
+	--if a > 255 then a = 255 end
 
 	return {r, g, b, a}
 end

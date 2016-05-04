@@ -1424,22 +1424,13 @@ end
 
 function gooi.setStyle(style)
 	if style.bgColor and type(style.bgColor) == "string" then
-		style.bgColor = gooi.toRGB(style.bgColor)
-		if #style.bgColor > 7 then
-			style.bgColor = gooi.toRGBA(style.bgColor)
-		end
+		style.bgColor = gooi.toRGBA(style.bgColor)
 	end
 	if style.fgColor and type(style.fgColor) == "string" then
-		style.fgColor = gooi.toRGB(style.fgColor)
-		if #style.fgColor > 7 then
-			style.fgColor = gooi.toRGBA(style.fgColor)
-		end
+		style.fgColor = gooi.toRGBA(style.fgColor)
 	end
 	if style.borderColor and type(style.borderColor) == "string" then
-		style.borderColor = gooi.toRGB(style.borderColor)
-		if #style.borderColor > 7 then
-			style.borderColor = gooi.toRGBA(style.borderColor)
-		end
+		style.borderColor = gooi.toRGBA(style.borderColor)
 	end
 	component.style.bgColor = style.bgColor or {12, 183, 242, 127}
 	component.style.fgColor = style.fgColor or {255, 255, 255, 255}
@@ -1588,14 +1579,13 @@ function gooi.draw(group)
 	love.graphics.setFont(prevFont)
 end
 
-function gooi.toRGB(hex)
-    hex = hex:gsub("#","")
-    return {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))}
-end
-
 function gooi.toRGBA(hex)
     hex = hex:gsub("#","")
-    return {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6)), tonumber("0x"..hex:sub(7,8))}
+    color = {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))}
+    if string.len(hex) >= 8 then
+    	table.insert(color, tonumber("0x"..hex:sub(7, 8)))
+    end
+    return color
 end
 
 function gooi.setGroupVisible(group, b)
