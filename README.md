@@ -111,7 +111,7 @@ pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF"
 
 GÖÖi is highly customizable:
 
-![GÖÖi grid layout](http://s32.postimg.org/qs06qkgnp/grid_layout.gif)
+![GÖÖi grid layout](http://s32.postimg.org/j6jt4cow5/ss3.png)
 
 Code:
 ```lua
