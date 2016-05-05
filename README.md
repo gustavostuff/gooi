@@ -50,7 +50,7 @@ gooi.newButton({
 
 ### More Examples:
 
-![free components](http://s32.postimg.org/owuec96j9/no_layout.gif)
+![free components](http://s32.postimg.org/dmar77ev9/no_layout.gif)
 
 Code:
 ```lua
