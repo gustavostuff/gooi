@@ -98,7 +98,7 @@ function component.new(id, t, x, y, w, h, group)
 			color = gooi.toRGBA(color)
 		end
 		self.bgColor = color
-		self.borderColor = {color[1], color[2], color[3], color[4] or 255}
+		self.borderColor = {color[1], color[2], color[3], 255}
 		self:make3d()
 		return self
 	end
@@ -126,13 +126,14 @@ function component.new(id, t, x, y, w, h, group)
 
 		return self
 	end
-	function c:border(w, color,style)
+	function c:border(w, color, style)
 		if not w then return self.borderWidth, self.borderColor; end
 
 		self.borderWidth = w
 		self.borderColor = color or {12, 183, 242, 255}
 		if type(color) == "string" then
 			self.borderColor = gooi.toRGBA(color)
+			self.borderColor[4] = 255
 		end
 		self.borderStyle = style or "smooth"
 		self.showBorder = true

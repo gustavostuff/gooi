@@ -851,22 +851,23 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		local btnGap = (self.h / 5)
 		local btnSize = (btnGap * 3)
 
-		-- Minus button:
-		love.graphics.rectangle("fill",
-			math.floor(self.x) + btnGap,
-			math.floor(self.y) + btnGap,
-			btnSize, btnSize,
-			self.roundInside * btnSize / 2,
-			self.roundInside * btnSize / 2,
-			circleRes)
-		-- PLus button:
-		love.graphics.rectangle("fill",
-			math.floor(self.x) + math.floor(self.w) - btnGap - btnSize,
-			math.floor(self.y) + btnGap,
-			btnSize, btnSize,
-			self.roundInside * btnSize / 2,
-			self.roundInside * btnSize / 2,
-			circleRes)
+		local prevLineW = love.graphics.getLineWidth()
+		love.graphics.setLineWidth(self.h / 6)
+		--love.graphics.setLineStyle("smooth")
+		local x1 = self.x + self.h / 3
+		local x2 = self.x + self.w - self.h / 3
+		local xDiff = self.h / 3
+		local yTop = self.y + self.h / 6
+		local yMid = self.y + self.h / 2
+		local yLow = self.y + self.h - self.h / 6
+
+		-- Less:
+		love.graphics.line(x1 + xDiff, yTop, x1, yMid, x1 + xDiff, yLow)
+		-- Plus:
+		love.graphics.line(x2 - xDiff, yTop, x2, yMid, x2 - xDiff, yLow)
+
+		love.graphics.setLineStyle("rough")
+		love.graphics.setLineWidth(prevLineW)
 
 		--love.graphics.setColor(self:fixColor(self.bgColor[1], self.bgColor[2], self.bgColor[3]))
 		if not self.enabled then
@@ -880,14 +881,20 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		love.graphics.print(t, math.floor(x), math.floor(y))
 	end
 	function s:overMinus(x, y)
+		--[[
 		local dx, dy = self.xMin - love.mouse.getX(), self.yMin - love.mouse.getY()
 		if x and y then dx, dy = self.xMin - x, self.yMin - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
+		]]
+		return self:overIt() and x < self.x + self.w / 2
 	end
 	function s:overPlus(x, y)
+		--[[
 		local dx, dy = self.xPlus - love.mouse.getX(), self.yPlus - love.mouse.getY()
 		if x and y then dx, dy = self.xPlus - x, self.yPlus - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
+		]]
+		return self:overIt() and x >= self.x + self.w / 2
 	end
 	function s:changeValue(sense)
 		local newV = self.value + self.step * sense
@@ -1651,13 +1658,15 @@ end
 
 ---------------------------------------------------------------------------------------------
 function gooi.pressed(id, x, y)
+	x = x or love.mouse.getX()
+	y = y or love.mouse.getY()
 	for k, c in pairs(gooi.components) do
 		if c.enabled and c.visible then
 			if c.type == "joystick" then
 				if c:overStick(x, y) then 
 					c.stickPressed = true
-					c.dx = c.xStick - (x or love.mouse.getX())
-					c.dy = c.yStick - (y or love.mouse.getY())
+					c.dx = c.xStick - x
+					c.dy = c.yStick - y
 				end
 			elseif c.type == "spinner" then
 				if c:overMinus(x, y) then

@@ -16,7 +16,8 @@ function love.load()
 	style= {
 		font = gooiFont,
 		fgColor = "#ffffff",
-		bgColor = "#218AB8",
+		bgColor = "#218AB8ee",
+
         mode3d = true
 	}
 	gooi.setStyle(style)
@@ -45,8 +46,6 @@ function love.load()
 	:onRelease(function()
 		quit()
 	end)
-
-    lbln = gooi.newLabel({x = 230, y = 20, text = "sss", orientation = "right"})
 
 	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
 	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
@@ -136,7 +135,7 @@ function love.load()
 			pGrid.layout.debug = not pGrid.layout.debug
 		end),
 		gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
-		gooi.newSpinner(-10, 30, 3):roundness(.65, .8):bg("#ff00ff"),
+		gooi.newSpinner(-10, 30, 3):roundness(1, .8):bg("#ff00ff"),
 		gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
 		gooi.newKnob(0.2)
 	)
@@ -167,8 +166,6 @@ function love.update(dt)
 			table.remove(bullets, i)
 		end
 	end
-
-    lbln:setText(chb1.x..", "..chb1.y)
 end
 
 function love.draw()
