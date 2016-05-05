@@ -69,7 +69,7 @@ function love.load()
 
 	txt1 = gooi.newText({ y = 260, w = 200})
 	bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
-	joy1 = gooi.newJoy({ x = 220, y = 200, size = 80}):setImage(imgDir.."joystick.png")
+	joy1 = gooi.newJoy({ x = 120, y = 420, size = 150}):bg("#00000000"):setImage(imgDir.."joystick.png")
 
 
 
