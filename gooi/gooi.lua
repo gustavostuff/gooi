@@ -6,7 +6,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit perchildren to whom the Software is
+copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in
@@ -933,7 +933,7 @@ end
 --------------------------   Stick creator   -------------------------------
 ----------------------------------------------------------------------------
 --function gooi.newJoy(id, x, y, size, deadZone, group)
-function gooi.newJoy(x, y, size, deadZone)
+function gooi.newJoy(x, y, size, deadZone, image)
 	local s = {}
 	
 	local defText = "xxxxxxxxxxxx"
@@ -951,6 +951,7 @@ function gooi.newJoy(x, y, size, deadZone)
 		params.y = y or 10
 		params.size = size or defSize
 		params.deadZone = deadZone or 0
+		params.image = image
 	end
 
 	x, y, w, h = gooi.checkBounds(
@@ -971,6 +972,7 @@ function gooi.newJoy(x, y, size, deadZone)
 	s.stickPressed = false
 	s.dx, s.dy = 0, 0
 	s.spring = true
+	s.sxImg, s.syImg = 1, 1
 	function s:drawSpecifics(fg)
 		love.graphics.setColor(fg)
 		self:drawStick()
@@ -983,12 +985,36 @@ function gooi.newJoy(x, y, size, deadZone)
 		--self:generateBorder()
 	end
 	s:rebuild()
+	function s:setImage(image)
+		if image then
+			if type(image) == "string" then
+				image = love.graphics.newImage(image)
+			end
+			self.image = image
+			self.image:setFilter("linear", "linear")
+		end
+		return self
+	end
+	s:setImage(params.image)
 	function s:drawStick()
-		love.graphics.circle("fill",
-			math.floor(self.xStick),
-			math.floor(self.yStick),
-			math.floor(self.rStick),
-			circleRes)
+		if self.image then
+			love.graphics.setColor(255, 255, 255, self.fgColor[4] or 255)
+			local sx = self.rStick * 2 / self.image:getWidth()
+			local sy = self.rStick * 2 / self.image:getHeight()
+			love.graphics.draw(self.image,
+				self.xStick,
+				self.yStick,
+				0,
+				sx, sy,
+				self.image:getWidth() / 2,
+				self.image:getHeight() / 2)
+		else
+			love.graphics.circle("fill",
+				math.floor(self.xStick),
+				math.floor(self.yStick),
+				math.floor(self.rStick),
+				circleRes)
+		end
 	end
 	function s:move(direction)
 		if (self.pressed or self.touch) and self.stickPressed then
@@ -1224,7 +1250,7 @@ function gooi.newPanel(x, y, w, h, theLayout)
 	p.y = y
 	p.w = w
 	p.h = h
-	p.children = {}
+	p.sons = {}
 	function p:setLayout(l)
 		if l then
 			if l:sub(0, 4) == "grid" then
@@ -1280,8 +1306,8 @@ function gooi.newPanel(x, y, w, h, theLayout)
 				-- Set bounds according to the parent layout:
 				c:setBounds(cell.x, cell.y, cell.w, cell.h)
 
-				-- Save children:
-				table.insert(self.children,
+				-- Save sons:
+				table.insert(self.sons,
 				{
 					id = c.id,
 					parentId = self.id,
@@ -1314,7 +1340,7 @@ function gooi.newPanel(x, y, w, h, theLayout)
 					--print("cell: ", c.x, c.y)
 
 					-- Save child:
-					table.insert(self.children,
+					table.insert(self.sons,
 					{
 						id = c.id,
 						parentId = self.id,
@@ -1418,9 +1444,9 @@ end
 function gooi.removeComponent(id)
 	if gooi.components[id] ~= nil then
 		local c = gooi.components[id]
-		if c.children then
-			for n = 1, #c.children do
-				local ch = c.children[n]
+		if c.sons then
+			for n = 1, #c.sons do
+				local ch = c.sons[n]
 				gooi.removeComponent(ch.id)
 			end          
 		end          
@@ -1545,7 +1571,7 @@ function gooi.draw(group)
 			------------------------------------------------------------
 
 		else
-			comp:setVisible(false)
+			comp:hide()
 		end
 
 		if comp.showTooltip then
@@ -1593,20 +1619,6 @@ function gooi.toRGBA(hex)
     	table.insert(color, tonumber("0x"..hex:sub(7, 8)))
     end
     return color
-end
-
-function gooi.setGroupVisible(group, b)
-	local group = gooi.getByGroup(group)
-	for i=1, #group do
-		group[i]:setVisible(b)
-	end
-end
-
-function gooi.setGroupEnabled(group, b)
-	local group = gooi.getByGroup(group)
-	for i=1, #group do
-		group[i]:setEnabled(b)
-	end
 end
 
 function gooi.getByType(theType)

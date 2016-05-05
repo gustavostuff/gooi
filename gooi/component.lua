@@ -290,24 +290,37 @@ function component:draw()-- Every component has the same base:
 	end
 end
 
-function component:setEnabled(b)
-	self.enabled = b
-	if self.sons then
-		for i = 1, #self.sons do
-			self.sons[i]:setEnabled(b)
-		end
+-- Not working yet:
+function component:hide()
+	self.visible = false
+	for i = 1, #self.sons do
+		self.sons[i].visible = false
 	end
 end
 
-function component:setVisible(b)
-	self.visible = b
-	if self.sons then
-		for i = 1, #self.sons do
-			self.sons[i]:setVisible(b)
-		end
+function component:show()
+	self.visible = true
+	for i = 1, #self.sons do
+		self.sons[i].visible = true
 	end
 end
 
+function component:disable()
+	self.enabled = false
+	for i = 1, #self.sons do
+		self.sons[i].enabled = false
+	end
+end
+
+function component:enable()
+	self.enabled = true
+	if self.sons then
+		for i = 1, #self.sons do
+			self.sons[i].enabled = true
+		end
+	end
+end
+-----
 function component:setGroup(g)
 	self.group = g
 	if self.sons then
