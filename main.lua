@@ -13,7 +13,7 @@ function love.load()
 	imgDir = "/imgs/"
 	fontDir = "/fonts/"
 	gooiFont = gr.newFont(fontDir.."ProggySquare.ttf", 16)
-	style= {
+	style = {
 		font = gooiFont,
 		fgColor = "#ffffff",
 		bgColor = "#218AB8ee",
@@ -40,15 +40,12 @@ function love.load()
 
 	lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
 	lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
-
 	btn1 = gooi.newButton("Exit", 120, 40, 150, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
 	:onRelease(function()
 		quit()
 	end)
-
 	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
 	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
-
 	chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(function(c)
 		if c.checked then
 			gr.setBackgroundColor(127, 63, 0)
@@ -56,7 +53,6 @@ function love.load()
 			gr.setBackgroundColor(0, 63, 127)
 		end
 	end)
-
 	-- Radio group:
 	rad1 = gooi.newRadio({ y = 100, text = "one", radioGroup = "g1", selected = true})
 	rad2 = gooi.newRadio({ y = 130, text = "two", radioGroup = "g1"})
@@ -173,7 +169,7 @@ function love.draw()
 	-- Bullets:
 	for i = 1, #bullets do
 		local b = bullets[i]
-		gr.draw(imgBullet, b.x, b.y, 0, 5, 5,
+		gr.draw(imgBullet, b.x, b.y, 0, 4, 4,
 			imgBullet:getWidth() / 2,
 			imgBullet:getHeight() / 2)
 	end
@@ -183,7 +179,7 @@ function love.draw()
 	gr.rectangle("line", pGrid.x, pGrid.y, pGrid.w, pGrid.h)
 	
 	gr.setColor(255, 255, 255)
-	gr.draw(ship.img, ship.x, ship.y, 0, 5, 5,
+	gr.draw(ship.img, ship.x, ship.y, 0, 4, 4,
 		ship.img:getWidth() / 2,
 		ship.img:getHeight() / 2)
 

@@ -88,30 +88,31 @@ bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
 joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
 ```
 
-![GÖÖi game layout](http://s32.postimg.org/6rw56691x/game_layout.gif)
+![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
 
 Code:
 ```lua
 joyShip = gooi.newJoy({size = 60})
-btnShot = gooi.newButton("Shot"):onRelease(function()
-	table.insert(bullets, {
-		x = ship.x,
-		y = ship.y
-	})
-end)
+	btnShot = gooi.newButton("Shot"):onRelease(function()
+		table.insert(bullets, {
+			x = ship.x,
+			y = ship.y
+		})
+	end)
 
-pGame = gooi.newPanel(350, 10, 420, 270, "game")
-pGame:add(gooi.newButton("Bomb"), "b-r")
-pGame:add(btnShot, "b-r")
-pGame:add(joyShip, "b-l")
-pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
-pGame:add(gooi.newLabel("Score: 702013"), "t-l")
-pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
+	pGame = gooi.newPanel(350, 10, 420, 270, "game")
+	pGame:add(gooi.newButton("Bomb"), "b-r")
+	pGame:add(btnShot, "b-r")
+	pGame:add(joyShip, "b-l")
+	pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
+	pGame:add(gooi.newLabel("Score: 702013"), "t-l")
+	pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
 ```
 
-GÖÖi is highly customizable:
+GÖÖi is highly customizable, it also has a 3D mode for components:
 
-![GÖÖi grid layout](http://s32.postimg.org/j6jt4cow5/ss3.png)
+![GÖÖi grid layout](http://s32.postimg.org/tjlrnw4v9/flat.png)
+![GÖÖi grid layout 3D](http://s32.postimg.org/c7lvltsbp/image.png)
 
 Code:
 ```lua
@@ -151,17 +152,13 @@ pGrid
 )
 ```
 
-GÖÖi has also a "3D mode" for components, here's the difference:
-
-![3d mode](http://s32.postimg.org/xk3tm7691/comparison_3d_normal.png)
-
-And this is the style used:
+Style used:
 ```lua
-style= {
-	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
-	fgColor = "#FFFFFF",
-	bgColor = {22, 99, 140, 240},
-    mode3d = true -- Or false for plain aspect
+style = {
+	font = gooiFont,
+	fgColor = "#ffffff",
+	bgColor = "#218AB8ee",
+    mode3d = false
 }
 ```
 
