@@ -93,20 +93,20 @@ joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
 Code:
 ```lua
 joyShip = gooi.newJoy({size = 60})
-	btnShot = gooi.newButton("Shot"):onRelease(function()
-		table.insert(bullets, {
-			x = ship.x,
-			y = ship.y
-		})
-	end)
+btnShot = gooi.newButton("Shot"):onRelease(function()
+	table.insert(bullets, {
+		x = ship.x,
+		y = ship.y
+	})
+end)
 
-	pGame = gooi.newPanel(350, 10, 420, 270, "game")
-	pGame:add(gooi.newButton("Bomb"), "b-r")
-	pGame:add(btnShot, "b-r")
-	pGame:add(joyShip, "b-l")
-	pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
-	pGame:add(gooi.newLabel("Score: 702013"), "t-l")
-	pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
+pGame = gooi.newPanel(350, 10, 420, 270, "game")
+pGame:add(gooi.newButton("Bomb"), "b-r")
+pGame:add(btnShot, "b-r")
+pGame:add(joyShip, "b-l")
+pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
+pGame:add(gooi.newLabel("Score: 702013"), "t-l")
+pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
 ```
 
 GÖÖi is highly customizable, it also has a 3D mode for components:
