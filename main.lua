@@ -17,7 +17,8 @@ function love.load()
 		font = gooiFont,
 		fgColor = "#ffffff",
 		bgColor = "#218AB8ee",
-        mode3d = false
+        mode3d = false,
+        glass = true
 	}
 	gooi.setStyle(style)
 	gr.setDefaultFilter("nearest", "nearest")

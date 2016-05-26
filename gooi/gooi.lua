@@ -1474,6 +1474,7 @@ function gooi.setStyle(style)
 	component.style.borderColor = style.borderColor or {12, 183, 242}
 	component.style.borderWidth = style.borderWidth or 2
 	component.style.mode3d = style.mode3d or false
+	component.style.glass = style.glass or false
 	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
 	gooi.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
 

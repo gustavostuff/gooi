@@ -34,7 +34,8 @@ component.style = {
 	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
 	font = love.graphics.newFont(love.graphics.getWidth() / 80),
-	mode3d = false
+	mode3d = false,
+	glass = false
 }
 
 local currId = -1
@@ -59,6 +60,7 @@ function component.new(id, t, x, y, w, h, group)
 	c.hasFocus = false
 	c.pressed = false
 	c.mode3d = component.style.mode3d
+	c.glass = component.style.glass
 	c.bgColor = component.style.bgColor
 	c.fgColor = component.style.fgColor
 	c.group = group or "default"
@@ -169,6 +171,12 @@ function component.new(id, t, x, y, w, h, group)
 
 		self.img3D:setFilter("linear", "linear")
 		self.img3DHL:setFilter("linear", "linear")
+
+		self.imgDataGlass = love.image.newImageData(1, 2)
+		self.imgDataGlass:setPixel(0, 0, 255, 255, 255, 80)
+		self.imgDataGlass:setPixel(0, 1, 255, 255, 255, 40)
+		self.imgGlass = love.graphics.newImage(self.imgDataGlass)
+		self.imgGlass:setFilter("linear", "linear")
 	end
 
 	c:make3d()
@@ -211,19 +219,19 @@ function component:draw()-- Every component has the same base:
 
 		local radiusCorner = self.round * self.h / 2
 
+		function mask()
+			love.graphics.rectangle("fill",
+				math.floor(self.x),
+				math.floor(self.y),
+				math.floor(self.w),
+				math.floor(self.h),
+				radiusCorner,
+				radiusCorner,
+				50)
+		end
+		love.graphics.stencil(mask, "replace", 1)
+		love.graphics.setStencilTest("greater", 0)
 		if self.mode3d then
-			function mask()
-				love.graphics.rectangle("fill",
-					math.floor(self.x),
-					math.floor(self.y),
-					math.floor(self.w),
-					math.floor(self.h),
-					radiusCorner,
-					radiusCorner,
-					50)
-			end
-			love.graphics.stencil(mask, "replace", 1)
-			love.graphics.setStencilTest("greater", 0)
 
 			local scaleY = 1
 			local img = self.img3D
@@ -247,7 +255,6 @@ function component:draw()-- Every component has the same base:
 				img:getWidth() / 2,
 				img:getHeight() / 2)
 
-			love.graphics.setStencilTest()
 		else
 			love.graphics.rectangle("fill",
 				math.floor(self.x),
@@ -258,6 +265,17 @@ function component:draw()-- Every component has the same base:
 				radiusCorner,
 				50)
 		end
+
+		if self.glass then
+			love.graphics.setColor(255, 255, 255)
+			love.graphics.draw(self.imgGlass,
+				self.x,
+				self.y,
+				0,
+				math.floor(self.w),
+				self.h / 4)
+		end
+		love.graphics.setStencilTest()
 
 		-- Border:
 		love.graphics.setLineStyle(self.borderStyle or "smooth")
