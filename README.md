@@ -114,6 +114,11 @@ GÖÖi is highly customizable, it also has a 3D mode for components:
 ![GÖÖi grid layout](http://s32.postimg.org/tjlrnw4v9/flat.png)
 ![GÖÖi grid layout 3D](http://s32.postimg.org/c7lvltsbp/image.png)
 
+And a glossy effect to make it look even more elegant:
+
+![Glossy](http://s33.postimg.org/fdbx4dvfz/glossy.png)
+
+
 Code:
 ```lua
 pGrid = gooi.newPanel(350, 290, 420, 290, "grid 10x3")
