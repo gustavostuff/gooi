@@ -231,19 +231,20 @@ function component:draw()-- Every component has the same base:
 		end
 		love.graphics.stencil(mask, "replace", 1)
 		love.graphics.setStencilTest("greater", 0)
-		if self.mode3d then
-
-			local scaleY = 1
-			local img = self.img3D
-			if self:overIt() then
-				img = self.img3DHL
-				if self.pressed then
-					img = self.img3D
-					if self.type == "button" then
-						scaleY = scaleY * -1
-					end
+		local scaleY = 1
+		local img = self.img3D
+		if self:overIt() then
+			img = self.img3DHL
+			if self.pressed then
+				img = self.img3D
+				if self.type == "button" then
+					scaleY = scaleY * -1
 				end
 			end
+		end
+
+		if self.mode3d then
+
 
 			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
 			love.graphics.draw(img,
@@ -268,6 +269,16 @@ function component:draw()-- Every component has the same base:
 
 		if self.glass then
 			love.graphics.setColor(255, 255, 255)
+			if self.mode3d then
+				love.graphics.draw(img,
+				self.x + self.w / 2,
+				self.y + self.h / 2,
+				0,
+				math.floor(self.w),
+				self.h / 2 * -1,
+				img:getWidth() / 2,
+				img:getHeight() / 2)
+			end
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,

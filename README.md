@@ -54,7 +54,6 @@ gooi.newButton({
 
 Code:
 ```lua
-lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
 lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
 
 btn1 = gooi.newButton("Exit", 120, 40, 150, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
@@ -116,7 +115,7 @@ GÖÖi is highly customizable, it also has a 3D mode for components:
 
 And a glossy effect to make it look even more elegant:
 
-![Glossy](http://s33.postimg.org/fdbx4dvfz/glossy.png)
+![Glossy](http://s33.postimg.org/wi2ycl6bj/glossy.png)
 
 
 Code:
