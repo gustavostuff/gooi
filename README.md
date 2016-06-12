@@ -108,15 +108,9 @@ pGame:add(gooi.newLabel("Score: 702013"), "t-l")
 pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
 ```
 
-GÖÖi is highly customizable, it also has a 3D mode for components:
+GÖÖi is highly customizable, it also has a "3D" mode and a "glossy" mode:
 
-![GÖÖi grid layout](http://s32.postimg.org/tjlrnw4v9/flat.png)
-![GÖÖi grid layout 3D](http://s32.postimg.org/c7lvltsbp/image.png)
-
-And a glossy effect to make it look even more elegant:
-
-![Glossy](http://s33.postimg.org/wi2ycl6bj/glossy.png)
-
+![GÖÖi grid layout](http://s33.postimg.org/wq8rasl1r/modes_gooi.png)
 
 Code:
 ```lua
@@ -126,7 +120,7 @@ pGrid:add(gooi.newRadio({text = "Radio 1", selected = true}), "7,1")
 pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
 pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
 pGrid
-:setColspan(1, 1, 3)-- In row 1, col 1, cover 3 columns.
+:setColspan(1, 1, 3)
 :setRowspan(6, 3, 2)
 :setColspan(8, 2, 2)
 :setRowspan(8, 2, 3)
@@ -135,22 +129,22 @@ pGrid
 	gooi.newLabel({text = "Left label", orientation = "left"}),
 	gooi.newLabel({text = "Centered", orientation = "center"}),
 	gooi.newLabel({text = "Right", orientation = "right"}),
-	gooi.newButton({text = "Left button", orientation = "left"}),
-	gooi.newButton("Centered"),
+	gooi.newButton({text = "Left button", orientation = "left"}):bg("#ff8800"),
+	gooi.newButton("Centered"):bg("#22aa22"),
 	gooi.newButton({text = "Right", orientation = "right"}),
 	gooi.newLabel({text = "Left label", orientation = "left", icon = imgDir.."coin.png"}),
 	gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
 	gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
-	gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}),
-	gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}),
-	gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}),
+	gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}):bg("#888888"),
+	gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}):bg("#880088"),
+	gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800"),
 	gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
 	gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 	:onRelease(function(c)
 		pGrid.layout.debug = not pGrid.layout.debug
 	end),
 	gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
-	gooi.newSpinner(-10, 30, 3):roundness(.65, .8):bg("#ff00ff"),
+	gooi.newSpinner(-10, 30, 3):roundness(1, .8):bg("#ff00ff"),
 	gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
 	gooi.newKnob(0.2)
 )
@@ -159,18 +153,19 @@ pGrid
 Style used:
 ```lua
 style = {
-	font = gooiFont,
+	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 	fgColor = "#ffffff",
 	bgColor = "#218AB8ee",
-    mode3d = false
+	mode3d = true,
+	glass = true
 }
 ```
 
 ### Limitations:
 
-* A panel can't be added inside another panel, just normal components
+* A panel can't be added inside another panel
 * In text fields, the text can't be larger than the component width
-* There's no responsiveness (yet)
+* There's no automatic responsiveness (yet)
 
 GÖÖi is still a work in progress, thanks for you feedback!
 

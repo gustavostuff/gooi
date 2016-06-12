@@ -12,9 +12,8 @@ function love.load()
 
 	imgDir = "/imgs/"
 	fontDir = "/fonts/"
-	gooiFont = gr.newFont(fontDir.."ProggySquare.ttf", 16)
 	style = {
-		font = gooiFont,
+		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 		fgColor = "#ffffff",
 		bgColor = "#218AB8ee",
         mode3d = true,
@@ -116,15 +115,15 @@ function love.load()
 		gooi.newLabel({text = "Left label", orientation = "left"}),
 		gooi.newLabel({text = "Centered", orientation = "center"}),
 		gooi.newLabel({text = "Right", orientation = "right"}),
-		gooi.newButton({text = "Left button", orientation = "left"}),
-		gooi.newButton("Centered"),
+		gooi.newButton({text = "Left button", orientation = "left"}):bg("#ff8800"),
+		gooi.newButton("Centered"):bg("#22aa22"),
 		gooi.newButton({text = "Right", orientation = "right"}),
 		gooi.newLabel({text = "Left label", orientation = "left", icon = imgDir.."coin.png"}),
 		gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
 		gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
-		gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}),
-		gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}),
-		gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}),
+		gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}):bg("#888888"),
+		gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}):bg("#880088"),
+		gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800"),
 		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
 		gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 		:onRelease(function(c)
