@@ -1044,6 +1044,10 @@ function gooi.newJoy(x, y, size, deadZone, image)
 		self.dx = 0
 		self.dy = 0
 	end
+	function s:noSpring()
+		self.spring = false
+		return self
+	end
 	function s:butting()
 		local hyp = 0
 		local daX, daY = love.mouse.getPosition()
