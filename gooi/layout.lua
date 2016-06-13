@@ -89,10 +89,10 @@ function layout.new(specs)
 					self.gridCells[theRow][theCol] =
 					{
 						on = true,
-						x = panel.x + ((theCol - 1) * panel.w / self.gridCols + self.padding),
-						y = panel.y + ((theRow - 1) * panel.h / self.gridRows + self.padding),
-						w = panel.w / self.gridCols - self.padding * 2,
-						h = panel.h / self.gridRows - self.padding * 2,
+						x = math.floor(panel.x + ((theCol - 1) * panel.w / self.gridCols + self.padding)),
+						y = math.floor(panel.y + ((theRow - 1) * panel.h / self.gridRows + self.padding)),
+						w = (panel.w / self.gridCols - self.padding * 2),
+						h = (panel.h / self.gridRows - self.padding * 2),
 						row = theRow,
 						col = theCol,
 						rowspan = 1,

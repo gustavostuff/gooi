@@ -27,7 +27,7 @@ component.__index = component
 component.style = {
 	bgColor = {12, 183, 242, 127}, -- LOVE blue
 	fgColor = {255, 255, 255, 255},
-	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 85),
+	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 60),
 	round = .25,
 	roundInside = .25,
 	showBorder = false,
@@ -244,9 +244,10 @@ function component:draw()-- Every component has the same base:
 		end
 
 		if self.mode3d then
-
-
 			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
+			if not self.enabled then
+				love.graphics.setColor(0, 0, 0, self.bgColor[4] or 255)
+			end
 			love.graphics.draw(img,
 				self.x + self.w / 2,
 				self.y + self.h / 2,
@@ -319,44 +320,32 @@ function component:draw()-- Every component has the same base:
 	end
 end
 
--- Not working yet:
-function component:hide()
-	self.visible = false
-	for i = 1, #self.sons do
-		self.sons[i].visible = false
-	end
-end
-
-function component:show()
-	self.visible = true
-	for i = 1, #self.sons do
-		self.sons[i].visible = true
-	end
-end
-
-function component:disable()
-	self.enabled = false
-	for i = 1, #self.sons do
-		self.sons[i].enabled = false
-	end
-end
-
-function component:enable()
-	self.enabled = true
+function component:setVisible(b)
+	self.visible = b
 	if self.sons then
 		for i = 1, #self.sons do
-			self.sons[i].enabled = true
+			self.sons[i].ref.visible = b
 		end
 	end
 end
------
+
+function component:setEnabled(b)
+	self.enabled = b
+	if self.sons then
+		for i = 1, #self.sons do
+			self.sons[i].ref.enabled = b
+		end
+	end
+end
+
 function component:setGroup(g)
 	self.group = g
 	if self.sons then
 		for i = 1, #self.sons do
-			self.sons[i]:setGroup(g)
+			self.sons[i].ref.group = g
 		end
 	end
+	return self
 end
 
 function component:wasReleased()

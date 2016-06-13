@@ -847,11 +847,13 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 	end
 	s:rebuild()
 	function s:drawSpecifics(fg)
+		local prevLineW = love.graphics.getLineWidth()
+		--[[
+
 		love.graphics.setColor(fg)
 		local btnGap = (self.h / 5)
 		local btnSize = (btnGap * 3)
 
-		local prevLineW = love.graphics.getLineWidth()
 		love.graphics.setLineWidth(self.h / 6)
 		--love.graphics.setLineStyle("smooth")
 		local x1 = self.x + self.h / 3
@@ -860,11 +862,39 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		local yTop = self.y + self.h / 6
 		local yMid = self.y + self.h / 2
 		local yLow = self.y + self.h - self.h / 6
+		]]
+
+		local rad = .4 -- Normal radius for the white circles.
+		local mC = math.floor(self.h / 8) -- Margin corner.
+		local side = math.floor(self.h - mC * 2)
+		love.graphics.setColor(fg)
+		local recWhite = {
+			math.floor(self.x + mC),
+			math.floor(self.y + mC),
+			math.floor(side),
+			math.floor(side),
+		}
+		love.graphics.rectangle("fill",
+				recWhite[1] + mC * 2 ,
+				recWhite[2] + mC * 2,
+				recWhite[3]- mC * 4,
+				recWhite[4]- mC * 4,
+				self.roundInside * side / 2,
+				self.roundInside * side / 2,
+				circleRes)
+		love.graphics.rectangle("fill",
+				recWhite[1] + mC + math.floor(self.w - self.h),
+				recWhite[2] + mC,
+				recWhite[3]- mC * 2,
+				recWhite[4]- mC * 2,
+				self.roundInside * side / 2,
+				self.roundInside * side / 2,
+				circleRes)
 
 		-- Less:
-		love.graphics.line(x1 + xDiff, yTop, x1, yMid, x1 + xDiff, yLow)
+		--love.graphics.line(x1 + xDiff, yTop, x1, yMid, x1 + xDiff, yLow)
 		-- Plus:
-		love.graphics.line(x2 - xDiff, yTop, x2, yMid, x2 - xDiff, yLow)
+		--love.graphics.line(x2 - xDiff, yTop, x2, yMid, x2 - xDiff, yLow)
 
 		love.graphics.setLineStyle("rough")
 		love.graphics.setLineWidth(prevLineW)
@@ -1316,7 +1346,8 @@ function gooi.newPanel(x, y, w, h, theLayout)
 					id = c.id,
 					parentId = self.id,
 					cellRow = cell.row,
-					cellCol = cell.col
+					cellCol = cell.col,
+					ref = c
 				})
 
 				cell.on = false
@@ -1349,7 +1380,8 @@ function gooi.newPanel(x, y, w, h, theLayout)
 						id = c.id,
 						parentId = self.id,
 						cellRow = cell.row,
-						cellCol = cell.col
+						cellCol = cell.col,
+						ref = c
 					})
 
 					-- Joysticks are always a square or cirle:
@@ -1471,7 +1503,7 @@ function gooi.setStyle(style)
 	end
 	component.style.bgColor = style.bgColor or {12, 183, 242, 127}
 	component.style.fgColor = style.fgColor or {255, 255, 255, 255}
-	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 85)
+	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 60)
 	component.style.round = style.round or .25
 	component.style.roundInside = style.roundInside or .25
 	component.style.showBorder = style.showBorder
@@ -1576,7 +1608,7 @@ function gooi.draw(group)
 			------------------------------------------------------------
 
 		else
-			comp:hide()
+			--comp:setVisible(false)
 		end
 
 		if comp.showTooltip then
@@ -1590,7 +1622,8 @@ function gooi.draw(group)
 
 	-- Check if a tooltip was generated, just for desktop:
 
-	if compWithTooltip and not love.touch then
+	local os = love.system.getOS()
+	if compWithTooltip and os ~= "Android" and os ~= "iOS" then
 		local disp = love.graphics.getWidth() / 100
 		local unit = compWithTooltip.tooltipFont:getHeight() / 5
 		love.graphics.setColor(0, 0, 0, 200)
@@ -1642,6 +1675,22 @@ function gooi.get(id)
 		error("Component '"..id.."' does not exist!")
 	end
 	return gooi.components[id]
+end
+
+function gooi.setGroupVisible(group, b)
+	for k, c in pairs(gooi.components) do
+		if c.group == group then
+			c:setVisible(b)
+		end
+	end
+end
+
+function gooi.setGroupEnabled(group, b)
+	for k, c in pairs(gooi.components) do
+		if c.group == group then
+			c:setEnabled(b)
+		end
+	end
 end
 
 function gooi.getByGroup(group)
