@@ -33,7 +33,7 @@ component.style = {
 	showBorder = false,
 	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
-	font = love.graphics.newFont(love.graphics.getWidth() / 80),
+	font = love.graphics.newFont(love.graphics.getWidth() / 70),
 	mode3d = false,
 	glass = false
 }
@@ -59,24 +59,18 @@ function component.new(id, t, x, y, w, h, group)
 	c.visible = true
 	c.hasFocus = false
 	c.pressed = false
-	c.mode3d = component.style.mode3d
-	c.glass = component.style.glass
-	c.bgColor = component.style.bgColor
-	c.fgColor = component.style.fgColor
 	c.group = group or "default"
 	c.tooltip = nil
 	c.smallerSide = c.h
 	if c.w < c.h then
 		c.smallerSide = c.w
 	end
-	c.tooltipFont = component.style.tooltipFont
 	c.timerTooltip = 0
 	c.showTooltip = false
 	function c:setTooltip(text)
 		self.tooltip = text
 		return self
 	end
-	c.font = component.style.font
 	c.touch = nil-- Stores the touch which is on this component.
 	c.opaque = true-- If false, the component base will never be drawn.
 	c.events = {p = nil, r = nil, m = nil}
@@ -141,11 +135,36 @@ function component.new(id, t, x, y, w, h, group)
 		self.showBorder = true
 		return self
 	end
-	c.borderWidth = component.style.borderWidth
-	c.round = component.style.round
-	c.roundInside = component.style.roundInside
-	c.showBorder = component.style.showBorder
-	c.borderColor = component.style.borderColor
+	function c:noGlass()
+		self.glass = false
+		return self
+	end
+	function c:no3D()
+		self.mode3d = false
+		return self
+	end
+	function c:setStyle(style)
+		self.borderWidth = style.borderWidth
+		self.round = style.round
+		self.roundInside = style.roundInside
+		self.showBorder = style.showBorder
+		self.borderColor = style.borderColor
+		self.mode3d = style.mode3d
+		self.glass = style.glass
+		self.bgColor = style.bgColor
+		self.fgColor = style.fgColor
+		self.tooltipFont = style.tooltipFont
+		self.font = style.font
+
+		if self.sons then
+			for k, v in pairs(self.sons) do
+				v.ref:setStyle(style)
+			end
+		end
+		
+		return self
+	end
+	c:setStyle(component.style)
 
 	function c:make3d()
 		-- For a 3D look:
@@ -242,6 +261,10 @@ function component:draw()-- Every component has the same base:
 				end
 			end
 		end
+		-- Correct light effect when 2 modes are set:
+		if self.mode3d and self.glass then
+			scaleY = -1
+		end
 
 		if self.mode3d then
 			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
@@ -270,16 +293,18 @@ function component:draw()-- Every component has the same base:
 
 		if self.glass then
 			love.graphics.setColor(255, 255, 255)
-			if self.mode3d then
-				love.graphics.draw(img,
-				self.x + self.w / 2,
-				self.y + self.h / 2,
-				0,
-				math.floor(self.w),
-				self.h / 2 * -1,
-				img:getWidth() / 2,
-				img:getHeight() / 2)
-			end
+			--[[
+				if self.mode3d then
+					love.graphics.draw(img,
+					self.x + self.w / 2,
+					self.y + self.h / 2,
+					0,
+					math.floor(self.w),
+					self.h / 2 * -1,
+					img:getWidth() / 2,
+					img:getHeight() / 2)
+				end
+			]]
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
@@ -358,12 +383,7 @@ function component:wasReleased()
 	return b
 end
 
-function component:overIt(x, y)-- x and y if it's the first time pressed (no touch defined yet).
-	if self.type == "panel" or self.type == "label" then
-		return false
-	end
-	if not (self.enabled or self.visible) then return false end
-
+function component:overItAux(x, y)
 	local xm = love.mouse.getX()
 	local ym = love.mouse.getY()
 
@@ -407,6 +427,25 @@ function component:overIt(x, y)-- x and y if it's the first time pressed (no tou
 			hyp2 < radiusCorner or
 			hyp3 < radiusCorner or
 			hyp4 < radiusCorner or b), index, xm, ym
+end
+
+function component:overIt(x, y)-- x and y if it's the first time pressed (no touch defined yet).
+	if self.type == "panel" or self.type == "label" then
+		return false
+	end
+
+	-- Not applicable in this case:
+	if not (self.enabled or self.visible) then return false end
+
+	if self.noFlag or self.okFlag or self.yesFlag then
+		return self:overItAux(x, y)
+	else
+		if gooi.showingDialog then
+			return false
+		else
+			return self:overItAux(x, y)
+		end
+	end
 end
 
 function component:setBounds(x, y, w, h)

@@ -27,8 +27,27 @@ gooi = {}
 gooi.__index = gooi
 gooi.font = love.graphics.newFont(love.graphics.getWidth() / 80)
 gooi.components = {}
+gooi.dialogFOK = function() end
+gooi.showingDialog = false
+gooi.dialogMsg = ""
+gooi.dialogH = 0
+gooi.dialogW = 0
+gooi.desktop = false
 
-local circleRes = 50
+function gooi.desktopMode()
+	gooi.desktop = true
+end
+
+gooi.smallerSide = function()
+	local smallerSide = love.graphics.getWidth()
+
+	if love.graphics.getHeight() < smallerSide then
+		smallerSide = love.graphics.getHeight()
+	end
+	return smallerSide
+end
+
+local circleRes = 40
 
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
@@ -848,22 +867,6 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 	s:rebuild()
 	function s:drawSpecifics(fg)
 		local prevLineW = love.graphics.getLineWidth()
-		--[[
-
-		love.graphics.setColor(fg)
-		local btnGap = (self.h / 5)
-		local btnSize = (btnGap * 3)
-
-		love.graphics.setLineWidth(self.h / 6)
-		--love.graphics.setLineStyle("smooth")
-		local x1 = self.x + self.h / 3
-		local x2 = self.x + self.w - self.h / 3
-		local xDiff = self.h / 3
-		local yTop = self.y + self.h / 6
-		local yMid = self.y + self.h / 2
-		local yLow = self.y + self.h - self.h / 6
-		]]
-
 		local rad = .4 -- Normal radius for the white circles.
 		local mC = math.floor(self.h / 8) -- Margin corner.
 		local side = math.floor(self.h - mC * 2)
@@ -1040,9 +1043,9 @@ function gooi.newJoy(x, y, size, deadZone, image)
 				self.image:getHeight() / 2)
 		else
 			love.graphics.circle("fill",
-				math.floor(self.xStick),
-				math.floor(self.yStick),
-				math.floor(self.rStick),
+				self.xStick,
+				self.yStick,
+				self.rStick,
 				circleRes)
 		end
 	end
@@ -1092,11 +1095,11 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	-- Get numbers with presicion of two decimals:
 	function s:xValue()
 		if self:onDeadZone() then return 0 end
-		return tonumber(string.format("%.2f",(self.xStick - self:theX()) / (self.r - self.rStick)))
+		return tonumber(string.format("%.3f",(self.xStick - self:theX()) / (self.r - self.rStick)))
 	end
 	function s:yValue()
 		if self:onDeadZone() then return 0 end
-		return tonumber(string.format("%.2f",(self.yStick - self:theY()) / (self.r - self.rStick)))
+		return tonumber(string.format("%.3f",(self.yStick - self:theY()) / (self.r - self.rStick)))
 	end
 	function s:overStick(x, y)-- x and y are sent in case of a touch.
 		dx, dy = self.xStick - love.mouse.getX(), self.yStick - love.mouse.getY()
@@ -1108,8 +1111,8 @@ function gooi.newJoy(x, y, size, deadZone, image)
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
 	-- TODO this is a temporal fix for the joystick "moving" by itself when setting a style:
-	function s:theX() return math.ceil(self.x) + math.floor(self.r) end
-	function s:theY() return math.ceil(self.y) + math.floor(self.r) end
+	function s:theX() return (self.x) + (self.r) end
+	function s:theY() return (self.y) + (self.r) end
 
 	return gooi.storeComponent(s, id)
 end
@@ -1450,6 +1453,101 @@ function gooi.newPanel(x, y, w, h, theLayout)
 	return gooi.storeComponent(p, id)
 end
 
+--*********************************************
+--*********************************************
+--            Special dialog widgets:           
+--*********************************************
+--*********************************************
+
+function gooi.alert(msg, fOK)
+	gooi.dialog(msg, fOK, function() end, "alert")
+end
+
+function gooi.confirm(msg, fYes, fNo)
+	gooi.dialog(msg, fYes, fNo, "confirm")
+end
+
+function gooi.dialog(msg, fPositive, fNegative, kind)
+	gooi.dialogMsg = msg or ""
+	gooi.showingDialog = true
+
+	local w, h = love.graphics.getWidth(), love.graphics.getHeight()
+
+	local smaller = gooi.smallerSide()
+
+	gooi.dialogW = math.floor(smaller * 0.8)
+	gooi.dialogH = math.floor(gooi.dialogW * 0.6)
+
+	if gooi.desktop then
+		gooi.dialogW = math.floor(gooi.dialogW / 2)
+		gooi.dialogH = math.floor(gooi.dialogH / 2)
+	end
+
+	gooi.panelDialog = gooi.newPanel(
+		math.floor(w / 2 - gooi.dialogW / 2),
+		math.floor(h / 2 - gooi.dialogH / 2),
+		math.floor(gooi.dialogW),
+		math.floor(gooi.dialogH),
+		"grid 3x3"
+	)
+
+	gooi.panelDialog.layout.padding = 7-- Default = 3
+	gooi.panelDialog.layout:init(gooi.panelDialog)
+
+	gooi.panelDialog:setColspan(1, 1, 3)-- For the msg:
+	gooi.panelDialog:setRowspan(1, 1, 2)
+
+	gooi.lblDialog = gooi.newLabel(gooi.dialogMsg):setOrientation("center")
+		:setOpaque(false)
+	gooi.lblDialog.lblFlag = true
+	gooi.panelDialog:add(gooi.lblDialog, "1,1")
+
+	if kind == "alert" then
+		gooi.okButton  = gooi.newButton("OK"):onRelease(function()
+			if fPositive then
+				fPositive()
+			end
+			gooi.closeDialog()
+		end)
+		gooi.okButton.okFlag   = true
+		gooi.panelDialog:add(gooi.okButton,  "3,2")
+		gooi.radCorner = gooi.okButton.round * gooi.okButton.h / 2
+	else
+		gooi.noButton  = gooi.newButton("NO"):onRelease(function()
+			if fNegative then
+				fNegative()
+			end
+			gooi.closeDialog()
+		end)
+		gooi.yesButton = gooi.newButton("YES"):onRelease(function()
+			if fPositive then
+				fPositive()
+			end
+			gooi.closeDialog()
+		end)
+		gooi.noButton.noFlag   = true
+		gooi.yesButton.yesFlag = true
+		gooi.panelDialog:add(gooi.noButton,  "3,1")
+		gooi.panelDialog:add(gooi.yesButton, "3,3")
+		gooi.radCorner = gooi.noButton.round * gooi.noButton.h / 2
+	end
+
+	--gooi.panelDialog:setStyle(component.style)-- Create this with the style used
+
+end
+
+function gooi.closeDialog()
+	print(#gooi.components)
+	gooi.removeComponent(gooi.panelDialog)
+	gooi.showingDialog = false
+end
+
+
+
+
+
+
+
 
 
 
@@ -1466,27 +1564,28 @@ end
 
 
 function gooi.storeComponent(c, id)
-	--[[if gooi.components[id] ~= nil then
-		error("Component '"..id.."' already defined!")
-	else
-		gooi.components[id] = c
-		return c
-	end]]
 	table.insert(gooi.components, c)
 	return c
 end
 
 
-function gooi.removeComponent(id)
-	if gooi.components[id] ~= nil then
-		local c = gooi.components[id]
-		if c.sons then
-			for n = 1, #c.sons do
-				local ch = c.sons[n]
-				gooi.removeComponent(ch.id)
-			end          
-		end          
-		gooi.components[id] = nil
+function gooi.removeComponent(comp)
+	for k, v in pairs(gooi.components) do
+		local c = gooi.components[k]
+
+		if c == comp then
+			--print("id father: "..c.id)
+			if c.sons then
+				for k2, v2 in pairs(c.sons) do
+					--print("text sons: "..(c.sons[k2].text or "(nil)"))
+					gooi.removeComponent(c.sons[k2].ref)
+					c.sons[k2] = nil
+				end
+				c.sons = nil
+			end
+			gooi.components[k] = nil
+			return
+		end
 	end
 end
 
@@ -1501,18 +1600,18 @@ function gooi.setStyle(style)
 	if style.borderColor and type(style.borderColor) == "string" then
 		style.borderColor = gooi.toRGBA(style.borderColor)
 	end
-	component.style.bgColor = style.bgColor or {12, 183, 242, 127}
-	component.style.fgColor = style.fgColor or {255, 255, 255, 255}
-	component.style.tooltipFont = style.tooltipFont or love.graphics.newFont(love.graphics.getWidth() / 60)
-	component.style.round = style.round or .25
-	component.style.roundInside = style.roundInside or .25
-	component.style.showBorder = style.showBorder
-	component.style.borderColor = style.borderColor or {12, 183, 242}
-	component.style.borderWidth = style.borderWidth or 2
+	component.style.bgColor = style.bgColor or component.style.bgColor
+	component.style.fgColor = style.fgColor or component.style.fgColor
+	component.style.tooltipFont = style.tooltipFont or component.style.tooltipFont
+	component.style.round = style.round or component.style.round
+	component.style.roundInside = style.roundInside or component.style.roundInside
+	component.style.showBorder = style.showBorder or false
+	component.style.borderColor = style.borderColor or component.style.borderColor
+	component.style.borderWidth = style.borderWidth or component.style.borderWidth
 	component.style.mode3d = style.mode3d or false
 	component.style.glass = style.glass or false
-	component.style.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
-	gooi.font = style.font or love.graphics.newFont(love.graphics.getWidth() / 80)
+	component.style.font = style.font or component.style.font
+	gooi.font = component.style.font
 
 	if component.style.round < 0 then component.style.round = 0 end
 	if component.style.roundInside < 0 then component.style.roundInside = 0 end
@@ -1576,78 +1675,146 @@ function gooi.draw(group)
 
 	local prevFont  = love.graphics.getFont()
 	local lineW = love.graphics.getLineWidth()
+	local prevLineS = love.graphics.getLineStyle()
+	local prevR, prevG, prevB, prevA = love.graphics.getColor()
+
+	local noButton, okButton, yesButton, msgLbl = nil, nil, nil, nil
 
 	local compWithTooltip = nil -- Just for desktop.
 
 	for k, comp in pairs(gooi.components) do
 
-		--love.graphics.setLineStyle("rough")
-		local lineW = comp.smallerSide / 10
-		if lineW < 1 then lineW = 1 end
-		love.graphics.setLineWidth(lineW)
-		if actualGroup == comp.group and comp.visible then
-			comp:draw()-- Draw the base.
+		if comp.noFlag then
+			noButton = comp
+		end
 
-			love.graphics.setFont(comp.font or gooi.getFont())-- Specific or a common font.
+		if comp.okFlag then
+			okButton = comp
+		end
 
-			local fg = comp.fgColor
-			if not comp.enabled then
-				fg = {31, 31, 31}
+		if comp.yesFlag then
+			yesButton = comp
+		end
+
+		if comp.lblFlag then
+			msgLbl = comp
+		end
+
+		if not comp.noFlag and not comp.okFlag and not comp.yesFlag and not comp.lblFlag then
+			--love.graphics.setLineStyle("rough")
+			local lineW = comp.smallerSide / 10
+			if lineW < 1 then lineW = 1 end
+			love.graphics.setLineWidth(lineW)
+			if actualGroup == comp.group and comp.visible then
+				comp:draw()-- Draw the base.
+
+				love.graphics.setFont(comp.font or gooi.getFont())-- Specific or a common font.
+
+				local fg = comp.fgColor
+				if not comp.enabled then
+					fg = {31, 31, 31}
+				end
+
+				------------------------------------------------------------
+				------------------------------------------------------------
+				------------------------------------------------------------
+
+
+				comp:drawSpecifics(fg)
+
+
+				------------------------------------------------------------
+				------------------------------------------------------------
+				------------------------------------------------------------
+
+			else
+				--comp:setVisible(false)
 			end
 
-			------------------------------------------------------------
-			------------------------------------------------------------
-			------------------------------------------------------------
+			if comp.showTooltip then
+				compWithTooltip = comp
+			end
 
+		end
 
-			comp:drawSpecifics(fg)
+		-- Check if a tooltip was generated, just for desktop:
 
+		local os = love.system.getOS()
+		if compWithTooltip and os ~= "Android" and os ~= "iOS" and gooi.desktop then
+			local disp = love.graphics.getWidth() / 100
+			local unit = compWithTooltip.tooltipFont:getHeight() / 5
+			love.graphics.setColor(0, 0, 0, 200)
+			love.graphics.setFont(compWithTooltip.tooltipFont)
+			local xRect = love.mouse.getX() + disp - unit
+			local yRect = love.mouse.getY() - disp * 2 - unit
+			local xText = love.mouse.getX() + disp
+			local yText = love.mouse.getY() - disp * 2
+			local wRect = compWithTooltip.tooltipFont:getWidth(compWithTooltip.tooltip) + unit * 2
+			local hRect = compWithTooltip.tooltipFont:getHeight() + unit * 2
+			if xRect + wRect > love.graphics.getWidth() then
+				xRect = xRect - wRect
+				xText = xText - wRect
+			end
+			if yRect < 0 then
+				yRect = yRect + hRect * 2
+				yText = yText + hRect * 2
+			end
+			love.graphics.rectangle("fill", xRect, yRect, wRect, hRect)
+			love.graphics.setColor(255, 255, 255)
+			love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
+		end
+	end
 
-			------------------------------------------------------------
-			------------------------------------------------------------
-			------------------------------------------------------------
+	if gooi.showingDialog then
+		love.graphics.setFont(gooi.panelDialog.font or gooi.getFont())-- Specific or a common font.
+		local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 
+		love.graphics.setColor(0, 0, 0, 127)
+		love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+		love.graphics.setColor(component.style.bgColor)
+		love.graphics.rectangle("fill",
+			gooi.panelDialog.x,
+			gooi.panelDialog.y,
+			gooi.panelDialog.w,
+			gooi.panelDialog.h,
+			gooi.radCorner,
+			gooi.radCorner
+		)
+
+		if component.style.showBorder then
+			love.graphics.setLineStyle("smooth")
+			love.graphics.setColor(component.style.borderColor)
+			love.graphics.setLineWidth(component.style.borderWidth)
+
+			love.graphics.rectangle("line",
+				gooi.panelDialog.x,
+				gooi.panelDialog.y,
+				gooi.panelDialog.w,
+				gooi.panelDialog.h,
+				gooi.radCorner,
+				gooi.radCorner
+			)
+		end
+
+		msgLbl:draw()
+		msgLbl:drawSpecifics(msgLbl.fgColor)
+
+		if okButton then
+			okButton:draw()
+			okButton:drawSpecifics(okButton.fgColor)
 		else
-			--comp:setVisible(false)
+			noButton:draw()
+			noButton:drawSpecifics(noButton.fgColor)
+
+			yesButton:draw()
+			yesButton:drawSpecifics(yesButton.fgColor)
 		end
 
-		if comp.showTooltip then
-			compWithTooltip = comp
-		end
-
-		-- Restore line and paint:
-		love.graphics.setLineWidth(1)
-		love.graphics.setColor(255, 255, 255)
 	end
-
-	-- Check if a tooltip was generated, just for desktop:
-
-	local os = love.system.getOS()
-	if compWithTooltip and os ~= "Android" and os ~= "iOS" then
-		local disp = love.graphics.getWidth() / 100
-		local unit = compWithTooltip.tooltipFont:getHeight() / 5
-		love.graphics.setColor(0, 0, 0, 200)
-		love.graphics.setFont(compWithTooltip.tooltipFont)
-		local xRect = love.mouse.getX() + disp - unit
-		local yRect = love.mouse.getY() - disp * 2 - unit
-		local xText = love.mouse.getX() + disp
-		local yText = love.mouse.getY() - disp * 2
-		local wRect = compWithTooltip.tooltipFont:getWidth(compWithTooltip.tooltip) + unit * 2
-		local hRect = compWithTooltip.tooltipFont:getHeight() + unit * 2
-		if xRect + wRect > love.graphics.getWidth() then
-			xRect = xRect - wRect
-			xText = xText - wRect
-		end
-		if yRect < 0 then
-			yRect = yRect + hRect * 2
-			yText = yText + hRect * 2
-		end
-		love.graphics.rectangle("fill", xRect, yRect, wRect, hRect)
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
-	end
-
 	love.graphics.setFont(prevFont)
+	love.graphics.setLineStyle(prevLineS)
+	love.graphics.setColor(prevR, prevG, prevB, prevA)
 end
 
 function gooi.toRGBA(hex)
@@ -1813,7 +1980,7 @@ function gooi.getCompWithTouch(id)
 				break
 			end
 		else
-			if c.pressed then comp = c break end
+			if c.pressed then comp = c; break; end
 		end
 	end
 	return comp
@@ -1936,3 +2103,10 @@ function split(inputstr, sep)
 	end
 	return t
 end
+
+function invert(color)
+	local r, g, b, a = color[1], color[2], color[3], color[4] or 255
+	return {255 - r, 255 - g, 255 - b, a}
+end
+
+------------------- Reusable elements for .alert and .confirm:

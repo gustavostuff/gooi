@@ -50,20 +50,19 @@ gooi.newButton({
 
 ### More Examples:
 
-![free components](http://s32.postimg.org/dmar77ev9/no_layout.gif)
+![free components](https://s31.postimg.org/5m9ak4gcr/free_elements.png)
 
 Code:
 ```lua
+lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
 lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
-
-btn1 = gooi.newButton("Exit", 120, 40, 150, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
+btn1 = gooi.newButton("Exit with tooltip", 120, 40, 170, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
+:setTooltip("This is a tooltip!")
 :onRelease(function()
 	quit()
 end)
-
 sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
-spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 150, h = 25})
-
+spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 170, h = 25})
 chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(function(c)
 	if c.checked then
 		gr.setBackgroundColor(127, 63, 0)
@@ -71,7 +70,6 @@ chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(functio
 		gr.setBackgroundColor(0, 63, 127)
 	end
 end)
-
 -- Radio group:
 rad1 = gooi.newRadio({ y = 100, text = "one", radioGroup = "g1", selected = true})
 rad2 = gooi.newRadio({ y = 130, text = "two", radioGroup = "g1"})
@@ -84,7 +82,7 @@ rad6 = gooi.newRadio({ y = 160, x = 200, text = "Jun", radioGroup = "g2"})
 
 txt1 = gooi.newText({ y = 260, w = 200})
 bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
-joy1 = gooi.newJoy({ x = 220, y = 200, size = 80})
+joy1 = gooi.newJoy({ x = 120, y = 420, size = 150}):
 ```
 
 ![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
@@ -110,7 +108,7 @@ pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF"
 
 GÖÖi is highly customizable, it also has a "3D" mode and a "glossy" mode:
 
-![GÖÖi grid layout](http://s33.postimg.org/wq8rasl1r/modes_gooi.png)
+![GÖÖi grid layout](https://s31.postimg.org/or1zg4gtn/modes_gooi.png)
 
 Code:
 ```lua
@@ -136,28 +134,42 @@ pGrid
 	gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
 	gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
 	gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}):bg("#888888"),
-	gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}):bg("#880088"),
-	gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800"),
+	gooi.newButton({text = "Alert btn", orientation = "center", icon = imgDir.."medal.png"})
+	:bg("#880088"):onRelease(function()
+		gr.setBackgroundColor(r2(), r2(), r2())
+		gooi.alert("The background has changed!")
+	end),
+	gooi.newButton({text = "Confirm btn", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800")
+	:onRelease(function()
+		gooi.confirm("Change background?", function()
+			gr.setBackgroundColor(r2(), r2(), r2())
+		end)
+	end),
 	gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
 	gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 	:onRelease(function(c)
 		pGrid.layout.debug = not pGrid.layout.debug
 	end),
 	gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
-	gooi.newSpinner(-10, 30, 3):roundness(1, .8):bg("#ff00ff"),
+	gooi.newSpinner(-10, 30, 3):roundness(.7, .5):bg("#ff00ff"),
 	gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
-	gooi.newKnob(0.2)
+	gooi.newKnob(1)
 )
 ```
+
+There are modals too:
+
+![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
 
 Style used:
 ```lua
 style = {
 	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
-	fgColor = "#ffffff",
-	bgColor = "#218AB8ee",
-	mode3d = true,
-	glass = true
+	fgColor = "#FFFFFF",
+	bgColor = "#226699f9",
+    mode3d = true,
+    glass = true,
+    round = .18,
 }
 ```
 

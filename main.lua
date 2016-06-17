@@ -14,12 +14,18 @@ function love.load()
 	fontDir = "/fonts/"
 	style = {
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
-		fgColor = "#ffffff",
-		bgColor = "#218AB8ee",
+		fgColor = "#FFFFFF",
+		bgColor = "#226699f9",
         mode3d = true,
-        glass = true
+        glass = true,
+        --showBorder = true,
+        --borderWidth = 1
+        round = .18,
+        --roundInside = 1
 	}
 	gooi.setStyle(style)
+	gooi.desktopMode()
+
 	gr.setDefaultFilter("nearest", "nearest")
 
 	ship = {
@@ -66,7 +72,8 @@ function love.load()
 
 	txt1 = gooi.newText({ y = 260, w = 200})
 	bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
-	joy1 = gooi.newJoy({ x = 120, y = 420, size = 150}):bg("#00000000"):setImage(imgDir.."joystick.png"):noSpring()
+	joy1 = gooi.newJoy({ x = 120, y = 420, size = 150}):
+	setImage(imgDir.."cat.png"):noSpring():noGlass():bg("#ff880088")
 
 
 
@@ -123,34 +130,46 @@ function love.load()
 		gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
 		gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
 		gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}):bg("#888888"),
-		gooi.newButton({text = "Centered", orientation = "center", icon = imgDir.."medal.png"}):bg("#880088"),
-		gooi.newButton({text = "Right", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800"),
+		gooi.newButton({text = "Alert btn", orientation = "center", icon = imgDir.."medal.png"})
+		:bg("#880088"):onRelease(function()
+			gr.setBackgroundColor(r2(), r2(), r2())
+			gooi.alert("The background has changed!")
+		end),
+		gooi.newButton({text = "Confirm btn", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800")
+		:onRelease(function()
+			gooi.confirm("Change background?", function()
+				gr.setBackgroundColor(r2(), r2(), r2())
+			end)
+		end),
 		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
 		gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 		:onRelease(function(c)
 			pGrid.layout.debug = not pGrid.layout.debug
 		end),
 		gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
-		gooi.newSpinner(-10, 30, 3):roundness(1, .8):bg("#ff00ff"),
+		gooi.newSpinner(-10, 30, 3):roundness(.7, .5):bg("#ff00ff"),
 		gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
-		gooi.newKnob(0.2)
+		gooi.newKnob(1)
 	)
 
 	-- Salute:
+	lblCoords = gooi.newLabel("", 30, 330, 300, 30):setOrientation("left")
 	gooi.newLabel("This is a demonstration of the different\n"..
-		"components, styles and layouts supported", 30, 400)
+		"components, styles and layouts supported", 30, 360):setOrientation("left")
 
+	--gooi.removeComponent(pGrid)
 end
 
 function love.update(dt)
 	gooi.update(dt)
 	lbl2:setText(string.sub(sli1:getValue(), 0, 4))
 
-	chb1.x = math.floor(chb1.x + joy1:xValue() * dt * 200)
-	chb1.y = math.floor(chb1.y + joy1:yValue() * dt * 200)
+	-- Move itself:
+	joy1.x = (joy1.x + joy1:xValue() * dt * 200)
+	joy1.y = (joy1.y + joy1:yValue() * dt * 200)
 
-	ship.x = math.floor(ship.x + joyShip:xValue() * dt * 150)
-	ship.y = math.floor(ship.y + joyShip:yValue() * dt * 150)
+	ship.x = (ship.x + joyShip:xValue() * dt * 150)
+	ship.y = (ship.y + joyShip:yValue() * dt * 150)
 	
 	if ship.x > width() then ship.x = width() end
 	if ship.x < 0 then ship.x = width() end
@@ -162,6 +181,8 @@ function love.update(dt)
 			table.remove(bullets, i)
 		end
 	end
+
+	lblCoords:setText("coords: "..joy1:xValue()..", "..joy1:yValue())
 end
 
 function love.draw()
@@ -185,7 +206,6 @@ function love.draw()
 		ship.img:getHeight() / 2)
 
 	gooi.draw()
-
 	gr.print("FPS: "..love.timer.getFPS())
 end
 
@@ -207,6 +227,7 @@ function quit()
 end
 
 function r() return love.math.random(0, 255) end
+function r2() return love.math.random(0, 127) end
 --[[
 ]]
 
