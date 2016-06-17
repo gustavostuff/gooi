@@ -161,6 +161,10 @@ There are modals too:
 
 ![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
 
+Currently, the demo in the repo gives you this windows:
+
+![GÖÖi demo](https://s32.postimg.org/mznrgoejp/ss_gooi.png)
+
 Style used:
 ```lua
 style = {
