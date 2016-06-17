@@ -104,6 +104,7 @@ function gooi.newLabel(text, x, y, w, h)
 	function l:setText(value)
 		if not value then value = "" end
 		self.text = tostring(value)
+		return self
 	end
 	function l:drawSpecifics(fg)
 		local t = self.text or ""
@@ -209,6 +210,11 @@ function gooi.newButton(text, x, y, w, h)
 	b.pressedMove = 0
 	function b:rebuild()
 		--self:generateBorder()
+	end
+	function b:setText(value)
+		if not value then value = "" end
+		self.text = tostring(value)
+		return self
 	end
 	b:rebuild()
 	function b:drawSpecifics(fg)
@@ -1468,68 +1474,70 @@ function gooi.confirm(msg, fYes, fNo)
 end
 
 function gooi.dialog(msg, fPositive, fNegative, kind)
-	gooi.dialogMsg = msg or ""
-	gooi.showingDialog = true
+	if not gooi.showingDialog then
+		gooi.dialogMsg = msg or ""
+		gooi.showingDialog = true
 
-	local w, h = love.graphics.getWidth(), love.graphics.getHeight()
+		local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 
-	local smaller = gooi.smallerSide()
+		local smaller = gooi.smallerSide()
 
-	gooi.dialogW = math.floor(smaller * 0.8)
-	gooi.dialogH = math.floor(gooi.dialogW * 0.6)
+		gooi.dialogW = math.floor(smaller * 0.8)
+		gooi.dialogH = math.floor(gooi.dialogW * 0.6)
 
-	if gooi.desktop then
-		gooi.dialogW = math.floor(gooi.dialogW / 2)
-		gooi.dialogH = math.floor(gooi.dialogH / 2)
-	end
+		if gooi.desktop then
+			gooi.dialogW = math.floor(gooi.dialogW / 2)
+			gooi.dialogH = math.floor(gooi.dialogH / 2)
+		end
 
-	gooi.panelDialog = gooi.newPanel(
-		math.floor(w / 2 - gooi.dialogW / 2),
-		math.floor(h / 2 - gooi.dialogH / 2),
-		math.floor(gooi.dialogW),
-		math.floor(gooi.dialogH),
-		"grid 3x3"
-	)
+		gooi.panelDialog = gooi.newPanel(
+			math.floor(w / 2 - gooi.dialogW / 2),
+			math.floor(h / 2 - gooi.dialogH / 2),
+			math.floor(gooi.dialogW),
+			math.floor(gooi.dialogH),
+			"grid 3x3"
+		)
 
-	gooi.panelDialog.layout.padding = 7-- Default = 3
-	gooi.panelDialog.layout:init(gooi.panelDialog)
+		gooi.panelDialog.layout.padding = 7-- Default = 3
+		gooi.panelDialog.layout:init(gooi.panelDialog)
 
-	gooi.panelDialog:setColspan(1, 1, 3)-- For the msg:
-	gooi.panelDialog:setRowspan(1, 1, 2)
+		gooi.panelDialog:setColspan(1, 1, 3)-- For the msg:
+		gooi.panelDialog:setRowspan(1, 1, 2)
 
-	gooi.lblDialog = gooi.newLabel(gooi.dialogMsg):setOrientation("center")
-		:setOpaque(false)
-	gooi.lblDialog.lblFlag = true
-	gooi.panelDialog:add(gooi.lblDialog, "1,1")
+		gooi.lblDialog = gooi.newLabel(gooi.dialogMsg):setOrientation("center")
+			:setOpaque(false)
+		gooi.lblDialog.lblFlag = true
+		gooi.panelDialog:add(gooi.lblDialog, "1,1")
 
-	if kind == "alert" then
-		gooi.okButton  = gooi.newButton("OK"):onRelease(function()
-			if fPositive then
-				fPositive()
-			end
-			gooi.closeDialog()
-		end)
-		gooi.okButton.okFlag   = true
-		gooi.panelDialog:add(gooi.okButton,  "3,2")
-		gooi.radCorner = gooi.okButton.round * gooi.okButton.h / 2
-	else
-		gooi.noButton  = gooi.newButton("NO"):onRelease(function()
-			if fNegative then
-				fNegative()
-			end
-			gooi.closeDialog()
-		end)
-		gooi.yesButton = gooi.newButton("YES"):onRelease(function()
-			if fPositive then
-				fPositive()
-			end
-			gooi.closeDialog()
-		end)
-		gooi.noButton.noFlag   = true
-		gooi.yesButton.yesFlag = true
-		gooi.panelDialog:add(gooi.noButton,  "3,1")
-		gooi.panelDialog:add(gooi.yesButton, "3,3")
-		gooi.radCorner = gooi.noButton.round * gooi.noButton.h / 2
+		if kind == "alert" then
+			gooi.okButton  = gooi.newButton("OK"):onRelease(function()
+				if fPositive then
+					fPositive()
+				end
+				gooi.closeDialog()
+			end)
+			gooi.okButton.okFlag   = true
+			gooi.panelDialog:add(gooi.okButton,  "3,2")
+			gooi.radCorner = gooi.okButton.round * gooi.okButton.h / 2
+		else
+			gooi.noButton  = gooi.newButton("NO"):onRelease(function()
+				if fNegative then
+					fNegative()
+				end
+				gooi.closeDialog()
+			end)
+			gooi.yesButton = gooi.newButton("YES"):onRelease(function()
+				if fPositive then
+					fPositive()
+				end
+				gooi.closeDialog()
+			end)
+			gooi.noButton.noFlag   = true
+			gooi.yesButton.yesFlag = true
+			gooi.panelDialog:add(gooi.noButton,  "3,1")
+			gooi.panelDialog:add(gooi.yesButton, "3,3")
+			gooi.radCorner = gooi.noButton.round * gooi.noButton.h / 2
+		end
 	end
 
 	--gooi.panelDialog:setStyle(component.style)-- Create this with the style used
@@ -1537,7 +1545,7 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 end
 
 function gooi.closeDialog()
-	print(#gooi.components)
+	--print(#gooi.components)
 	gooi.removeComponent(gooi.panelDialog)
 	gooi.showingDialog = false
 end
@@ -2021,6 +2029,10 @@ function gooi.changeFont(font)-- Update font of every component:
 end
 
 function gooi.keypressed(key)
+	if gooi.showingDialog then
+		gooi.closeDialog()
+	end
+
 	local fields = gooi.getByType("text")
 	for i = 1, #fields do
 		local f = fields[i]
