@@ -161,9 +161,9 @@ There are modals too:
 
 ![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
 
-Currently, the demo in the repo gives you this window:
+This is the demo right now:
 
-![GÖÖi demo](https://s32.postimg.org/ssfctnrlh/ss2.png)
+![GÖÖi demo](https://s32.postimg.org/fh1bbsztx/image.png)
 
 Style used:
 ```lua
