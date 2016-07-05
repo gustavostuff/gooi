@@ -15,13 +15,10 @@ function love.load()
 	style = {
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 		fgColor = "#FFFFFF",
-		bgColor = "#226699f9",
+		bgColor = "#25AAE1F0",
         mode3d = true,
         glass = true,
-        --showBorder = true,
-        --borderWidth = 1
         round = .18,
-        --roundInside = 1
 	}
 	gooi.setStyle(style)
 	gooi.desktopMode()

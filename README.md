@@ -108,7 +108,7 @@ pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF"
 
 GÖÖi is highly customizable, it also has a "3D" mode and a "glossy" mode:
 
-![GÖÖi grid layout](https://s31.postimg.org/or1zg4gtn/modes_gooi.png)
+![GÖÖi grid layout](https://s31.postimg.org/kta18czjv/image.png)
 
 Code:
 ```lua
@@ -170,7 +170,7 @@ Style used:
 style = {
 	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 	fgColor = "#FFFFFF",
-	bgColor = "#226699f9",
+	bgColor = "#25AAE1F0",
     mode3d = true,
     glass = true,
     round = .18,
