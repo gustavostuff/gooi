@@ -163,7 +163,7 @@ There are modals too:
 
 This is the demo right now:
 
-![GÖÖi demo](https://s32.postimg.org/fh1bbsztx/image.png)
+![GÖÖi demo](https://s32.postimg.org/y7q4nne8l/image.png)
 
 Style used:
 ```lua
