@@ -111,7 +111,7 @@ function love.load()
 	pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
 	pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
 	pGrid
-	:setColspan(1, 1, 3)
+	:setColspan(1, 1, 3)-- Row, column and span size
 	:setRowspan(6, 3, 2)
 	:setColspan(8, 2, 2)
 	:setRowspan(8, 2, 3)
