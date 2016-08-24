@@ -33,6 +33,9 @@ gooi.dialogMsg = ""
 gooi.dialogH = 0
 gooi.dialogW = 0
 gooi.desktop = false
+gooi.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight())
+gooi.sx = 1
+gooi.sy = 1
 
 function gooi.desktopMode()
 	gooi.desktop = true
@@ -347,6 +350,7 @@ function gooi.newSlider(value, x, y, w, h)
 		end
 	end
 	function s:updateGUI(theX)
+		theX = theX / gooi.sx
 		self.displacement = (theX - (self.x + self.h / 2))
 		if self.displacement > (self.w - self.h) then self.displacement = self.w - self.h end
 		if self.displacement < 0 then self.displacement = 0 end
@@ -900,11 +904,6 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 				self.roundInside * side / 2,
 				circleRes)
 
-		-- Less:
-		--love.graphics.line(x1 + xDiff, yTop, x1, yMid, x1 + xDiff, yLow)
-		-- Plus:
-		--love.graphics.line(x2 - xDiff, yTop, x2, yMid, x2 - xDiff, yLow)
-
 		love.graphics.setLineStyle("rough")
 		love.graphics.setLineWidth(prevLineW)
 
@@ -925,7 +924,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		if x and y then dx, dy = self.xMin - x, self.yMin - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
 		]]
-		return self:overIt() and x < self.x + self.w / 2
+		return self:overIt() and x < (self.x + self.w / 2) * gooi.sx
 	end
 	function s:overPlus(x, y)
 		--[[
@@ -933,7 +932,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		if x and y then dx, dy = self.xPlus - x, self.yPlus - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
 		]]
-		return self:overIt() and x >= self.x + self.w / 2
+		return self:overIt() and x >= (self.x + self.w / 2) * gooi.sx
 	end
 	function s:changeValue(sense)
 		local newV = self.value + self.step * sense
@@ -1049,8 +1048,8 @@ function gooi.newJoy(x, y, size, deadZone, image)
 				self.image:getHeight() / 2)
 		else
 			love.graphics.circle("fill",
-				self.xStick,
-				self.yStick,
+				math.floor(self.xStick),
+				math.floor(self.yStick),
 				self.rStick,
 				circleRes)
 		end
@@ -1058,16 +1057,18 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	function s:move(direction)
 		if (self.pressed or self.touch) and self.stickPressed then
 			local daX, daY = love.mouse.getPosition()
+			daX = daX / gooi.sx
+			daY = daY / gooi.sy
 			if self:butting() then
 				if self.touch then
-					daX, daY = self.touch.x, self.touch.y
+					daX, daY = self.touch.x / gooi.sx, self.touch.y / gooi.sy
 				end
-				local dX, dY = self:theX() - daX - self.dx, self:theY() - daY - self.dy
+				local dX = self:theX() - daX - self.dx
+				local dY = self:theY() - daY - self.dy
 				local angle = (math.atan2(dY, dX) + math.rad(180));
 				self.xStick = self.x + (self.r - self.rStick) * math.cos(angle) + self.r
 				self.yStick = self.y + (self.r - self.rStick) * math.sin(angle) + self.r
 			else
-				--self.xStick, self.yStick = love.mouse.getX() + self.dx, love.mouse.getY() + self.dy
 				if self.touch then
 					daX, daY = self.touch.x, self.touch.y
 				end
@@ -1090,6 +1091,8 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	function s:butting()
 		local hyp = 0
 		local daX, daY = love.mouse.getPosition()
+		daX = daX / gooi.sx
+		daY = daY / gooi.sy
 		if self.touch then
 			daX, daY = self.touch.x, self.touch.y
 		end
@@ -1107,18 +1110,19 @@ function gooi.newJoy(x, y, size, deadZone, image)
 		if self:onDeadZone() then return 0 end
 		return tonumber(string.format("%.3f",(self.yStick - self:theY()) / (self.r - self.rStick)))
 	end
-	function s:overStick(x, y)-- x and y are sent in case of a touch.
-		dx, dy = self.xStick - love.mouse.getX(), self.yStick - love.mouse.getY()
-		if x and y then dx, dy = self.xStick - x, self.yStick - y end
+	function s:overStick(x, y)
+		local dx = (self.xStick - x)
+		local dy = (self.yStick - y)
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.rStick * 1.1
 	end
 	function s:onDeadZone()
 		local dx, dy = self:theX() - self.xStick, self:theY() - self.yStick
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) <= self.deadZone * (self.r - self.rStick)
 	end
-	-- TODO this is a temporal fix for the joystick "moving" by itself when setting a style:
 	function s:theX() return (self.x) + (self.r) end
 	function s:theY() return (self.y) + (self.r) end
+
+	
 
 	return gooi.storeComponent(s, id)
 end
@@ -1230,7 +1234,7 @@ function gooi.newKnob(value, x, y, size)
 
 		local dy = self.pivotY - y
 
-		self.changedValue = self.pivotValue + dy / self.h / 3
+		self.changedValue = self.pivotValue + (dy / self.h / 2) / gooi.sy
 
 		if self.changedValue > 1 then self.changedValue = 1 end
 		if self.changedValue < 0 then self.changedValue = 0 end
@@ -1368,6 +1372,14 @@ function gooi.newPanel(x, y, w, h, theLayout)
 				end
 
 				if c.rebuild then c:rebuild() end
+				if c.type == "joystick" then
+					-- Workaround for joysticks:
+					joy1.pressed = true
+					joy1.stickPressed = true
+					joy1:restore()
+					joy1.stickPressed = false
+					joy1.pressed = false
+				end
 			else-- Add component in the next available cell:
 				for i = 1, #params do
 					local c = params[i]
@@ -1400,6 +1412,14 @@ function gooi.newPanel(x, y, w, h, theLayout)
 					end
 
 					if c.rebuild then c:rebuild() end
+					if c.type == "joystick" then
+						-- Workaround for joysticks:
+						joy1.pressed = true
+						joy1.stickPressed = true
+						joy1:restore()
+						joy1.stickPressed = false
+						joy1.pressed = false
+					end
 				end
 			end
 		elseif self.layout.kind == "game" then
@@ -1576,6 +1596,12 @@ function gooi.storeComponent(c, id)
 	return c
 end
 
+function gooi.setCanvas(c)
+	gooi.canvas = c
+	gooi.sx = gooi.canvas:getWidth() / love.graphics.getWidth()
+	gooi.sy = gooi.canvas:getHeight() / love.graphics.getHeight()
+end
+
 
 function gooi.removeComponent(comp)
 	for k, v in pairs(gooi.components) do
@@ -1689,6 +1715,10 @@ function gooi.draw(group)
 	local noButton, okButton, yesButton, msgLbl = nil, nil, nil, nil
 
 	local compWithTooltip = nil -- Just for desktop.
+
+	love.graphics.setColor(255, 255, 255)
+	love.graphics.setCanvas(gooi.canvas)
+	love.graphics.clear()
 
 	for k, comp in pairs(gooi.components) do
 
@@ -1823,6 +1853,9 @@ function gooi.draw(group)
 	love.graphics.setFont(prevFont)
 	love.graphics.setLineStyle(prevLineS)
 	love.graphics.setColor(prevR, prevG, prevB, prevA)
+
+	love.graphics.setCanvas()
+	love.graphics.draw(gooi.canvas, 0, 0, 0, gooi.sx, gooi.sy)
 end
 
 function gooi.toRGBA(hex)
@@ -1904,10 +1937,10 @@ function gooi.pressed(id, x, y)
 	for k, c in pairs(gooi.components) do
 		if c.enabled and c.visible then
 			if c.type == "joystick" then
-				if c:overStick(x, y) then 
+				if c:overStick(x / gooi.sx, y / gooi.sy) then 
 					c.stickPressed = true
-					c.dx = c.xStick - x
-					c.dy = c.yStick - y
+					c.dx = c.xStick - x / gooi.sx
+					c.dy = c.yStick - y / gooi.sy
 				end
 			elseif c.type == "spinner" then
 				if c:overMinus(x, y) then

@@ -293,18 +293,6 @@ function component:draw()-- Every component has the same base:
 
 		if self.glass then
 			love.graphics.setColor(255, 255, 255)
-			--[[
-				if self.mode3d then
-					love.graphics.draw(img,
-					self.x + self.w / 2,
-					self.y + self.h / 2,
-					0,
-					math.floor(self.w),
-					self.h / 2 * -1,
-					img:getWidth() / 2,
-					img:getHeight() / 2)
-				end
-			]]
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
@@ -396,27 +384,32 @@ function component:overItAux(x, y)
 	end
 
 	local radiusCorner = self.round * self.h / 2
+	radiusCorner = radiusCorner * (gooi.sx + gooi.sy) / 2
+	local theX = self.x * gooi.sx
+	local theY = self.y * gooi.sy
+	local theW = self.w * gooi.sx
+	local theH = self.h * gooi.sy
 
 	-- Check if one of the "two" rectangles is on the mouse/finger:
 	local b = not (
-		xm < self.x or
-		ym < self.y + radiusCorner or
-		xm > self.x + self.w or
-		ym > self.y + self.h - radiusCorner
+		xm < theX or
+		ym < theY + radiusCorner or
+		xm > theX + theW or
+		ym > theY + theH - radiusCorner
 	) or not (
-		xm < self.x + radiusCorner or
-		ym < self.y or
-		xm > self.x + self.w - radiusCorner or
-		ym > self.y + self.h
+		xm < theX + radiusCorner or
+		ym < theY or
+		xm > theX + theW - radiusCorner or
+		ym > theY + theH
 	)
 
 	-- Check if mouse/finger is over one of the 4 "circles":
 
 	local x1, x2, y1, y2 =
-		self.x + radiusCorner,
-		self.x + self.w - radiusCorner,
-		self.y + radiusCorner,
-		self.y + self.h - radiusCorner
+		theX + radiusCorner,
+		theX + theW - radiusCorner,
+		theY + radiusCorner,
+		theY + theH - radiusCorner
 
 	local hyp1 = math.sqrt(math.pow(xm - x1, 2) + math.pow(ym - y1, 2))
 	local hyp2 = math.sqrt(math.pow(xm - x2, 2) + math.pow(ym - y1, 2))
