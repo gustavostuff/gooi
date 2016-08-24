@@ -1061,7 +1061,7 @@ function gooi.newJoy(x, y, size, deadZone, image)
 			daY = daY / gooi.sy
 			if self:butting() then
 				if self.touch then
-					daX, daY = self.touch.x / gooi.sx, self.touch.y / gooi.sy
+					daX, daY = self.touch.x, self.touch.y
 				end
 				local dX = self:theX() - daX - self.dx
 				local dY = self:theY() - daY - self.dy
@@ -1229,7 +1229,7 @@ function gooi.newKnob(value, x, y, size)
 		local y = love.mouse.getY()
 		
 		if self.touch then
-			y = self.touch.y
+			y = self.touch.y * gooi.sy
 		end
 
 		local dy = self.pivotY - y
@@ -1598,8 +1598,8 @@ end
 
 function gooi.setCanvas(c)
 	gooi.canvas = c
-	gooi.sx = gooi.canvas:getWidth() / love.graphics.getWidth()
-	gooi.sy = gooi.canvas:getHeight() / love.graphics.getHeight()
+	gooi.sx = love.graphics.getWidth() / gooi.canvas:getWidth()
+	gooi.sy = love.graphics.getHeight() / gooi.canvas:getHeight()
 end
 
 
@@ -1687,7 +1687,7 @@ function gooi.update(dt)
 			if c.type == "slider" then
 				local t = c.touch
 				if t then
-					c:updateGUI(t.x)
+					c:updateGUI(t.x * gooi.sx)
 				else
 					c:updateGUI(love.mouse.getX())
 				end
@@ -1974,8 +1974,8 @@ end
 function gooi.moved(id, x, y)
 	local comp = gooi.getCompWithTouch(id)
 	if comp and comp.touch then-- Update touch for every component which has it.
-		comp.touch.x = x
-		comp.touch.y = y
+		comp.touch.x = x / gooi.sx
+		comp.touch.y = y / gooi.sy
 		if comp.events.m then
 			comp.events.m(comp)-- Moven event.
 		end

@@ -293,6 +293,18 @@ function component:draw()-- Every component has the same base:
 
 		if self.glass then
 			love.graphics.setColor(255, 255, 255)
+			--[[
+				if self.mode3d then
+					love.graphics.draw(img,
+					self.x + self.w / 2,
+					self.y + self.h / 2,
+					0,
+					math.floor(self.w),
+					self.h / 2 * -1,
+					img:getWidth() / 2,
+					img:getHeight() / 2)
+				end
+			]]
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
