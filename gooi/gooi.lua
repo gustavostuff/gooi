@@ -1959,7 +1959,11 @@ function gooi.pressed(id, x, y)
 		if c.enabled and c.visible then
 			if c:overIt(x, y) then
 				if id and x and y then
-					c.touch = {id = id, x = x, y = y}-- Touch used on touchscreens only.
+					c.touch = {
+						id = id,
+						x = x / gooi.sx,
+						y = y / gooi.sy
+					}-- Touch used on touchscreens only.
 				else
 					c.pressed = true-- Pressed just on PC (one pressed at once).
 				end
