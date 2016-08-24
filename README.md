@@ -27,6 +27,7 @@ function love.mousereleased(x, y, button) gooi.released() end
 --[[
 	function love.touchpressed(id, x, y)  gooi.pressed(id, x, y) end
 	function love.touchreleased(id, x, y) gooi.released(id, x, y) end
+	function love.touchmoved(id, x, y)    gooi.moved(id, x, y) end
 ]]
 ```
 
