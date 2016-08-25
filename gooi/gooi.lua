@@ -1717,8 +1717,8 @@ function gooi.draw(group)
 	local compWithTooltip = nil -- Just for desktop.
 
 	love.graphics.setColor(255, 255, 255)
-	love.graphics.setCanvas(gooi.canvas)
-	love.graphics.clear()
+	--love.graphics.setCanvas(gooi.canvas)
+	--love.graphics.clear()
 
 	for k, comp in pairs(gooi.components) do
 
@@ -1854,8 +1854,8 @@ function gooi.draw(group)
 	love.graphics.setLineStyle(prevLineS)
 	love.graphics.setColor(prevR, prevG, prevB, prevA)
 
-	love.graphics.setCanvas()
-	love.graphics.draw(gooi.canvas, 0, 0, 0, gooi.sx, gooi.sy)
+	--love.graphics.setCanvas()
+	--love.graphics.draw(gooi.canvas, 0, 0, 0, gooi.sx, gooi.sy)
 end
 
 function gooi.toRGBA(hex)
