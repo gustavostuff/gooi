@@ -57,7 +57,7 @@ gooi.newButton({
 
 GÖÖi is highly customizable, it has a 3D mode, a Glossy mode and a "Canvas" mode to work in virtual resolutions:
 
-![GÖÖi grid layout](https://s16.postimg.org/qapy3nr11/ss_Full.png)
+![GÖÖi grid layout](https://s10.postimg.org/gumjz9wyx/Sin_nombre.png)
 
 There are modals too:
 
