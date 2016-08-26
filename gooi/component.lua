@@ -384,23 +384,24 @@ function component:wasReleased()
 end
 
 function component:overItAux(x, y)
-	local xm = love.mouse.getX()
-	local ym = love.mouse.getY()
+	-- Scale:
+	local xm = love.mouse.getX() / gooi.sx
+	local ym = love.mouse.getY() / gooi.sy
 
 	if self.touch then
-		xm, ym = self.touch.x, self.touch.y
+		xm, ym = self.touch.x, self.touch.y-- Already scaled.
 	end
-
+	-- Scale:
 	if x and y then
 		xm, ym = x, y
 	end
 
 	local radiusCorner = self.round * self.h / 2
-	radiusCorner = radiusCorner * (gooi.sx + gooi.sy) / 2
-	local theX = self.x * gooi.sx
-	local theY = self.y * gooi.sy
-	local theW = self.w * gooi.sx
-	local theH = self.h * gooi.sy
+
+	local theX = self.x
+	local theY = self.y
+	local theW = self.w
+	local theH = self.h
 
 	-- Check if one of the "two" rectangles is on the mouse/finger:
 	local b = not (

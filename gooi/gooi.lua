@@ -349,8 +349,11 @@ function gooi.newSlider(value, x, y, w, h)
 				self.y + self.h / 2)
 		end
 	end
-	function s:updateGUI(theX)
-		theX = theX / gooi.sx
+	function s:updateGUI()
+		local theX = love.mouse.getX() / gooi.sx
+		if self.touch then
+			theX = self.touch.x
+		end
 		self.displacement = (theX - (self.x + self.h / 2))
 		if self.displacement > (self.w - self.h) then self.displacement = self.w - self.h end
 		if self.displacement < 0 then self.displacement = 0 end
@@ -924,7 +927,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		if x and y then dx, dy = self.xMin - x, self.yMin - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
 		]]
-		return self:overIt() and x < (self.x + self.w / 2) * gooi.sx
+		return self:overIt() and x < (self.x + self.w / 2)
 	end
 	function s:overPlus(x, y)
 		--[[
@@ -932,7 +935,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		if x and y then dx, dy = self.xPlus - x, self.yPlus - y end
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
 		]]
-		return self:overIt() and x >= (self.x + self.w / 2) * gooi.sx
+		return self:overIt() and x >= (self.x + self.w / 2)
 	end
 	function s:changeValue(sense)
 		local newV = self.value + self.step * sense
@@ -1059,19 +1062,16 @@ function gooi.newJoy(x, y, size, deadZone, image)
 			local daX, daY = love.mouse.getPosition()
 			daX = daX / gooi.sx
 			daY = daY / gooi.sy
+			if self.touch then
+				daX, daY = self.touch.x, self.touch.y
+			end
 			if self:butting() then
-				if self.touch then
-					daX, daY = self.touch.x, self.touch.y
-				end
 				local dX = self:theX() - daX - self.dx
 				local dY = self:theY() - daY - self.dy
 				local angle = (math.atan2(dY, dX) + math.rad(180));
 				self.xStick = self.x + (self.r - self.rStick) * math.cos(angle) + self.r
 				self.yStick = self.y + (self.r - self.rStick) * math.sin(angle) + self.r
 			else
-				if self.touch then
-					daX, daY = self.touch.x, self.touch.y
-				end
 				self.xStick, self.yStick = daX + self.dx, daY + self.dy
 			end
 		end
@@ -1208,33 +1208,16 @@ function gooi.newKnob(value, x, y, size)
 			circleRes)
 	end
 
-	function k:insideKnob()
-		local x = love.mouse.getX()
-		local y = love.mouse.getY()
-		
-		if self.touch then
-			x = self.touch.x
-			y = self.touch.y
-		end
-
-		local dx = math.abs(x - self.xKnob)
-		local dy = math.abs(y - self.yKnob)
-		local hyp = math.sqrt(math.pow(dx, 2) + math.pow(dy, 2))
-		local rad = self.radKnob
-
-		return hyp < rad
-	end
-
 	function k:turn()
-		local y = love.mouse.getY()
+		local y = love.mouse.getY() / gooi.sy
 		
 		if self.touch then
-			y = self.touch.y * gooi.sy
+			y = self.touch.y
 		end
 
 		local dy = self.pivotY - y
 
-		self.changedValue = self.pivotValue + (dy / self.h / 2) / gooi.sy
+		self.changedValue = (self.pivotValue + (dy / self.h / 2))
 
 		if self.changedValue > 1 then self.changedValue = 1 end
 		if self.changedValue < 0 then self.changedValue = 0 end
@@ -1687,9 +1670,9 @@ function gooi.update(dt)
 			if c.type == "slider" then
 				local t = c.touch
 				if t then
-					c:updateGUI(t.x * gooi.sx)
+					c:updateGUI()
 				else
-					c:updateGUI(love.mouse.getX())
+					c:updateGUI()
 				end
 			elseif c.type == "joystick" then
 				c:move()
@@ -1931,16 +1914,18 @@ function gooi.deselectOtherRadios(group, id)
 end
 
 ---------------------------------------------------------------------------------------------
-function gooi.pressed(id, x, y)
-	x = x or love.mouse.getX()
-	y = y or love.mouse.getY()
+function gooi.pressed(id, xt, yt)
+	local x = xt or love.mouse.getX()
+	local y = yt or love.mouse.getY()
+	x = x / gooi.sx
+	y = y / gooi.sy
 	for k, c in pairs(gooi.components) do
 		if c.enabled and c.visible then
 			if c.type == "joystick" then
-				if c:overStick(x / gooi.sx, y / gooi.sy) then 
+				if c:overStick(x, y) then 
 					c.stickPressed = true
-					c.dx = c.xStick - x / gooi.sx
-					c.dy = c.yStick - y / gooi.sy
+					c.dx = c.xStick - x
+					c.dy = c.yStick - y
 				end
 			elseif c.type == "spinner" then
 				if c:overMinus(x, y) then
@@ -1955,14 +1940,12 @@ function gooi.pressed(id, x, y)
 			elseif c.type == "knob" then
 				c.pivotY = (y or love.mouse.getY())
 			end
-		end
-		if c.enabled and c.visible then
 			if c:overIt(x, y) then
 				if id and x and y then
 					c.touch = {
 						id = id,
-						x = x / gooi.sx,
-						y = y / gooi.sy
+						x = x,
+						y = y
 					}-- Touch used on touchscreens only.
 				else
 					c.pressed = true-- Pressed just on PC (one pressed at once).
@@ -1975,18 +1958,18 @@ function gooi.pressed(id, x, y)
 	end
 end
 ---------------------------------------------------------------------------------------------
-function gooi.moved(id, x, y)
+function gooi.moved(id, xt, yt)
 	local comp = gooi.getCompWithTouch(id)
 	if comp and comp.touch then-- Update touch for every component which has it.
-		comp.touch.x = x / gooi.sx
-		comp.touch.y = y / gooi.sy
+		comp.touch.x = xt / gooi.sx
+		comp.touch.y = yt / gooi.sy
 		if comp.events.m then
 			comp.events.m(comp)-- Moven event.
 		end
 	end
 end
 ---------------------------------------------------------------------------------------------
-function gooi.released(id, x, y)
+function gooi.released(id, xt, yt)
 	local c = gooi.getCompWithTouch(id)
 	gooi.updateFocus()
 	if c then
