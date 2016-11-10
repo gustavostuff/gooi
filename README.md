@@ -22,6 +22,7 @@ Important things:
 
 * Multitouch support
 * Multilingual support
+* Canvas support (virtual resolutions)
 * Grid layout and Game layouts
 * Works in desktop as well
 * Flexible API
