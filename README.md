@@ -1,4 +1,4 @@
-# _GÖÖi_ - Android-Oriented GUI Library
+# _GÖÖi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](http://doge.mit-license.org)
 
