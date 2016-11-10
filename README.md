@@ -18,7 +18,7 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 * Panels
 * Modals
 
-Important stuff:
+Important things:
 
 * Multitouch support
 * Multilingual support
