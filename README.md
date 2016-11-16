@@ -23,7 +23,8 @@ Important things:
 * Multitouch support
 * Multilingual support
 * Canvas support (virtual resolutions)
-* Grid layout and Game layout
+* Grid layout [![grid_mini.png](https://s16.postimg.org/gv2qgrys5/grid_mini.png)](https://postimg.org/image/mw0fdule9/)
+* Game layout [![game_mini.png](https://s21.postimg.org/4p21drhav/game_mini.png)](https://postimg.org/image/iiqe2t9w3/)
 * Works in desktop as well
 * Flexible API
 * Flexible shapes and colors
@@ -80,17 +81,13 @@ gooi.newButton({
 
 ![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
 
-GÖÖi is highly customizable, it has a 3D mode, a Glossy mode and a "Canvas" mode to work in virtual resolutions:
+GÖÖi is highly customizable:
 
 ![GÖÖi grid layout](https://s13.postimg.org/qshh1ky2f/Sin_nombre.png)
 
-There are modals too:
+Modals:
 
 ![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
-
-This is the demo right now:
-
-![GÖÖi demo](https://s32.postimg.org/y7q4nne8l/image.png)
 
 Style used:
 ```lua
