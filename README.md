@@ -20,15 +20,15 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 
 Important things:
 
-* Multitouch support
-* Multilingual support
-* Canvas support (virtual resolutions)
-* Grid layout [![grid_mini.png](https://s16.postimg.org/80r8wcfs5/grid_mini.png)](https://postimg.org/image/4twpcpvc1/)
-* Game layout [![game_mini.png](https://s18.postimg.org/6eqolidfd/game_mini.png)](https://postimg.org/image/b0mstuyyd/)
-* Works in desktop as well
-* Flexible API
-* Flexible shapes and colors
-* Easy theme system
+* [![touch_mini.png](https://s11.postimg.org/jyptsc1z7/touch_mini.png)](https://postimg.org/image/j971fz1fj/) Multitouch support
+* [![multilang_mini.png](https://s17.postimg.org/gs69hvsdr/multilang_mini.png)](https://postimg.org/image/yi7y2x5yj/) Multilingual support
+* [![canvas_mini.png](https://s13.postimg.org/pq0ynta2v/canvas_mini.png)](https://postimg.org/image/do5kto0ub/) Canvas support (virtual resolutions)
+* [![grid_mini.png](https://s11.postimg.org/ndbg9r3k3/grid_mini.png)](https://postimg.org/image/rz7ki3p33/) Grid layout 
+* [![game_mini.png](https://s13.postimg.org/4df2wj48n/game_mini.png)](https://postimg.org/image/kbnsmnygj/) Game layout
+* [![desktop_mini.png](https://s15.postimg.org/7k03xbsiz/desktop_mini.png)](https://postimg.org/image/kbea3u2av/) Works in desktop as well
+* [![api_mini.png](https://s11.postimg.org/qmudcpq83/api_mini.png)](https://postimg.org/image/99k2xuuwv/) Flexible API
+* [![shapes_mini.png](https://s13.postimg.org/4oi73j13b/shapes_mini.png)](https://postimg.org/image/gqdkxoabn/) Flexible shapes and colors
+* [![theme_mini.png](https://s3.postimg.org/3kob6oir7/theme_mini.png)](https://postimg.org/image/vkseqym7j/) Easy theme system
 
 ### Examples:
 
