@@ -23,8 +23,8 @@ Important things:
 * Multitouch support
 * Multilingual support
 * Canvas support (virtual resolutions)
-* Grid layout [![grid_mini.png](https://s16.postimg.org/gv2qgrys5/grid_mini.png)](https://postimg.org/image/mw0fdule9/)
-* Game layout [![game_mini.png](https://s21.postimg.org/4p21drhav/game_mini.png)](https://postimg.org/image/iiqe2t9w3/)
+* Grid layout [![grid_mini.png](https://s16.postimg.org/80r8wcfs5/grid_mini.png)](https://postimg.org/image/4twpcpvc1/)
+* Game layout [![game_mini.png](https://s18.postimg.org/6eqolidfd/game_mini.png)](https://postimg.org/image/b0mstuyyd/)
 * Works in desktop as well
 * Flexible API
 * Flexible shapes and colors
