@@ -32,6 +32,5 @@ return {
 	utf8 = require(BASE .. 'utf8'), 
 	gooi = require(BASE .. 'gooi'),
 	component = require(BASE .. 'component'),
-	layout = require(BASE .. 'layout'),
-	colorManager = require(BASE..'colorManager')
+	layout = require(BASE .. 'layout')
 }
