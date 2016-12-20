@@ -1757,33 +1757,32 @@ function gooi.draw(group)
 			end
 
 		end
+	end
 
-		-- Check if a tooltip was generated, just for desktop:
-
-		local os = love.system.getOS()
-		if compWithTooltip and os ~= "Android" and os ~= "iOS" and gooi.desktop then
-			local disp = love.graphics.getWidth() / 100
-			local unit = compWithTooltip.tooltipFont:getHeight() / 5
-			love.graphics.setColor(0, 0, 0, 200)
-			love.graphics.setFont(compWithTooltip.tooltipFont)
-			local xRect = love.mouse.getX() + disp - unit
-			local yRect = love.mouse.getY() - disp * 2 - unit
-			local xText = love.mouse.getX() + disp
-			local yText = love.mouse.getY() - disp * 2
-			local wRect = compWithTooltip.tooltipFont:getWidth(compWithTooltip.tooltip) + unit * 2
-			local hRect = compWithTooltip.tooltipFont:getHeight() + unit * 2
-			if xRect + wRect > love.graphics.getWidth() then
-				xRect = xRect - wRect
-				xText = xText - wRect
-			end
-			if yRect < 0 then
-				yRect = yRect + hRect * 2
-				yText = yText + hRect * 2
-			end
-			love.graphics.rectangle("fill", xRect, yRect, wRect, hRect)
-			love.graphics.setColor(255, 255, 255)
-			love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
+	-- Check if a tooltip was generated, just for desktop:¡
+	local os = love.system.getOS()
+	if compWithTooltip and os ~= "Android" and os ~= "iOS" and gooi.desktop then
+		local disp = love.graphics.getWidth() / 100
+		local unit = compWithTooltip.tooltipFont:getHeight() / 5
+		love.graphics.setColor(0, 0, 0, 150)
+		love.graphics.setFont(compWithTooltip.tooltipFont)
+		local xRect = love.mouse.getX() + disp - unit
+		local yRect = love.mouse.getY() - disp * 2 - unit
+		local xText = love.mouse.getX() + disp
+		local yText = love.mouse.getY() - disp * 2
+		local wRect = compWithTooltip.tooltipFont:getWidth(compWithTooltip.tooltip) + unit * 2
+		local hRect = compWithTooltip.tooltipFont:getHeight() + unit * 2
+		if xRect + wRect > love.graphics.getWidth() then
+			xRect = xRect - wRect
+			xText = xText - wRect
 		end
+		if yRect < 0 then
+			yRect = yRect + hRect * 2
+			yText = yText + hRect * 2
+		end
+		love.graphics.rectangle("fill", xRect, yRect, wRect, hRect)
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print(compWithTooltip.tooltip, math.floor(xText), math.floor(yText))
 	end
 
 	if gooi.showingDialog then
