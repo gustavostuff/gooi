@@ -42,7 +42,7 @@ function love.load()
 	-----------------------------------------------
 
 	lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
-	lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOpaque(true):setOrientation("center")
+	lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOrientation("center")
 	btn1 = gooi.newButton("Exit with tooltip", 120, 40, 170, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
 	:setTooltip("This is a tooltip!")
 	:onRelease(function()
@@ -50,7 +50,7 @@ function love.load()
 	end)
 	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
 	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 170, h = 25})
-	chb1 = gooi.newCheck("This is a cool check box", 10, 200, 200):onRelease(function(c)
+	chb1 = gooi.newCheck("This is a cool check box", 10, 200):onRelease(function(c)
 		if c.checked then
 			gr.setBackgroundColor(127, 63, 0)
 		else

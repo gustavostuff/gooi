@@ -25,7 +25,8 @@ THE SOFTWARE.
 
 gooi = {}
 gooi.__index = gooi
-gooi.font = love.graphics.newFont(love.graphics.getWidth() / 80)
+gooi.defaultFont = love.graphics.newFont(12)
+gooi.font = defaultFont
 gooi.components = {}
 gooi.dialogFOK = function() end
 gooi.showingDialog = false
@@ -112,15 +113,15 @@ function gooi.newLabel(text, x, y, w, h)
 	function l:drawSpecifics(fg)
 		local t = self.text or ""
 		-- Right by default:
-		local x = self.x + self.w - gooi.getFont(self):getWidth(t) - self.h / 2
-		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
+		local x = self.x + self.w - gooi.getFont():getWidth(t) - self.h / 2
+		local y = (self.y + self.h / 2) - (gooi.getFont():getHeight() / 2)
 		if self.orientation == "left" then
 			x = self.x + self.h / 2
 			if self.icon then
 				x = x + self.h / 2
 			end
 		elseif self.orientation == "center" then
-			x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
+			x = (self.x + self.w / 2) - (gooi.getFont():getWidth(t) / 2)
 		end
 		if self.icon then
 			local xImg = math.floor(self.x + self.h / 2)
@@ -227,15 +228,15 @@ function gooi.newButton(text, x, y, w, h)
 		end
 		-- Center text:
 		local t = self.text
-		local x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
-		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
+		local x = (self.x + self.w / 2) - (gooi.getFont():getWidth(t) / 2)
+		local y = (self.y + self.h / 2) - (gooi.getFont():getHeight() / 2)
 		if self.orientation == "left" then
 			x = self.x + self.h / 2
 			if self.icon then
 				x = x + self.h / 2
 			end
 		elseif self.orientation == "right" then
-			x = self.x + self.w - self.h / 2 - gooi.getFont(self):getWidth(self.text)
+			x = self.x + self.w - self.h / 2 - gooi.getFont():getWidth(self.text)
 		end
 		if self.icon then
 			local xImg = math.floor(self.x + self.h / 2)
@@ -400,7 +401,7 @@ function gooi.newCheck(text, x, y, w, h)
 	elseif type(text) == "string" then
 		params.text = text
 		params.x, params.y = x or 10, y or 10
-		params.w = w or gooi.getFont():getWidth(text) + gooi.getFont():getHeight()
+		params.w = w or gooi.getFont():getWidth(text) + gooi.getFont():getHeight() * 2.5
 		params.h = h or defH
 	end
 
@@ -458,7 +459,7 @@ function gooi.newCheck(text, x, y, w, h)
 		love.graphics.setColor(fg)
 		love.graphics.print(self.text, 
 			math.floor(self.x + self.h * 1.1),
-			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
+			math.floor(self.y + self.h / 2 - gooi.getFont():getHeight() / 2))
 	end
 	function chb:change()
 		self.checked = not self.checked
@@ -551,7 +552,7 @@ function gooi.newRadio(text, radioGroup, x, y, w, h)
 		end
 		love.graphics.print(self.text,
 			math.floor(self.x + self.h * 1.1),
-			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
+			math.floor(self.y + self.h / 2 - gooi.getFont():getHeight() / 2))
 	end
 	function r:setRadioGroup(g)
 		self.radioGroup = g
@@ -613,7 +614,7 @@ function gooi.newText(text, x, y, w, h)
 	f.accentuationComing = false -- Support for typing á, é, í, ó, ú and Á, É, Í, Ó, Ú (on PC).
 	f.indexCursor = string.utf8len(f.text)
 	function f:rebuild()
-		self.displacementCursor = math.floor(self.x + self.h / 3 + gooi.getFont(self):getWidth(self.text))
+		self.displacementCursor = math.floor(self.x + self.h / 3 + gooi.getFont():getWidth(self.text))
 		--self:generateBorder()
 	end
 	f:rebuild()
@@ -674,10 +675,10 @@ function gooi.newText(text, x, y, w, h)
 			if self.indexCursor < 0 then
 				self.indexCursor = 0
 			end
-			self.displacementCursor = self.x + marginText + gooi.getFont(self):getWidth(string.utf8sub(self.text, 1, self.indexCursor))
+			self.displacementCursor = self.x + marginText + gooi.getFont():getWidth(string.utf8sub(self.text, 1, self.indexCursor))
 		else
 			self.indexCursor = self.indexCursor + 1
-			self.displacementCursor = self.x + marginText + gooi.getFont(self):getWidth(self.text)
+			self.displacementCursor = self.x + marginText + gooi.getFont():getWidth(self.text)
 		end
 	end
 
@@ -685,7 +686,7 @@ function gooi.newText(text, x, y, w, h)
 		local marginRecBlack = math.floor(self.h / 6)
 		love.graphics.print(self.text,
 			math.floor(self.x + marginRecBlack * 2),
-			math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
+			math.floor(self.y + self.h / 2 - gooi.getFont():getHeight() / 2))
 	end
 
 	return gooi.storeComponent(f, id)
@@ -915,8 +916,8 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 			love.graphics.setColor(0, 0, 0)
 		end
 		local t = tostring(self.value)
-		local x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
-		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
+		local x = (self.x + self.w / 2) - (gooi.getFont():getWidth(t) / 2)
+		local y = (self.y + self.h / 2) - (gooi.getFont():getHeight() / 2)
 
 		love.graphics.setColor(fg)
 		love.graphics.print(t, math.floor(x), math.floor(y))
@@ -1637,7 +1638,6 @@ function gooi.setStyle(style)
 	if component.style.roundInside > 1 then component.style.roundInside = 1 end
 end
 
-
 -- Update what needs to be updated:
 local timerBackspaceText = 0
 local timerStepChar = 0
@@ -1729,7 +1729,7 @@ function gooi.draw(group)
 			if actualGroup == comp.group and comp.visible then
 				comp:draw()-- Draw the base.
 
-				love.graphics.setFont(comp.font or gooi.getFont())-- Specific or a common font.
+				love.graphics.setFont(gooi.getFont())-- Specific or a common font.
 
 				local fg = comp.fgColor
 				if not comp.enabled then
@@ -2095,13 +2095,14 @@ end
 function gooi.checkBounds(text, x, y, w, h, t)
 	local newX, newY, newW, newH = x, y, w, h
 	if not (w and h) then
-		newW = gooi.getFont(self):getWidth(text) + gooi.getFont(self):getHeight()
-		newH = gooi.getFont(self):getHeight() * 2
+		newW = gooi.getFont():getWidth(text) + gooi.getFont():getHeight()
+		newH = gooi.getFont():getHeight() * 2
 		if t == "checkbox" or t == "text" or t == "radio" then
-			newW = newW + newH
+			newW = newW + newH * 2.5
+			love.event.quit()
 		end
 		if t == "spinner" then
-			newW = newW + newH * 2
+			newW = newW + newH * 2.5
 		end
 		if not (x and y) then
 			newX, newY = 10, 10
@@ -2117,7 +2118,7 @@ function gooi.getFont(comp)
 	if comp and comp.font then
 		return comp.font
 	end
-	return gooi.font or love.graphics.getFont()
+	return gooi.font or gooi.defaultFont
 end
 
 
