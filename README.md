@@ -80,7 +80,7 @@ gooi.newButton({
 
 [![ss1.png](https://s23.postimg.org/5fp9xdi9n/ss1.png)](https://postimg.org/image/yuuy6dmt3/)
 
-![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
+[![game.gif](https://s27.postimg.org/aq69b3q4z/game.gif)](https://postimg.org/image/h3vcecv0v/)
 
 GÖÖi is highly customizable:
 
