@@ -108,7 +108,7 @@ function component.new(id, t, x, y, w, h, group)
 		end
 		return self
 	end
-	function c:roundness(r, ri)
+	function c:setRadius(r, ri)
 		if not r then return self.radius, self.innerRadius; end
 
 		self.radius = r

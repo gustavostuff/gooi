@@ -21,7 +21,7 @@ function love.load()
         radius = 3,
         innerRadius = 3
 	}
-	gooi.setStyle(style)
+	--gooi.setStyle(style)
 	gooi.desktopMode()
 
 	gr.setDefaultFilter("nearest", "nearest")
@@ -112,8 +112,8 @@ function love.load()
 	pGrid = gooi.newPanel(350, 290, 420, 290, "grid 10x3")
 	-- Add in the specified cell:
 	pGrid:add(gooi.newRadio({text = "Radio 1", selected = true}), "7,1")
-	pGrid:add(gooi.newRadio({text = "Radio 2"}):roundness(0):bg("#00000000"):fg("#00ff00"), "8,1")
-	pGrid:add(gooi.newRadio({text = "Radio 3"}):roundness(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
+	pGrid:add(gooi.newRadio({text = "Radio 2"}):setRadius(0):bg("#00000000"):fg("#00ff00"), "8,1")
+	pGrid:add(gooi.newRadio({text = "Radio 3"}):setRadius(0):bg("#00000000"):border(1, "#000000"):fg("#ff7700"), "9,1")
 	pGrid
 	:setColspan(1, 1, 3)-- Row, column and span size
 	:setRowspan(6, 3, 2)
@@ -143,13 +143,13 @@ function love.load()
 			end)
 		end),
 		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
-		gooi.newCheck("Debug"):roundness(12, 10):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
+		gooi.newCheck("Debug"):setRadius(12, 10):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 		:onRelease(function(c)
 			pGrid.layout.debug = not pGrid.layout.debug
 		end),
-		gooi.newBar(0):roundness(0, 10):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
-		gooi.newSpinner(-10, 30, 3):roundness(.7, .5):bg("#ff00ff"),
-		gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
+		gooi.newBar(0):setRadius(0, 10):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
+		gooi.newSpinner(-10, 30, 3):setRadius(0, 0):bg("#ff00ff"),
+		gooi.newJoy():setRadius(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
 		gooi.newKnob(1)
 	)
 

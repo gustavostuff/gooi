@@ -326,61 +326,67 @@ function gooi.newSlider(value, x, y, w, h)
 
 	s.displacement = (s.w - s.h) * s.value
 	function s:drawSpecifics(fg)
-		local mC = math.floor(self.h / 8) -- Margin corner.
-		local rad = self.h * .4 -- Normal radius for the white circles.
-		local side = math.floor(self.h - mC * 2)
-
 		if self.mode == "v" then
-			mC = math.floor(self.w / 8) -- Margin corner.
-			rad = self.w * .4 -- Normal radius for the white circles.
-			side = math.floor(self.w - mC * 2)
-		end
+			local mC = math.floor(self.w / 8) -- Margin corner.
+			local rad = self.w * .4 -- Normal radius for the white circles.
+			local side = math.floor(self.w - mC * 2)
+			
+			love.graphics.setLineWidth(1)
+			love.graphics.setColor(fg)
+			if self.pressed or self.touch then rad = rad * .5 end
+		
+			local lineSpace = self.h - self.w
+			local xPivotIndicator = math.floor(self.x + self.w / 2 - side / 2)
+			local yPivotIndicator = math.floor(self.y + self.h - (self.w / 2 + self.value * lineSpace + side / 2))
+			
 
-		love.graphics.setLineWidth(1)
-		love.graphics.setColor(fg)
-		if self.pressed or self.touch then rad = rad * .5 end
-		local lineSpace = self.w - self.h
+			love.graphics.rectangle("fill",
+				xPivotIndicator,
+				yPivotIndicator,
+				math.floor(side),
+				math.floor(side),
+				self.innerRadius,
+				self.innerRadius,
+				circleRes)
 
-		if self.mode == "v" then
-			lineSpace = self.h - self.w
-		end
-
-		local xPivotIndicator = math.floor(self.x + self.h / 2 + self.value * lineSpace - side / 2)
-		local yPivotIndicator = math.floor(self.y + mC)
-
-		if self.mode == "v" then
-			xPivotIndicator = math.floor(self.x + self.w / 2 - side / 2)
-			yPivotIndicator = math.floor(self.y + self.h - (self.w / 2 + self.value * lineSpace + side / 2))
-		end
-
-		love.graphics.rectangle("fill",
-			xPivotIndicator,
-			yPivotIndicator,
-			math.floor(side),
-			math.floor(side),
-			self.innerRadius,
-			self.innerRadius,
-			circleRes)
-		local x1Line = self.x + self.h / 2
-		local y1Line = self.y + self.h / 2
-		local x2Line = self.x + self.h / 2 + self.value * lineSpace - side / 2
-		local y2Line = self.y + self.h / 2
-
-		if self.mode == "v" then
-			x1Line = self.x + self.w / 2
-			y1Line = self.y + self.h - self.w / 2
-			x2Line = self.x + self.w / 2
-			y2Line = self.y + self.h - (self.w / 2 + self.value * lineSpace - side / 2)
+			local x1Line = self.x + self.w / 2
+			local y1Line = self.y + self.h - self.w / 2
+			local x2Line = self.x + self.w / 2
+			local y2Line = self.y + self.h - (self.w / 2 + self.value * lineSpace - side / 2)
 
 			if y2Line < y1Line then
 				love.graphics.line(x1Line, y1Line, x2Line, y2Line)
 			end
 		else
+			local mC = math.floor(self.h / 8) -- Margin corner.
+			local rad = self.h * .4 -- Normal radius for the white circles.
+			local side = math.floor(self.h - mC * 2)
+
+			love.graphics.setLineWidth(1)
+			love.graphics.setColor(fg)
+			if self.pressed or self.touch then rad = rad * .5 end
+			local lineSpace = self.w - self.h
+
+			local xPivotIndicator = math.floor(self.x + self.h / 2 + self.value * lineSpace - side / 2)
+			local yPivotIndicator = math.floor(self.y + mC)
+
+			love.graphics.rectangle("fill",
+				xPivotIndicator,
+				yPivotIndicator,
+				math.floor(side),
+				math.floor(side),
+				self.innerRadius,
+				self.innerRadius,
+				circleRes)
+			local x1Line = self.x + self.h / 2
+			local y1Line = self.y + self.h / 2
+			local x2Line = self.x + self.h / 2 + self.value * lineSpace - side / 2
+			local y2Line = self.y + self.h / 2
+
 			if x2Line > x1Line then
 				love.graphics.line(x1Line, y1Line, x2Line, y2Line)
 			end
 		end
-
 	end
 	function s:vertical()
 		self.mode = "v"-- Vertical
