@@ -14,11 +14,12 @@ function love.load()
 	fontDir = "/fonts/"
 	style = {
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
-		fgColor = "#FFFFFF",
+		fgColor = "#ffffff",
 		bgColor = "#25AAE1F0",
         mode3d = true,
         glass = true,
-        round = .18,
+        radius = 3,
+        innerRadius = 3
 	}
 	gooi.setStyle(style)
 	gooi.desktopMode()
@@ -42,15 +43,15 @@ function love.load()
 	-----------------------------------------------
 
 	lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
-	lbl2 = gooi.newLabel("0", 10, 40, 100, 25):setOrientation("center")
-	btn1 = gooi.newButton("Exit with tooltip", 120, 40, 170, 25):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
-	:setTooltip("This is a tooltip!")
-	:onRelease(function()
-		quit()
-	end)
-	sli1 = gooi.newSlider({ x = 10, w = 100, h = 25, y = 70, value = 0.2})
-	spin1 = gooi.newSpinner({ min = -10, max = 50, value = 33, x = 120, y = 70, w = 170, h = 25})
-	chb1 = gooi.newCheck("This is a cool check box", 10, 200):onRelease(function(c)
+	lbl2 = gooi.newLabel("0", 10, 40, 90, 22):setOrientation("center")
+	btn1 = gooi.newButton("Exit with tooltip", 110, 40, 180, 22):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
+		:setTooltip("This is a tooltip!")
+		:onRelease(function()
+			quit()
+		end)
+	sli1 = gooi.newSlider({x = 10, w = 90, h = 22, y = 70, value = 0.2})
+	spin1 = gooi.newSpinner({min = -10, max = 50, value = 33, x = 110, y = 70, w = 180, h = 22})
+	chb1 = gooi.newCheck({text = "A Check Box", x = 10, y = 200, w = 180, h = 22}):onRelease(function(c)
 		if c.checked then
 			gr.setBackgroundColor(127, 63, 0)
 		else
@@ -58,19 +59,22 @@ function love.load()
 		end
 	end)
 	-- Radio group:
-	rad1 = gooi.newRadio({ y = 100, text = "one", radioGroup = "g1", selected = true})
-	rad2 = gooi.newRadio({ y = 130, text = "two", radioGroup = "g1"})
-	rad3 = gooi.newRadio({ y = 160, text = "three", radioGroup = "g1"})
-	knob1 = gooi.newKnob({ x = 120, y = 110, value = 0.9, size = 60})
+	rad1 = gooi.newRadio({y = 100, h = 22, w = 80, text = "one", radioGroup = "g1", selected = true})
+	rad2 = gooi.newRadio({y = 130, h = 22, w = 80, text = "two", radioGroup = "g1"})
+	rad3 = gooi.newRadio({y = 160, h = 22, w = 80, text = "three", radioGroup = "g1"})
+	knob1 = gooi.newKnob({x = 110, y = 100, value = 0.9, size = 82})
 	-- Anoher radio group:
-	rad4 = gooi.newRadio({ y = 100, x = 200, text = "Apr", radioGroup = "g2", selected = true})
-	rad5 = gooi.newRadio({ y = 130, x = 200, text = "May", radioGroup = "g2"})
-	rad6 = gooi.newRadio({ y = 160, x = 200, text = "Jun", radioGroup = "g2"})
+	rad4 = gooi.newRadio({y = 100, x = 200, w = 80, h = 22,  text = "Apr", radioGroup = "g2", selected = true})
+	rad5 = gooi.newRadio({y = 130, x = 200, w = 80, h = 22,  text = "May", radioGroup = "g2"})
+	rad6 = gooi.newRadio({y = 160, x = 200, w = 80, h = 22,  text = "Jun", radioGroup = "g2"})
 
-	txt1 = gooi.newText({ y = 260, w = 200})
-	bar1 = gooi.newBar({ y = 230, w = 200, value = 0}):increaseAt(0.1)
-	joy1 = gooi.newJoy({ x = 120, y = 420, size = 150}):
-	setImage(imgDir.."cat.png"):noSpring():noGlass():bg("#ff880088")
+	txt1 = gooi.newText({y = 260, w = 180, h = 22,  text = "Text Box"})
+	bar1 = gooi.newBar({y = 230, w = 180, h = 22, value = 0}):increaseAt(0.1)
+	joy1 = gooi.newJoy({x = 120, y = 420, size = 150}):
+		setImage(imgDir.."cat.png"):noSpring():noGlass():bg("#ff880088")
+	vertSlider =  gooi.newSlider({x = 200, y = 200, w = 25, h = 82, value = 0}):vertical()
+	vertSlider2 = gooi.newSlider({x = 230, y = 200, w = 25, h = 82, value = 0.5}):vertical()
+	vertSlider3 = gooi.newSlider({x = 260, y = 200, w = 25, h = 82, value = 1}):vertical()
 
 
 
@@ -139,11 +143,11 @@ function love.load()
 			end)
 		end),
 		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
-		gooi.newCheck("Debug"):roundness(1, 1):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
+		gooi.newCheck("Debug"):roundness(12, 10):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
 		:onRelease(function(c)
 			pGrid.layout.debug = not pGrid.layout.debug
 		end),
-		gooi.newBar(0):roundness(0, 1):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
+		gooi.newBar(0):roundness(0, 10):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
 		gooi.newSpinner(-10, 30, 3):roundness(.7, .5):bg("#ff00ff"),
 		gooi.newJoy():roundness(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
 		gooi.newKnob(1)

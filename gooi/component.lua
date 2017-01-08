@@ -25,11 +25,11 @@ THE SOFTWARE.
 component = {}
 component.__index = component
 component.style = {
-	bgColor = {12, 183, 242, 127}, -- LOVE blue
+	bgColor = {12, 183, 242, 170}, -- LOVE blue
 	fgColor = {255, 255, 255, 255},
 	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 70),
-	round = .25,
-	roundInside = .25,
+	radius = 3,
+	innerRadius = 3,
 	showBorder = false,
 	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
@@ -109,15 +109,11 @@ function component.new(id, t, x, y, w, h, group)
 		return self
 	end
 	function c:roundness(r, ri)
-		if not r then return self.round, self.roundInside; end
+		if not r then return self.radius, self.innerRadius; end
 
-		if r < 0 then r = 0 end
-		if r > 1 then r = 1 end
-		self.round = r
+		self.radius = r
 		if ri then
-			if ri < 0 then ri = 0 end
-			if ri > 1 then ri = 1 end
-			self.roundInside = ri
+			self.innerRadius = ri
 		end
 
 		return self
@@ -145,8 +141,8 @@ function component.new(id, t, x, y, w, h, group)
 	end
 	function c:setStyle(style)
 		self.borderWidth = style.borderWidth
-		self.round = style.round
-		self.roundInside = style.roundInside
+		self.radius = style.radius
+		self.innerRadius = style.innerRadius
 		self.showBorder = style.showBorder
 		self.borderColor = style.borderColor
 		self.mode3d = style.mode3d
@@ -236,7 +232,7 @@ function component:draw()-- Every component has the same base:
 			love.graphics.setColor(63, 63, 63, self.bgColor[4])
 		end
 
-		local radiusCorner = self.round * self.h / 2
+		local radiusCorner = self.radius
 
 		function mask()
 			love.graphics.rectangle("fill",
@@ -396,7 +392,7 @@ function component:overItAux(x, y)
 		xm, ym = x, y
 	end
 
-	local radiusCorner = self.round * self.h / 2
+	local radiusCorner = self.radius
 
 	local theX = self.x
 	local theY = self.y
@@ -482,13 +478,13 @@ end
 -- Thanks to Boolsheet:
 function roundRect(x, y, w, h, r)
 	r = r or h / 4
-	love.graphics.rectangle("fill", x, y+r, w, h-r*2)
-	love.graphics.rectangle("fill", x+r, y, w-r*2, r)
-	love.graphics.rectangle("fill", x+r, y+h-r, w-r*2, r)
-	love.graphics.arc("fill", x+r, y+r, r, left, top)
-	love.graphics.arc("fill", x + w-r, y+r, r, -bottom, right)
-	love.graphics.arc("fill", x + w-r, y + h-r, r, right, bottom)
-	love.graphics.arc("fill", x+r, y + h-r, r, bottom, left)
+	love.graphics.rectangle("fill", x, y + r, w, h - r * 2)
+	love.graphics.rectangle("fill", x + r, y, w - r * 2, r)
+	love.graphics.rectangle("fill", x + r, y + h - r, w - r * 2, r)
+	love.graphics.arc("fill", x + r, y + r, r, left, top)
+	love.graphics.arc("fill", x + w - r, y + r, r, -bottom, right)
+	love.graphics.arc("fill", x + w - r, y + h - r, r, right, bottom)
+	love.graphics.arc("fill", x + r, y + h - r, r, bottom, left)
 end
 
 function changeBrig(color, amount)

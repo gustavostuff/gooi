@@ -1,6 +1,7 @@
 # _GÖÖi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
+[![Version](http://img.shields.io/:version-0.0.1-green.svg)](https://github.com/tavuntu/gooi/blob/master/README.md)
 
 GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. The supported components are:
 
@@ -77,35 +78,24 @@ gooi.newButton({
 
 ### More Examples:
 
-![free components](https://s32.postimg.org/q97lzfso5/ss3.png)
+[![ss1.png](https://s27.postimg.org/w7pwzq5oj/ss1.png)](https://postimg.org/image/orqndxhz3/)
 
 ![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
 
 GÖÖi is highly customizable:
 
-![GÖÖi grid layout](https://s13.postimg.org/qshh1ky2f/Sin_nombre.png)
+[![ss2.png](https://s28.postimg.org/oe94cix8d/ss2.png)](https://postimg.org/image/zdubo4nnd/)
 
 Modals:
 
 ![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
 
-Style used:
-```lua
-style = {
-	font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
-	fgColor = "#FFFFFF",
-	bgColor = "#25AAE1F0",
-    mode3d = true,
-    glass = true,
-    round = .18,
-}
-```
 The code for these examples is in the repository.
 
 ### Limitations:
 
-* A panel can't be added inside another panel
-* In text fields, the text can't be larger than the component width
+* A panel shouldn't be added inside another panel
+* In text fields, the text can't be larger than the field length
 * There's no automatic responsiveness (yet)
 
 GÖÖi is still a work in progress, thanks for you feedback!
