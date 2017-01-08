@@ -78,13 +78,13 @@ gooi.newButton({
 
 ### More Examples:
 
-[![ss1.png](https://s27.postimg.org/w7pwzq5oj/ss1.png)](https://postimg.org/image/orqndxhz3/)
+[![ss1.png](https://s23.postimg.org/5fp9xdi9n/ss1.png)](https://postimg.org/image/yuuy6dmt3/)
 
 ![GÖÖi game layout](http://s32.postimg.org/yyy4cbbfp/the_game_layout.gif)
 
 GÖÖi is highly customizable:
 
-[![ss2.png](https://s28.postimg.org/oe94cix8d/ss2.png)](https://postimg.org/image/zdubo4nnd/)
+[![ss2.png](https://s24.postimg.org/xnpe6zyb9/ss2.png)](https://postimg.org/image/8ufu6cfap/)
 
 Modals:
 
