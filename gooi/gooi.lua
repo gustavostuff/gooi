@@ -1007,6 +1007,9 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 	function s:minus()
 		self:changeValue(-1)
 	end
+	function s:getValue()
+		return gooi.round(self.value, 2)
+	end
 	function s:changeValue(sense)
 		local newV = self.value + self.step * sense
 		if newV <= self.max and newV >= self.min then
