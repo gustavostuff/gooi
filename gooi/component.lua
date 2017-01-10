@@ -34,7 +34,7 @@ component.style = {
     borderColor = {12, 183, 242, 255},
     borderWidth = 2, -- in pixels
     font = love.graphics.newFont(12),
-    mode3d = false, -- gives that subtle gradient on the give color
+    mode3d = false, -- gives that subtle gradient on the given color
     glass = false -- for a glass effect (horizon reflection)
 }
 
