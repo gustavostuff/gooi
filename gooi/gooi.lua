@@ -34,6 +34,8 @@ gooi.dialogW = 0
 gooi.desktop = false
 gooi.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight())
 gooi.sx = 1
+gooi.defaultFont = love.graphics.newFont(12)
+gooi.font = defaultFont
 gooi.sy = 1
 
 function gooi.desktopMode()
@@ -48,9 +50,6 @@ gooi.smallerSide = function()
 	end
 	return smallerSide
 end
-
-gooi.defaultFont = love.graphics.newFont(gooi.smallerSide() / 50)
-gooi.font = defaultFont
 
 local circleRes = 50
 

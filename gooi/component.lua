@@ -27,13 +27,13 @@ component.__index = component
 component.style = {
 	bgColor = {12, 183, 242, 170}, -- LOVE blue
 	fgColor = {255, 255, 255, 255},
-	tooltipFont = love.graphics.newFont(love.graphics.getWidth() / 70),
+	tooltipFont = love.graphics.newFont(10),
 	radius = 3,
 	innerRadius = 3,
 	showBorder = false,
 	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
-	font = love.graphics.newFont(gooi.smallerSide() / 50),
+	font = love.graphics.newFont(12),
 	mode3d = false,
 	glass = false
 }
