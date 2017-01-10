@@ -25,8 +25,6 @@ THE SOFTWARE.
 
 gooi = {}
 gooi.__index = gooi
-gooi.defaultFont = love.graphics.newFont(12)
-gooi.font = defaultFont
 gooi.components = {}
 gooi.dialogFOK = function() end
 gooi.showingDialog = false
@@ -50,6 +48,9 @@ gooi.smallerSide = function()
 	end
 	return smallerSide
 end
+
+gooi.defaultFont = love.graphics.newFont(gooi.smallerSide() / 50)
+gooi.font = defaultFont
 
 local circleRes = 50
 

@@ -33,7 +33,7 @@ component.style = {
 	showBorder = false,
 	borderColor = {12, 183, 242, 255},
 	borderWidth = 2,
-	font = love.graphics.newFont(love.graphics.getWidth() / 70),
+	font = love.graphics.newFont(gooi.smallerSide() / 50),
 	mode3d = false,
 	glass = false
 }
