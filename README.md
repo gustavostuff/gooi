@@ -39,7 +39,7 @@ Important things:
 
 [![ss2.png](https://s24.postimg.org/xnpe6zyb9/ss2.png)](https://postimg.org/image/8ufu6cfap/)
 
-![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
+[![ss7.png](https://s29.postimg.org/5kdcwx753/ss7.png)](https://postimg.org/image/69w59a7oj/)
 
 GÖÖi is still a work in progress, thanks for you feedback!
 

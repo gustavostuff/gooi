@@ -1610,13 +1610,13 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 			gooi.panelDialog:add(gooi.okButton,  "3,2")
 			gooi.radCorner = gooi.okButton.radius
 		else
-			gooi.noButton  = gooi.newButton("NO"):onRelease(function()
+			gooi.noButton  = gooi.newButton("Cancel"):onRelease(function()
 				if fNegative then
 					fNegative()
 				end
 				gooi.closeDialog()
 			end)
-			gooi.yesButton = gooi.newButton("YES"):onRelease(function()
+			gooi.yesButton = gooi.newButton("Yes"):onRelease(function()
 				if fPositive then
 					fPositive()
 				end
