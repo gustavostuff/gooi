@@ -851,6 +851,9 @@ function gooi.newBar(value, x, y, w, h)
 		if self.value < 0 then self.value = 0 end
 		return self
 	end
+	function p:getValue()
+		return gooi.round(self.value, 2)
+	end
 	function p:decreaseAt(amount)
 		self.changing = -1
 		self.speed = amount or 0.1
