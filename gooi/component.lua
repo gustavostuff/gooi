@@ -140,6 +140,15 @@ function component.new(id, t, x, y, w, h, group)
 		return self
 	end
 	function c:setStyle(style)
+		if style.bgColor and type(style.bgColor) == "string" then
+			style.bgColor = gooi.toRGBA(style.bgColor)
+		end
+		if style.fgColor and type(style.fgColor) == "string" then
+			style.fgColor = gooi.toRGBA(style.fgColor)
+		end
+		if style.borderColor and type(style.borderColor) == "string" then
+			style.borderColor = gooi.toRGBA(style.borderColor)
+		end
 		self.borderWidth = style.borderWidth
 		self.radius = style.radius
 		self.innerRadius = style.innerRadius
@@ -354,7 +363,10 @@ function component:setEnabled(b)
 	self.enabled = b
 	if self.sons then
 		for i = 1, #self.sons do
-			self.sons[i].ref.enabled = b
+			local c = self.sons[i].ref
+			c.enabled = b
+			c.glass = false
+			c.mode3d = false
 		end
 	end
 end

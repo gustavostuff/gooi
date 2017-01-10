@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
 [![Version](http://img.shields.io/:version-0.0.1-green.svg)](https://github.com/tavuntu/gooi/blob/master/README.md)
 
-GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. The supported components are:
+GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. See the [Wiki](https://github.com/tavuntu/gooi/wiki) for details.
 
 * Labels
 * Buttons
@@ -31,72 +31,15 @@ Important things:
 * [![shapes_mini.png](https://s13.postimg.org/4oi73j13b/shapes_mini.png)](https://postimg.org/image/gqdkxoabn/) Flexible shapes and colors
 * [![theme_mini.png](https://s3.postimg.org/3kob6oir7/theme_mini.png)](https://postimg.org/image/vkseqym7j/) Easy theme system
 
-### Examples:
-
-This is how you create a button with an event:
-
-```lua
-require "gooi"
-function love.load()
-	gooi.newButton("Exit"):onRelease(function()
-		love.event.quit()
-	end)
-end
-
-function love.draw()
-	gooi.draw()
-end
-
-function love.mousepressed(x, y, button)  gooi.pressed() end
-function love.mousereleased(x, y, button) gooi.released() end
-
--- Use these for Android:
---[[
-	function love.touchpressed(id, x, y)  gooi.pressed(id, x, y) end
-	function love.touchreleased(id, x, y) gooi.released(id, x, y) end
-	function love.touchmoved(id, x, y)    gooi.moved(id, x, y) end
-]]
-```
-
-These are other ways of creating a button:
-
-```lua
-gooi.newButton()
-gooi.newButton("A button")
-gooi.newButton("A button", 100, 100)
-gooi.newButton("A button", 100, 100, 150, 25)
-gooi.newButton({
-	text = "A button",
-	x = 100,
-	y = 100,
-	w = 150,
-	h = 25,
-	orientation = "right",
-	icon = "/imgs/icon.png"
-})
-```
-
-### More Examples:
+### Some screenshots
 
 [![ss1.png](https://s23.postimg.org/5fp9xdi9n/ss1.png)](https://postimg.org/image/yuuy6dmt3/)
 
 [![game.gif](https://s27.postimg.org/aq69b3q4z/game.gif)](https://postimg.org/image/h3vcecv0v/)
 
-GÖÖi is highly customizable:
-
 [![ss2.png](https://s24.postimg.org/xnpe6zyb9/ss2.png)](https://postimg.org/image/8ufu6cfap/)
 
-Modals:
-
 ![GÖÖi grid layout](https://s32.postimg.org/qii4w8jb9/confirm.png)
-
-The code for these examples is in the repository.
-
-### Limitations:
-
-* A panel shouldn't be added inside another panel
-* In text fields, the text can't be larger than the field length
-* There's no automatic responsiveness (yet)
 
 GÖÖi is still a work in progress, thanks for you feedback!
 

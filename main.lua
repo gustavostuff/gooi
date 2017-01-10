@@ -16,12 +16,12 @@ function love.load()
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 		fgColor = "#ffffff",
 		bgColor = "#25AAE1F0",
-        mode3d = true,
-        glass = true,
-        radius = 3,
-        innerRadius = 3
+		mode3d = true,
+		glass = true,
+		radius = 3,
+		innerRadius = 3
 	}
-	--gooi.setStyle(style)
+	gooi.setStyle(style)
 	gooi.desktopMode()
 
 	gr.setDefaultFilter("nearest", "nearest")
@@ -43,11 +43,13 @@ function love.load()
 	-----------------------------------------------
 
 	lbl1 = gooi.newLabel("Free elements (no layout):", 10, 10)
-	lbl2 = gooi.newLabel("0", 10, 40, 90, 22):setOrientation("center")
+	lbl2 = gooi.newLabel("0", 10, 40, 90, 22):setAlign("center")
 	btn1 = gooi.newButton("Exit with tooltip", 110, 40, 180, 22):setIcon(imgDir.."coin.png"):bg({255, 0, 0})
 		:setTooltip("This is a tooltip!")
 		:onRelease(function()
-			quit()
+			gooi.confirm("Are you sure?", function()
+				quit()
+			end)
 		end)
 	sli1 = gooi.newSlider({x = 10, w = 90, h = 22, y = 70, value = 0.2})
 	spin1 = gooi.newSpinner({min = -10, max = 50, value = 33, x = 110, y = 70, w = 180, h = 22})
@@ -68,7 +70,7 @@ function love.load()
 	rad5 = gooi.newRadio({y = 130, x = 200, w = 80, h = 22,  text = "May", radioGroup = "g2"})
 	rad6 = gooi.newRadio({y = 160, x = 200, w = 80, h = 22,  text = "Jun", radioGroup = "g2"})
 
-	txt1 = gooi.newText({y = 260, w = 180, h = 22,  text = "Text Box"})
+	txt1 = gooi.newText({y = 260, w = 180, h = 22,  text = "text box"})
 	bar1 = gooi.newBar({y = 230, w = 180, h = 22, value = 0}):increaseAt(0.1)
 	joy1 = gooi.newJoy({x = 120, y = 420, size = 150}):
 		setImage(imgDir.."cat.png"):noSpring():noGlass():bg("#ff880088")
@@ -120,23 +122,23 @@ function love.load()
 	:setColspan(8, 2, 2)
 	:setRowspan(8, 2, 3)
 	:add(
-		gooi.newLabel({text = "(Grid Layout demo)", orientation = "center"}),
-		gooi.newLabel({text = "Left label", orientation = "left"}),
-		gooi.newLabel({text = "Centered", orientation = "center"}),
-		gooi.newLabel({text = "Right", orientation = "right"}),
-		gooi.newButton({text = "Left button", orientation = "left"}):bg("#ff8800"),
+		gooi.newLabel({text = "(Grid Layout demo)", align = "center"}),
+		gooi.newLabel({text = "Left label", align = "left"}),
+		gooi.newLabel({text = "Centered", align = "center"}),
+		gooi.newLabel({text = "Right", align = "right"}),
+		gooi.newButton({text = "Left button", align = "left"}):bg("#ff8800"),
 		gooi.newButton("Centered"):bg("#22aa22"),
-		gooi.newButton({text = "Right", orientation = "right"}),
-		gooi.newLabel({text = "Left label", orientation = "left", icon = imgDir.."coin.png"}),
-		gooi.newLabel({text = "Centered", orientation = "center", icon = imgDir.."coin.png"}),
-		gooi.newLabel({text = "Right", orientation = "right", icon = imgDir.."coin.png"}),
-		gooi.newButton({text = "Left button", orientation = "left", icon = imgDir.."medal.png"}):bg("#888888"),
-		gooi.newButton({text = "Alert btn", orientation = "center", icon = imgDir.."medal.png"})
+		gooi.newButton({text = "Right", align = "right"}),
+		gooi.newLabel({text = "Left label", align = "left", icon = imgDir.."coin.png"}),
+		gooi.newLabel({text = "Centered", align = "center", icon = imgDir.."coin.png"}),
+		gooi.newLabel({text = "Right", align = "right", icon = imgDir.."coin.png"}),
+		gooi.newButton({text = "Left button", align = "left", icon = imgDir.."medal.png"}):bg("#888888"),
+		gooi.newButton({text = "Alert btn", align = "center", icon = imgDir.."medal.png"})
 		:bg("#880088"):onRelease(function()
 			gr.setBackgroundColor(r2(), r2(), r2())
 			gooi.alert("The background has changed!")
 		end),
-		gooi.newButton({text = "Confirm btn", orientation = "right", icon = imgDir.."medal.png"}):bg("#888800")
+		gooi.newButton({text = "Confirm btn", align = "right", icon = imgDir.."medal.png"}):bg("#888800")
 		:onRelease(function()
 			gooi.confirm("Change background?", function()
 				gr.setBackgroundColor(r2(), r2(), r2())
@@ -154,16 +156,16 @@ function love.load()
 	)
 
 	-- Salute:
-	lblCoords = gooi.newLabel("", 30, 330, 300, 30):setOrientation("left")
+	lblCoords = gooi.newLabel("", 30, 330, 300, 30):setAlign("left")
 	gooi.newLabel("This is a demonstration of the different\n"..
-		"components, styles and layouts supported", 30, 360):setOrientation("left")
+		"components, styles and layouts supported", 30, 360):setAlign("left")
 
 	--gooi.removeComponent(pGrid)
 end
 
 function love.update(dt)
 	gooi.update(dt)
-	lbl2:setText(string.sub(sli1:getValue(), 0, 4))
+	lbl2:setText(sli1:getValue())
 
 	-- Move itself:
 	joy1.x = (joy1.x + joy1:xValue() * dt * 200)
@@ -229,56 +231,3 @@ end
 
 function r() return love.math.random(0, 255) end
 function r2() return love.math.random(0, 127) end
---[[
-]]
-
--- Android test:
-
---[[
-require "gooi"
-
-function love.load()
-	gr = love.graphics
-
-	ball = {
-		x = 300,
-		y = 300,
-		color = {255, 255, 255},
-		radius = 50
-	}
-
-	joy = gooi.newJoy({size = 200})
-	panel = gooi.newPanel(0, 0, gr.getWidth(), gr.getHeight(), "game")
-	panel:add(joy, "b-l")
-	panel:add(gooi.newButton({text = "Color", w = 220, h = 70}):onRelease(function()
-		ball.color = {r(), r(), r()}
-	end), "b-r")
-	panel:add(gooi.newButton({text = "Size", w = 220, h = 70}):onRelease(function()
-		ball.radius = r() / 2
-	end), "b-r")
-end
-
-function love.update(dt)
-	gooi.update(dt)
-	ball.x = ball.x + joy:xValue() * 200 * dt
-	ball.y = ball.y + joy:yValue() * 200 * dt
-end
-
-function love.draw()
-	gooi.draw()
-	gr.setColor(ball.color)
-	gr.circle("fill", ball.x, ball.y, ball.radius)
-end
-
-function r() return love.math.random(0, 255) end
-
-function love.touchpressed(id, x, y)  gooi.pressed(id, x, y) end
-function love.touchmoved(id, x, y)  gooi.moved(id, x, y) end
-function love.touchreleased(id, x, y) gooi.released(id, x, y) end
-
-function love.keypressed(key)
-	if key == "escape" then
-		love.event.quit()
-	end
-end
-]]

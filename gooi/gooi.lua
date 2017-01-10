@@ -51,13 +51,13 @@ gooi.smallerSide = function()
 	return smallerSide
 end
 
-local circleRes = 40
+local circleRes = 50
 
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
 --------------------------   Label creator  --------------------------------
 ----------------------------------------------------------------------------
---function gooi.newLabel(id, text, x, y, w, h, icon, orientation,  group)
+--function gooi.newLabel(id, text, x, y, w, h, icon, align,  group)
 function gooi.newLabel(text, x, y, w, h)
 	local l = {}
 	
@@ -115,12 +115,12 @@ function gooi.newLabel(text, x, y, w, h)
 		-- Right by default:
 		local x = self.x + self.w - gooi.getFont():getWidth(t) - self.h / 2
 		local y = (self.y + self.h / 2) - (gooi.getFont():getHeight() / 2)
-		if self.orientation == "left" then
+		if self.align == "left" then
 			x = self.x + self.h / 2
 			if self.icon then
 				x = x + self.h / 2
 			end
-		elseif self.orientation == "center" then
+		elseif self.align == "center" then
 			x = (self.x + self.w / 2) - (gooi.getFont():getWidth(t) / 2)
 		end
 		if self.icon then
@@ -138,19 +138,19 @@ function gooi.newLabel(text, x, y, w, h)
 		love.graphics.setColor(fg)
 		love.graphics.print(self.text, math.floor(x), math.floor(y))
 	end
-	function l:setOrientation(o)
+	function l:setAlign(o)
 		if o == "left" then
-			self.orientation = o
+			self.align = o
 		elseif o == "right" then
-			self.orientation = o
+			self.align = o
 		elseif o == "center" then
-			self.orientation = o
+			self.align = o
 		else
-			error("orientation '"..o.."' not valid")
+			error("align '"..o.."' not valid")
 		end
 		return self
 	end
-	l:setOrientation(params.orientation or "right")
+	l:setAlign(params.align or "right")
 	function l:setIcon(icon)
 		if type(icon) == "string" then
 			icon = love.graphics.newImage(icon)
@@ -230,12 +230,12 @@ function gooi.newButton(text, x, y, w, h)
 		local t = self.text
 		local x = (self.x + self.w / 2) - (gooi.getFont():getWidth(t) / 2)
 		local y = (self.y + self.h / 2) - (gooi.getFont():getHeight() / 2)
-		if self.orientation == "left" then
+		if self.align == "left" then
 			x = self.x + self.h / 2
 			if self.icon then
 				x = x + self.h / 2
 			end
-		elseif self.orientation == "right" then
+		elseif self.align == "right" then
 			x = self.x + self.w - self.h / 2 - gooi.getFont():getWidth(self.text)
 		end
 		if self.icon then
@@ -252,19 +252,19 @@ function gooi.newButton(text, x, y, w, h)
 		love.graphics.setColor(fg)
 		love.graphics.print(t, math.floor(x), math.floor(y + self.pressedMove))
 	end
-	function b:setOrientation(o)
+	function b:setAlign(o)
 		if o == "left" then
-			self.orientation = o
+			self.align = o
 		elseif o == "right" then
-			self.orientation = o
+			self.align = o
 		elseif o == "center" then
-			self.orientation = o
+			self.align = o
 		else
-			error("orientation '"..o.."' not valid")
+			error("align '"..o.."' not valid")
 		end
 		return self
 	end
-	b:setOrientation(params.orientation or "center")
+	b:setAlign(params.align or "center")
 	function b:setIcon(icon)
 		if type(icon) == "string" then
 			icon = love.graphics.newImage(icon)
@@ -424,7 +424,7 @@ function gooi.newSlider(value, x, y, w, h)
 		return self
 	end
 	function s:getValue()
-		return self.value
+		return gooi.round(self.value, 2)
 	end
 	function s:rebuild()
 		--self:generateBorder()
@@ -471,7 +471,7 @@ function gooi.newCheck(text, x, y, w, h)
 		"checkbox"
 	)
 
-	chb = component.new(id, "checkbox", x, y, w, h, group)
+	chb = component.new(id, "checkbox", x, y, w, h, params.group)
 	chb.checked = params.checked or false
 	chb.text = params.text or defText
 	function chb:rebuild()
@@ -732,7 +732,8 @@ function gooi.newText(text, x, y, w, h)
 			if self.indexCursor < 0 then
 				self.indexCursor = 0
 			end
-			self.displacementCursor = self.x + marginText + gooi.getFont():getWidth(string.utf8sub(self.text, 1, self.indexCursor))
+			self.displacementCursor = self.x + marginText +
+				gooi.getFont():getWidth(string.utf8sub(self.text, 1, self.indexCursor))
 		else
 			self.indexCursor = self.indexCursor + 1
 			self.displacementCursor = self.x + marginText + gooi.getFont():getWidth(self.text)
@@ -744,6 +745,16 @@ function gooi.newText(text, x, y, w, h)
 		love.graphics.print(self.text,
 			math.floor(self.x + marginRecBlack * 2),
 			math.floor(self.y + self.h / 2 - gooi.getFont():getHeight() / 2))
+	end
+
+	function f:getText()
+		return self.text
+	end
+
+	function f:setText(text)
+		self.text = text
+		self.indexCursor = string.utf8len(text)
+		self:moveCursor(true)
 	end
 
 	return gooi.storeComponent(f, id)
@@ -850,16 +861,8 @@ function gooi.newBar(value, x, y, w, h)
 		self.speed = amount or 0.1
 		return self
 	end
-	function p:increase(amount, dt)
-		self:changeValue(amount, dt, 1)
-		return self
-	end
-	function p:setLength(l)
+	function p:setWidth(l)
 		self.w = l
-		return self
-	end
-	function p:decrease(amount, dt)
-		self:changeValue(amount, dt, -1)
 		return self
 	end
 	return gooi.storeComponent(p, id)
@@ -909,7 +912,7 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 	local v = params.value or 5
 	local maxv = params.max or 10
 	x, y, w, h = gooi.checkBounds(tostring(maxv), x, y, w, h, "spinner")
-	s = component.new(id, "spinner", x, y, w, h, group)
+	s = component.new(id, "spinner", x, y, w, h, params.group)
 	s.value = v
 	s.realValue = s.value
 	s.max = maxv
@@ -994,6 +997,12 @@ function gooi.newSpinner(min, max, value, x, y, w, h)
 		return math.sqrt(math.pow(dx, 2) + math.pow(dy, 2)) < self.radCirc * 1.1
 		]]
 		return self:overIt() and x >= (self.x + self.w / 2)
+	end
+	function s:plus()
+		self:changeValue(1)
+	end
+	function s:minus()
+		self:changeValue(-1)
 	end
 	function s:changeValue(sense)
 		local newV = self.value + self.step * sense
@@ -1162,11 +1171,11 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	-- Get numbers with presicion of two decimals:
 	function s:xValue()
 		if self:onDeadZone() then return 0 end
-		return tonumber(string.format("%.3f",(self.xStick - self:theX()) / (self.r - self.rStick)))
+		return gooi.round((self.xStick - self:theX()) / (self.r - self.rStick), 2)
 	end
 	function s:yValue()
 		if self:onDeadZone() then return 0 end
-		return tonumber(string.format("%.3f",(self.yStick - self:theY()) / (self.r - self.rStick)))
+		return gooi.round((self.yStick - self:theY()) / (self.r - self.rStick), 2)
 	end
 	function s:overStick(x, y)
 		local dx = (self.xStick - x)
@@ -1230,6 +1239,10 @@ function gooi.newKnob(value, x, y, size)
 
 	k.initialAngle = 0
 	k.finalAngle = 180
+
+	function k:getValue()
+		return gooi.round(self.value, 2)
+	end
 
 	function k:setValue(v)
 		if v > 1 then v = 1 end
@@ -1394,7 +1407,7 @@ function gooi.newPanel(x, y, w, h, theLayout)
 				-- Set bounds according to the parent layout:
 				c:setBounds(cell.x, cell.y, cell.w, cell.h)
 
-				-- Save sons:
+				-- Save son:
 				table.insert(self.sons,
 				{
 					id = c.id,
@@ -1475,6 +1488,15 @@ function gooi.newPanel(x, y, w, h, theLayout)
 				error("valid positions are: 't-l', 't-r', 'b-l' and 'b-r'")
 			end
 			self.layout:suit(self, ref, position)
+			-- Save son:
+			table.insert(self.sons,
+			{
+				id = ref.id,
+				parentId = self.id,
+				cellRow = -1,
+				cellCol = -1,
+				ref = ref
+			})
 			if ref.rebuild then ref:rebuild() end
 		end
 		return self
@@ -1565,7 +1587,7 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 		gooi.panelDialog:setColspan(1, 1, 3)-- For the msg:
 		gooi.panelDialog:setRowspan(1, 1, 2)
 
-		gooi.lblDialog = gooi.newLabel(gooi.dialogMsg):setOrientation("center")
+		gooi.lblDialog = gooi.newLabel(gooi.dialogMsg):setAlign("center")
 			:setOpaque(false)
 		gooi.lblDialog.lblFlag = true
 		gooi.panelDialog:add(gooi.lblDialog, "1,1")
@@ -1643,6 +1665,10 @@ function gooi.setCanvas(c)
 	gooi.sy = love.graphics.getHeight() / gooi.canvas:getHeight()
 end
 
+function gooi.round(num, numDecimalPlaces)
+	local mult = 10^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
+end
 
 function gooi.removeComponent(comp)
 	for k, v in pairs(gooi.components) do
@@ -1695,7 +1721,7 @@ local timerStepChar = 0
 function gooi.update(dt)
 	for k, c in pairs(gooi.components) do
 		if c.type == "progressbar" and c.visible then
-			if c.changing then
+			if c.changing and c.enabled then
 				c.value = c.value + c.speed * c.changing * dt
 				if c.value > 1 then c.value = 1 end
 				if c.value < 0 then c.value = 0 end
@@ -1815,7 +1841,7 @@ function gooi.draw(group)
 	if compWithTooltip and os ~= "Android" and os ~= "iOS" and gooi.desktop then
 		local disp = love.graphics.getWidth() / 100
 		local unit = compWithTooltip.tooltipFont:getHeight() / 5
-		love.graphics.setColor(0, 0, 0, 150)
+		love.graphics.setColor(0, 0, 0, 180)
 		love.graphics.setFont(compWithTooltip.tooltipFont)
 		local xRect = love.mouse.getX() + disp - unit
 		local yRect = love.mouse.getY() - disp * 2 - unit
@@ -1837,7 +1863,7 @@ function gooi.draw(group)
 	end
 
 	if gooi.showingDialog then
-		love.graphics.setFont(gooi.panelDialog.font or gooi.getFont())-- Specific or a common font.
+		love.graphics.setFont(gooi.getFont())-- Specific or a common font.
 		local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 
 		love.graphics.setColor(0, 0, 0, 127)
