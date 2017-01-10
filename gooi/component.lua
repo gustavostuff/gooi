@@ -25,17 +25,17 @@ THE SOFTWARE.
 component = {}
 component.__index = component
 component.style = {
-	bgColor = {12, 183, 242, 170}, -- LOVE blue
-	fgColor = {255, 255, 255, 255},
-	tooltipFont = love.graphics.newFont(10),
-	radius = 3,
-	innerRadius = 3,
-	showBorder = false,
-	borderColor = {12, 183, 242, 255},
-	borderWidth = 2,
-	font = love.graphics.newFont(12),
-	mode3d = false,
-	glass = false
+    bgColor = {12, 183, 242, 170}, -- LOVE blue
+    fgColor = {255, 255, 255, 255}, -- Foreground color
+    tooltipFont = love.graphics.newFont(10), -- tooltips are smaller than the main font
+    radius = 3, -- radius for the outer shapes of components
+    innerRadius = 3, -- For the inner ones
+    showBorder = false, -- border for components
+    borderColor = {12, 183, 242, 255},
+    borderWidth = 2, -- in pixels
+    font = love.graphics.newFont(12),
+    mode3d = false, -- gives that subtle gradient on the give color
+    glass = false -- for a glass effect (horizon reflection)
 }
 
 local currId = -1
