@@ -390,6 +390,7 @@ function gooi.newSlider(value, x, y, w, h)
 	end
 	function s:vertical()
 		self.mode = "v"-- Vertical
+		self.w, self.h = self.h, self.w
 		return self
 	end
 	function s:updateGUI()
