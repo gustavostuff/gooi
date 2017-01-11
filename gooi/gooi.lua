@@ -1812,7 +1812,7 @@ function gooi.draw(group)
 			if actualGroup == comp.group and comp.visible then
 				comp:draw()-- Draw the base.
 
-				love.graphics.setFont(gooi.getFont())-- Specific or a common font.
+				love.graphics.setFont(gooi.getFont(comp))-- Specific or a common font.
 
 				local fg = comp.fgColor
 				if not comp.enabled then
