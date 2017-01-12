@@ -1,6 +1,6 @@
 --[[
 
-Copyright (c) 2015 Gustavo Alberto Lara Gomez
+Copyright (c) 2015-2017 Gustavo Alberto Lara Gómez
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
