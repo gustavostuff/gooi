@@ -41,6 +41,8 @@ Important things:
 
 [![ss7.png](https://s29.postimg.org/5kdcwx753/ss7.png)](https://postimg.org/image/69w59a7oj/)
 
+[![ss.png](https://s23.postimg.org/yiorqnkwb/image.png)](https://postimg.org/image/pawj9ydtz/)
+
 GÖÖi is still a work in progress, thanks for your feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
