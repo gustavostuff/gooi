@@ -43,19 +43,6 @@ Important things:
 
 [![ss.png](https://s23.postimg.org/yiorqnkwb/image.png)](https://postimg.org/image/pawj9ydtz/)
 
-##Change Log
-
-### 0.0.2
-* Added Joystick:noScaling()
-* Added Joystick:anyPoint()
-* Added [Panel:debug()](https://github.com/tavuntu/gooi/wiki/Using-panels#functions) for grid panels
-* Global ```padding``` in layouts is now in ```layout.padding```
-* Fixed individual style [font issue](https://github.com/tavuntu/gooi/issues/8)
-* Fixed chained modals functionality
-* Default font size = ```love.window.toPixels(13)```
-* Default tooltip font size = ```love.window.toPixels(11)```
-* Default Joystick size = ```love.window.toPixels(72)```
-
 GÖÖi is still a work in progress, thanks for your feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
