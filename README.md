@@ -48,7 +48,7 @@ Important things:
 ### 0.0.2
 * Added Joystick:noScaling()
 * Added Joystick:anyPoint()
-* Added Panel:debug() for grid panels
+* Added [Panel:debug()](https://github.com/tavuntu/gooi/wiki/Using-panels#functions) for grid panels
 * Global ```padding``` in layouts is now in ```layout.padding```
 * Fixed individual style [font issue](https://github.com/tavuntu/gooi/issues/8)
 * Fixed chained modals functionality
