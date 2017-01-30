@@ -49,7 +49,7 @@ Important things:
 * Added Joystick:noScaling()
 * Added Joystick:anyPoint()
 * Added Panel:debug() for grid panels
-* Global ```padding``` in layouts is is now in ```layout.padding```
+* Global ```padding``` in layouts is now in ```layout.padding```
 * Fixed individual style [font issue](https://github.com/tavuntu/gooi/issues/8)
 * Fixed chained modals functionality
 * Default font size = ```love.window.toPixels(13)```
