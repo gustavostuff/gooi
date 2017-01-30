@@ -1,7 +1,7 @@
 # _GÖÖi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
-[![Version](http://img.shields.io/:version-0.0.2-blue.svg)](https://github.com/tavuntu/gooi/blob/master/README.md)
+[![Version](http://img.shields.io/:version-0.0.2-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
 GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
