@@ -53,7 +53,7 @@ Important things:
 * Fixed individual style [font issue](https://github.com/tavuntu/gooi/issues/8)
 * Fixed chained modals functionality
 * Default font size = ```love.window.toPixels(13)```
-* Default tooltip font ```size = love.window.toPixels(11)```
+* Default tooltip font size = ```love.window.toPixels(11)```
 * Default Joystick size = ```love.window.toPixels(72)```
 
 GÖÖi is still a work in progress, thanks for your feedback!
