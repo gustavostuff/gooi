@@ -1,11 +1,12 @@
 # _GÖÖi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
-[![Version](http://img.shields.io/:version-0.0.1-green.svg)](https://github.com/tavuntu/gooi/blob/master/README.md)
+[![Version](http://img.shields.io/:version-0.0.2-blue.svg)](https://github.com/tavuntu/gooi/blob/master/README.md)
 
 GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
 * Labels
+* Tooltips
 * Buttons
 * Sliders
 * Checkboxes
@@ -14,7 +15,6 @@ GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](htt
 * Progress bars
 * Joysticks
 * Spinners
-* Tooltips
 * Knobs
 * Panels
 * Modals
@@ -42,6 +42,18 @@ Important things:
 [![ss7.png](https://s29.postimg.org/5kdcwx753/ss7.png)](https://postimg.org/image/69w59a7oj/)
 
 [![ss.png](https://s23.postimg.org/yiorqnkwb/image.png)](https://postimg.org/image/pawj9ydtz/)
+
+##Change Log
+
+### 0.0.2
+* Added Joystick:noScaling()
+* Added Joystick:anyPoint()
+* Added Panel:debug() for grid panels
+* Global ```padding``` in layouts is is now in ```layout.padding```
+* Fixed individual style font issue
+* Default font size = ```love.window.toPixels(13)```
+* Default tooltip font ```size = love.window.toPixels(11)```
+* Default Joystick size = ```love.window.toPixels(72)```
 
 GÖÖi is still a work in progress, thanks for your feedback!
 

@@ -23,11 +23,11 @@ THE SOFTWARE.
 ]]
 layout = {}
 layout.__index = layout
-local padding = 3
+layout.padding = 3
 function layout.new(specs)
 	local l ={}
 	l.specs = specs
-	l.padding = padding
+	l.padding = layout.padding
 	if l.specs:sub(0, 4) == "grid" then
 		local function split(inputstr, sep)
 			if sep == nil then

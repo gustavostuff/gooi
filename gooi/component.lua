@@ -27,13 +27,14 @@ component.__index = component
 component.style = {
     bgColor = {12, 183, 242, 170}, -- LOVE blue
     fgColor = {255, 255, 255, 255}, -- Foreground color
-    tooltipFont = love.graphics.newFont(10), -- tooltips are smaller than the main font
+    tooltipFont = love.graphics.newFont(love.window.toPixels(11)), -- tooltips are smaller than the main font
     radius = 3, -- radius for the outer shapes of components
     innerRadius = 3, -- For the inner ones
     showBorder = false, -- border for components
     borderColor = {12, 183, 242, 255},
     borderWidth = 2, -- in pixels
-    font = love.graphics.newFont(12),
+    borderStyle = "rough", -- or "smooth"
+    font = love.graphics.newFont(love.window.toPixels(13)),
     mode3d = false, -- gives that subtle gradient on the given color
     glass = false -- for a glass effect (horizon reflection)
 }
@@ -47,7 +48,7 @@ end
 ----------------------------------------------------------------------------
 --------------------------   Component creator  ----------------------------
 ----------------------------------------------------------------------------
-function component.new(id, t, x, y, w, h, group)
+function component.new(t, x, y, w, h, group)
 	local c = {}
 	c.id = genId()
 	c.type = t
@@ -88,99 +89,70 @@ function component.new(id, t, x, y, w, h, group)
 	end
 	function c:bg(color)
 		if not color then
-			return self.bgColor
+			return self.style.bgColor
 		end
 		if type(color) == "string" then
 			color = gooi.toRGBA(color)
 		end
-		self.bgColor = color
-		self.borderColor = {color[1], color[2], color[3], 255}
+		self.style.bgColor = color
+		self.style.borderColor = {color[1], color[2], color[3], 255}
 		self:make3d()
 		return self
 	end
 	function c:fg(color)
 		if not color then
-			return self.fgColor
+			return self.style.fgColor
 		end
-		self.fgColor = color
+		self.style.fgColor = color
 		if type(color) == "string" then
-			self.fgColor = gooi.toRGBA(color)
+			self.style.fgColor = gooi.toRGBA(color)
 		end
 		return self
 	end
 	function c:setRadius(r, ri)
-		if not r then return self.radius, self.innerRadius; end
+		if not r then return self.style.radius, self.style.innerRadius; end
 
-		self.radius = r
+		self.style.radius = r
 		if ri then
-			self.innerRadius = ri
+			self.style.innerRadius = ri
 		end
 
 		return self
 	end
 	function c:border(w, color, style)
-		if not w then return self.borderWidth, self.borderColor; end
+		if not w then return self.style.borderWidth, self.style.borderColor; end
 
-		self.borderWidth = w
-		self.borderColor = color or {12, 183, 242, 255}
+		self.style.borderWidth = w
+		self.style.borderColor = color or {12, 183, 242, 255}
 		if type(color) == "string" then
-			self.borderColor = gooi.toRGBA(color)
-			self.borderColor[4] = 255
+			self.style.borderColor = gooi.toRGBA(color)
+			self.style.borderColor[4] = 255
 		end
-		self.borderStyle = style or "smooth"
-		self.showBorder = true
+		self.style.borderStyle = style or "smooth"
+		self.style.showBorder = true
 		return self
 	end
 	function c:noGlass()
-		self.glass = false
+		self.style.glass = false
 		return self
 	end
 	function c:no3D()
-		self.mode3d = false
+		self.style.mode3d = false
 		return self
 	end
-	function c:setStyle(style)
-		if style.bgColor and type(style.bgColor) == "string" then
-			style.bgColor = gooi.toRGBA(style.bgColor)
-		end
-		if style.fgColor and type(style.fgColor) == "string" then
-			style.fgColor = gooi.toRGBA(style.fgColor)
-		end
-		if style.borderColor and type(style.borderColor) == "string" then
-			style.borderColor = gooi.toRGBA(style.borderColor)
-		end
-		self.borderWidth = style.borderWidth
-		self.radius = style.radius
-		self.innerRadius = style.innerRadius
-		self.showBorder = style.showBorder
-		self.borderColor = style.borderColor
-		self.mode3d = style.mode3d
-		self.glass = style.glass
-		self.bgColor = style.bgColor
-		self.fgColor = style.fgColor
-		self.tooltipFont = style.tooltipFont
-		self.font = style.font
-
-		if self.sons then
-			for k, v in pairs(self.sons) do
-				v.ref:setStyle(style)
-			end
-		end
-		
-		return self
-	end
-	c:setStyle(component.style)
+	
+	c.style = gooi.deepcopy(component.style)
 
 	function c:make3d()
 		-- For a 3D look:
-		self.colorTop = self.bgColor
-		self.colorBot = self.bgColor
+		self.colorTop = self.style.bgColor
+		self.colorBot = self.style.bgColor
 
-		self.colorTop = changeBrig(self.bgColor, 15)--colorManager.setBrightness(self.colorTop, 0.5)
-		self.colorBot = changeBrig(self.bgColor, -15)--colorManager.setBrightness(self.colorBot, 0.5)
+		self.colorTop = changeBrig(self.style.bgColor, 15)
+		self.colorBot = changeBrig(self.style.bgColor, -15)
 
-		self.colorTopHL = changeBrig(self.bgColor, 25)--colorManager.setBrightness(self.colorTop, 0.5)
-		self.colorBotHL = changeBrig(self.bgColor, -5)--colorManager.setBrightness(self.colorBot, 0.5)
+		self.colorTopHL = changeBrig(self.style.bgColor, 25)
+		self.colorBotHL = changeBrig(self.style.bgColor, -5)
 
 		self.imgData3D = love.image.newImageData(1, 2)
 		self.imgData3D:setPixel(0, 0, self.colorTop[1], self.colorTop[2], self.colorTop[3], self.colorTop[4])
@@ -214,12 +186,12 @@ end
 ----------------------------------------------------------------------------
 function component:draw()-- Every component has the same base:
 	love.graphics.setLineWidth(self.h / 25)
+	local style = self.style
 	if self.opaque and self.visible then
-		local r, g, b, a  = self.bgColor[1], self.bgColor[2], self.bgColor[3], self.bgColor[4]
 		local focusColorChange = 20
 		local fs = - 1
 		if not self.enabled then focusColorChange = 0 end
-		local newColor = self.bgColor
+		local newColor = style.bgColor
 		-- Generate bgColor for over and pressed:
 		if self:overIt() and self.type ~= "label" then
 			if not self.pressed then fs = 1 end
@@ -238,10 +210,10 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setColor(newColor)
 
 		if not self.enabled then
-			love.graphics.setColor(63, 63, 63, self.bgColor[4])
+			love.graphics.setColor(63, 63, 63, style.bgColor[4] or 255)
 		end
 
-		local radiusCorner = self.radius
+		local radiusCorner = style.radius
 
 		function mask()
 			love.graphics.rectangle("fill",
@@ -267,14 +239,14 @@ function component:draw()-- Every component has the same base:
 			end
 		end
 		-- Correct light effect when 2 modes are set:
-		if self.mode3d and self.glass then
+		if style.mode3d and style.glass then
 			scaleY = -1
 		end
 
-		if self.mode3d then
-			love.graphics.setColor(255, 255, 255, self.bgColor[4] or 255)
+		if style.mode3d then
+			love.graphics.setColor(255, 255, 255, style.bgColor[4] or 255)
 			if not self.enabled then
-				love.graphics.setColor(0, 0, 0, self.bgColor[4] or 255)
+				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 255)
 			end
 			love.graphics.draw(img,
 				self.x + self.w / 2,
@@ -296,20 +268,8 @@ function component:draw()-- Every component has the same base:
 				50)
 		end
 
-		if self.glass then
+		if style.glass then
 			love.graphics.setColor(255, 255, 255)
-			--[[
-				if self.mode3d then
-					love.graphics.draw(img,
-					self.x + self.w / 2,
-					self.y + self.h / 2,
-					0,
-					math.floor(self.w),
-					self.h / 2 * -1,
-					img:getWidth() / 2,
-					img:getHeight() / 2)
-				end
-			]]
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
@@ -320,14 +280,14 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setStencilTest()
 
 		-- Border:
-		love.graphics.setLineStyle(self.borderStyle or "smooth")
-		if self.showBorder then
-			love.graphics.setColor(self.borderColor)
+		love.graphics.setLineStyle(style.borderStyle)
+		if style.showBorder then
+			love.graphics.setColor(style.borderColor)
 			if not self.enabled then
 				love.graphics.setColor(63, 63, 63)
 			end
 			local prevLineW = love.graphics.getLineWidth()
-			love.graphics.setLineWidth(self.borderWidth)
+			love.graphics.setLineWidth(style.borderWidth)
 			love.graphics.rectangle("line",
 				math.floor(self.x),
 				math.floor(self.y),
@@ -339,11 +299,6 @@ function component:draw()-- Every component has the same base:
 			love.graphics.setLineWidth(prevLineW)
 		end
 		love.graphics.setLineStyle("rough")
-
-		if self.hasFocus then
-			--love.graphics.setColor(255,0,0)
-			--love.graphics.rectangle("fill", self.x,self.y,5,5)
-		end
 
 		-- Restore paint:
 		love.graphics.setColor(255, 255, 255)
@@ -365,8 +320,8 @@ function component:setEnabled(b)
 		for i = 1, #self.sons do
 			local c = self.sons[i].ref
 			c.enabled = b
-			c.glass = false
-			c.mode3d = false
+			c.style.glass = b
+			c.style.mode3d = b
 		end
 	end
 end
@@ -404,7 +359,7 @@ function component:overItAux(x, y)
 		xm, ym = x, y
 	end
 
-	local radiusCorner = self.radius
+	local radiusCorner = self.style.radius
 
 	local theX = self.x
 	local theY = self.y

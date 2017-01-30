@@ -15,7 +15,7 @@ function love.load()
 	style = {
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 		fgColor = "#ffffff",
-		bgColor = "#25AAE1F0",
+		bgColor = "#008877F0",
 		mode3d = true,
 		glass = true,
 		radius = 3,
