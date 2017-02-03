@@ -41,7 +41,7 @@ Important things:
 
 [![ss7.png](https://s29.postimg.org/5kdcwx753/ss7.png)](https://postimg.org/image/69w59a7oj/)
 
-[![ss.png](https://s23.postimg.org/yiorqnkwb/image.png)](https://postimg.org/image/pawj9ydtz/)
+[![ss.png](https://s29.postimg.org/sd8zt2vtz/image.png)](https://postimg.org/image/wz541fhcz/)
 
 ### Current limitations:
 
