@@ -43,6 +43,12 @@ Important things:
 
 [![ss.png](https://s23.postimg.org/yiorqnkwb/image.png)](https://postimg.org/image/pawj9ydtz/)
 
+### Current limitations:
+
+* A panel shouldn't be added inside another panel
+* Text in text fields is limited to the component width
+* Not resposive design
+
 GÖÖi is still a work in progress, thanks for your feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
