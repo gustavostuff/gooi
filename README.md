@@ -1,3 +1,5 @@
+[![logo_gooi_fixed.png](https://s12.postimg.org/x8m10cxul/logo_gooi_fixed.png)](https://postimg.org/image/ueivmwvo9/)
+
 # _GÖÖi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
