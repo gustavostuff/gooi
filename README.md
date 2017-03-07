@@ -1,4 +1,4 @@
-[![logo_gooi_fixed.png](https://s12.postimg.org/x8m10cxul/logo_gooi_fixed.png)](https://postimg.org/image/ueivmwvo9/)
+[![logo_gooi_fixed.png](https://s12.postimg.org/405b13nzx/logo_gooi_fixed.png)](https://postimg.org/image/kb5exf0hl/)
 
 # _GÖÖi_ ~ Android-Oriented GUI Library
 
