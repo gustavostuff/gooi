@@ -15,7 +15,7 @@ function love.load()
 	style = {
 		font = gr.newFont(fontDir.."ProggySquare.ttf", 16),
 		fgColor = "#ffffff",
-		bgColor = "#008877F0",
+		bgColor = "#111111EE",
 		mode3d = true,
 		glass = true,
 		radius = 3,
@@ -88,6 +88,8 @@ function love.load()
 	-----------------------------------------------
 
 	joyShip = gooi.newJoy({size = 60})
+	joyShipDigital = gooi.newJoy({size = 60}):setDigital("8")
+		:bg("#FF0000EE"):setImage(imgDir.."cat.png")
 	btnShot = gooi.newButton("Shot"):onRelease(function()
 		table.insert(bullets, {
 			x = ship.x,
@@ -96,14 +98,13 @@ function love.load()
 	end)
 
 	pGame = gooi.newPanel(350, 10, 420, 270, "game")
-	pGame:add(gooi.newButton("Bomb"), "b-r")
+	pGame:add(gooi.newButton("<- shot"), "b-r")
 	pGame:add(btnShot, "b-r")
 	pGame:add(joyShip, "b-l")
+	pGame:add(joyShipDigital, "b-l")
 	pGame:add(gooi.newLabel("(Game Layout demo)"), "t-l")
 	pGame:add(gooi.newLabel("Score: 702013"), "t-l")
 	pGame:add(gooi.newBar({value = 1, w = 100}):decreaseAt(0.1), "t-r"):fg("#FFFFFF")
-
-
 
 	-----------------------------------------------
 	-----------------------------------------------
@@ -140,9 +141,17 @@ function love.load()
 		end),
 		gooi.newButton({text = "Confirm btn", align = "right", icon = imgDir.."medal.png"}):bg("#888800")
 		:onRelease(function()
-			gooi.confirm("Change background?", function()
-				gr.setBackgroundColor(r2(), r2(), r2())
-			end)
+			gooi.confirm({
+				msg = "Change background?\nare you sure?",
+				ok = function()
+					gr.setBackgroundColor(r2(), r2(), r2())
+				end,
+				cancel = function()
+					gooi.alert("you chose Nope")
+				end,
+				okText = "Yeah",
+				cancelText = "Nope"
+			})
 		end),
 		gooi.newSlider({value = 0.75}):bg("#00000000"):border(3, "#00ff00"):fg({255, 0, 0}),
 		gooi.newCheck("Debug"):setRadius(12, 10):bg({127, 63, 0, 200}):fg("#00ffff"):border(1, "#ffff00")
@@ -151,7 +160,7 @@ function love.load()
 		end),
 		gooi.newBar(0):setRadius(0, 10):bg("#77ff00"):fg("#8800ff"):increaseAt(0.05),
 		gooi.newSpinner(-10, 30, 3):setRadius(0, 0):bg("#ff00ff"),
-		gooi.newJoy():setRadius(0):border(1, "#000000", "rough"):bg({0, 0, 0, 0}),
+		gooi.newLabel("This is a\nmultiline\nlabel centered"):setAlign("center"),
 		gooi.newKnob(1)
 	)
 
@@ -171,8 +180,24 @@ function love.update(dt)
 	joy1.x = (joy1.x + joy1:xValue() * dt * 200)
 	joy1.y = (joy1.y + joy1:yValue() * dt * 200)
 
+	-- move ship with analog joystick:
 	ship.x = (ship.x + joyShip:xValue() * dt * 150)
 	ship.y = (ship.y + joyShip:yValue() * dt * 150)
+	-- with digital:
+	local dir = joyShipDigital:direction()
+	if dir:match("l") then
+		ship.x = ship.x - dt * 150
+	elseif dir:match("r") then
+		ship.x = ship.x + dt * 150
+	end
+
+	if dir:match("t") then
+		ship.y = ship.y - dt * 150
+	elseif dir:match("b") then
+		ship.y = ship.y + dt * 150
+	end
+
+
 	
 	if ship.x > width() then ship.x = width() end
 	if ship.x < 0 then ship.x = width() end
@@ -186,6 +211,8 @@ function love.update(dt)
 	end
 
 	lblCoords:setText("coords: "..joy1:xValue()..", "..joy1:yValue())
+
+	btnShot:setText(joyShipDigital:direction())
 end
 
 function love.draw()

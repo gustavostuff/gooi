@@ -57,7 +57,6 @@ local circleRes = 50
 ----------------------------------------------------------------------------
 --------------------------   Label creator  --------------------------------
 ----------------------------------------------------------------------------
---function gooi.newLabel(id, text, x, y, w, h, icon, align,  group)
 function gooi.newLabel(text, x, y, w, h)
 	local l = {}
 	
@@ -102,6 +101,7 @@ function gooi.newLabel(text, x, y, w, h)
 			l.w = l.w + l.icon:getWidth()
 		end
 	end
+	l.textParts = split(l.text, "\n")
 	function l:rebuild()
 		--self:generateBorder()
 	end
@@ -109,10 +109,22 @@ function gooi.newLabel(text, x, y, w, h)
 	function l:setText(value)
 		if not value then value = "" end
 		self.text = tostring(value)
+		self.textParts = split(self.text, "\n")
 		return self
 	end
+	function l:largerLine()
+		local line = self.textParts[1] or ""
+
+		for i = 2, #self.textParts do
+			if #self.textParts[i] > #line then
+				line = self.textParts[i]
+			end
+		end
+
+		return line
+	end
 	function l:drawSpecifics(fg)
-		local t = self.text or ""
+		local t = self:largerLine() or ""
 		-- Right by default:
 		local x = self.x + self.w - gooi.getFont(self):getWidth(t) - self.h / 2
 		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
@@ -137,7 +149,27 @@ function gooi.newLabel(text, x, y, w, h)
 				math.floor(self.icon:getHeight() / 2))
 		end
 		love.graphics.setColor(fg)
-		love.graphics.print(self.text, math.floor(x), math.floor(y))
+		local yLine = self.y + self.h / 2
+		yLine = yLine - (gooi.getFont(self):getHeight()) * #self.textParts / 2
+		for i = 1, #self.textParts do
+			local part = self.textParts[i]
+
+			local xLine = self.x + self.w - gooi.getFont(self):getWidth(part) - self.h / 2
+			if self.align == "left" then
+				xLine = self.x + self.h / 2
+				if self.icon then
+					xLine = xLine + self.h /2
+				end
+			elseif self.align == "center" then
+				xLine = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(part) / 2)
+			end
+			love.graphics.print(part,
+				math.floor(xLine),
+				math.floor(yLine))
+
+			yLine = yLine + (gooi.getFont(self):getHeight())
+		end
+		--love.graphics.print(self.text, math.floor(x), math.floor(y))
 	end
 	function l:setAlign(o)
 		if o == "left" then
@@ -213,6 +245,7 @@ function gooi.newButton(text, x, y, w, h)
 			b.w = b.w + b.icon:getWidth()
 		end
 	end
+	b.textParts = split(b.text, "\n")
 	b.pressedMove = 0
 	function b:rebuild()
 		--self:generateBorder()
@@ -220,9 +253,21 @@ function gooi.newButton(text, x, y, w, h)
 	function b:setText(value)
 		if not value then value = "" end
 		self.text = tostring(value)
+		self.textParts = split(self.text, "\n")
 		return self
 	end
 	b:rebuild()
+	function b:largerLine()
+		local line = self.textParts[1] or ""
+
+		for i = 2, #self.textParts do
+			if #self.textParts[i] > #line then
+				line = self.textParts[i]
+			end
+		end
+
+		return line
+	end
 	function b:drawSpecifics(fg)
 		self.pressedMove = 0
 		if self.pressed or self.touch then
@@ -230,7 +275,7 @@ function gooi.newButton(text, x, y, w, h)
 			if self.pressedMove < 1 then self.pressedMove = 1 end
 		end
 		-- Center text:
-		local t = self.text
+		local t = self:largerLine(self.textParts)
 		local x = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(t) / 2)
 		local y = (self.y + self.h / 2) - (gooi.getFont(self):getHeight() / 2)
 		if self.align == "left" then
@@ -253,7 +298,27 @@ function gooi.newButton(text, x, y, w, h)
 				math.floor(self.icon:getHeight() / 2))
 		end
 		love.graphics.setColor(fg)
-		love.graphics.print(t, math.floor(x), math.floor(y + self.pressedMove))
+		local yLine = self.y + self.h / 2
+		yLine = yLine - (gooi.getFont(self):getHeight()) * #self.textParts / 2
+		for i = 1, #self.textParts do
+			local part = self.textParts[i]
+
+			local xLine = self.x + self.w - gooi.getFont(self):getWidth(part) - self.h / 2
+			if self.align == "left" then
+				xLine = self.x + self.h / 2
+				if self.icon then
+					xLine = xLine + self.h /2
+				end
+			elseif self.align == "center" then
+				xLine = (self.x + self.w / 2) - (gooi.getFont(self):getWidth(part) / 2)
+			end
+			love.graphics.print(part,
+				math.floor(xLine),
+				math.floor(yLine))
+
+			yLine = yLine + (gooi.getFont(self):getHeight())
+		end
+		--love.graphics.print(t, math.floor(x), math.floor(y + self.pressedMove))
 	end
 	function b:setAlign(o)
 		if o == "left" then
@@ -1101,6 +1166,7 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	s.dx, s.dy = 0, 0
 	s.spring = true
 	s.sxImg, s.syImg = 1, 1
+	s.digitalH, s.digitalV = "", ""
 	function s:drawSpecifics(fg)
 		love.graphics.setColor(fg)
 		self:drawStick()
@@ -1132,6 +1198,15 @@ function gooi.newJoy(x, y, size, deadZone, image)
 		self.anyP = true
 		return self
 	end
+	function s:setDigital(directions)-- 4 or 8
+		if directions and
+		directions ~= "4" and
+		directions ~= "8" then
+			error("Joystick:digital(string), direction must be '8' or '4'")
+		end
+		self.digital = directions or "8"
+		return self
+	end
 	function s:drawStick()
 		local fg = self.style.fgColor
 		if self.image then
@@ -1143,6 +1218,11 @@ function gooi.newJoy(x, y, size, deadZone, image)
 				sx, sy = 1, 1
 				x, y = math.floor(self.xStick), math.floor(self.yStick)
 			end
+
+			if self.digital then
+				x, y = self:computeDigital()
+			end
+
 			love.graphics.draw(self.image,
 				x,
 				y,
@@ -1151,12 +1231,77 @@ function gooi.newJoy(x, y, size, deadZone, image)
 				self.image:getWidth() / 2,
 				self.image:getHeight() / 2)
 		else
+			local x = self.xStick
+			local y = self.yStick
+
+			if self.digital then
+				x, y = self:computeDigital()
+			end
+
 			love.graphics.circle("fill",
-				math.floor(self.xStick),
-				math.floor(self.yStick),
+				math.floor(x), math.floor(y),
 				self.rStick,
 				circleRes)
 		end
+	end
+	function s:computeDigital()
+		-- horizontal directions:
+		local xv = self:xValue()
+		local yv = self:yValue()
+
+		if self.digital == "8" then
+			-- horizontal direction:
+			if xv < -0.5 then
+				self.digitalH = "l"
+				x = self.x + self.rStick
+			elseif xv > 0.5 then
+				self.digitalH = "r"
+				x = self.x + self.w - self.rStick
+			else
+				self.digitalH = ""
+				x = self.x + self.w / 2
+			end
+			--vertical:
+			if yv < -0.5 then
+				self.digitalV = "t"
+				y = self.y + self.rStick
+			elseif yv > 0.5 then
+				self.digitalV = "b"
+				y = self.y + self.h - self.rStick
+			else
+				self.digitalV = ""
+				y = self.y + self.h / 2
+			end
+		elseif self.digital == "4" then-- 4 directions joystick:
+			--ToDo
+			--[[
+			if math.abs(yv) < 0.5 then
+				if xv < -0.5 then
+					self.digitalH = "l"
+					x = self.x + self.rStick
+				elseif xv > 0.5 then
+					self.digitalH = "r"
+					x = self.x + self.w - self.rStick
+				else
+					self.digitalH = ""
+					x = self.x + self.w / 2
+				end
+			elseif math.abs(xv) < 0.5 then
+				if yv < -0.5 then
+					self.digitalV = "t"
+					y = self.y + self.rStick
+				elseif yv > 0.5 then
+					self.digitalV = "b"
+					y = self.y + self.h - self.rStick
+				else
+					self.digitalV = ""
+					y = self.y + self.h / 2
+				end
+			end
+			]]
+		end
+
+		return x, y
 	end
 	function s:move(direction)
 		if (self.pressed or self.touch) and self.stickPressed then
@@ -1210,6 +1355,13 @@ function gooi.newJoy(x, y, size, deadZone, image)
 	function s:yValue()
 		if self:onDeadZone() then return 0 end
 		return gooi.round((self.yStick - self:theY()) / (self.r - self.rStick), 2)
+	end
+	function s:direction()
+		if self.digital then
+			return self.digitalV..self.digitalH
+		else
+			return ""
+		end
 	end
 	function s:overStick(x, y)
 		local dx = (self.xStick - x)
@@ -1605,6 +1757,16 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 	if not gooi.showingDialog then
 		gooi.dialogMsg = msg or ""
 		gooi.showingDialog = true
+		local positiveBtnTxt = "OK"
+		local negativeBtnTxt = "Cancel"
+
+		if type(msg) == "table" then
+			gooi.dialogMsg = msg.msg
+			fPositive = msg.ok
+			fNegative = msg.cancel
+			positiveBtnTxt = msg.okText or positiveBtnTxt
+			negativeBtnTxt = msg.cancelText or negativeBtnTxt
+		end
 
 		local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 
@@ -1638,7 +1800,7 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 		gooi.panelDialog:add(gooi.lblDialog, "1,1")
 
 		if kind == "alert" then
-			gooi.okButton  = gooi.newButton("OK"):onRelease(function()
+			gooi.okButton  = gooi.newButton(positiveBtnTxt):onRelease(function()
 				gooi.closeDialog()
 				if fPositive then
 					fPositive()
@@ -1648,13 +1810,13 @@ function gooi.dialog(msg, fPositive, fNegative, kind)
 			gooi.panelDialog:add(gooi.okButton,  "3,2")
 			gooi.radCorner = gooi.okButton.style.radius
 		else
-			gooi.noButton  = gooi.newButton("Cancel"):onRelease(function()
+			gooi.noButton  = gooi.newButton(negativeBtnTxt):onRelease(function()
 				gooi.closeDialog()
 				if fNegative then
 					fNegative()
 				end
 			end)
-			gooi.yesButton = gooi.newButton("Yes"):onRelease(function()
+			gooi.yesButton = gooi.newButton(positiveBtnTxt):onRelease(function()
 				gooi.closeDialog()
 				if fPositive then
 					fPositive()
@@ -1795,6 +1957,12 @@ function gooi.setStyleComp(c)
 			if c.type == "text" then
 				c.w = s.font:getWidth(c.text) + s.font:getHeight() * 1.5
 				c.h = s.font:getHeight() * 2
+			end
+		end
+
+		if c.sons then
+			for i = 1, #c.sons do
+				c.sons[i].ref:setStyle(style)
 			end
 		end
 
