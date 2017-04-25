@@ -35,14 +35,6 @@ Important things:
 
 ### Some screenshots
 
-[![ss1.png](https://s23.postimg.org/5fp9xdi9n/ss1.png)](https://postimg.org/image/yuuy6dmt3/)
-
-[![game.gif](https://s27.postimg.org/aq69b3q4z/game.gif)](https://postimg.org/image/h3vcecv0v/)
-
-[![ss7.png](https://s29.postimg.org/5kdcwx753/ss7.png)](https://postimg.org/image/69w59a7oj/)
-
-[![ss.png](https://s29.postimg.org/sd8zt2vtz/image.png)](https://postimg.org/image/wz541fhcz/)
-
 ![image](https://s12.postimg.org/4c2itvfil/image.png)
 
 ### Current limitations:
