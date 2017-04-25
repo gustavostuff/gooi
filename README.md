@@ -1,11 +1,11 @@
 ![image](https://s9.postimg.org/be956a3j3/logo_gooi_0.0.4.png)
 
-# _GÖÖi_ ~ Android-Oriented GUI Library
+# _Gooi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
 [![Version](http://img.shields.io/:version-0.0.4-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
-GÖÖi (Good-sized Öptional Öpen interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
+GOOi (Good-sized Optional Open interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
 * Labels
 * Tooltips
@@ -51,6 +51,6 @@ Important things:
 * Text in text fields is limited to the component width
 * Not resposive design
 
-GÖÖi is still a work in progress, thanks for your feedback!
+GOOi is still a work in progress, thanks for your feedback!
 
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
