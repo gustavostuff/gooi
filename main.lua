@@ -13,7 +13,7 @@ function love.load()
     imgDir = "/imgs/"
     fontDir = "/fonts/"
     style = {
-        font = gr.newFont(fontDir.."Attractive-Regular.ttf", 14),
+        font = gr.newFont(fontDir.."Arimo-Bold.ttf", 13),
         innerRadius = 3,
         showBorder = true,
     }
@@ -85,7 +85,7 @@ function love.load()
         {y = 160, x = 200, w = 80, h = 22,  text = "Jun", radioGroup = "g2"}
     )
 
-    txt1 = gooi.newText({y = 270, w = 180, h = 22}):setText("Хола мундо")
+    txt1 = gooi.newText({y = 270, w = 180, h = 22}):setText("A text field")
     bar1 = gooi.newBar({y = 240, w = 180, h = 22, value = 0}):increaseAt(0.1)
     joy1 = gooi.newJoy({x = 120, y = 420, size = 150}):
         setImage(imgDir.."cat.png"):noSpring():noGlass():opacity(0.7)
@@ -115,7 +115,7 @@ function love.load()
     end)
 
     pGame = gooi.newPanel({x = 350, y = 10, w = 420, h = 270, layout = "game"})
-    pGame:add(gooi.newButton({text = "<- shot"}), "b-r")
+    pGame:add(gooi.newButton({text = "<= shot"}), "b-r")
     pGame:add(btnShot, "b-r")
     pGame:add(joyShip, "b-l")
     pGame:add(joyShipDigital, "b-l")
