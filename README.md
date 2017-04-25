@@ -5,6 +5,8 @@
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
 [![Version](http://img.shields.io/:version-0.0.4-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
+![image](https://s12.postimg.org/4c2itvfil/image.png)
+
 GOOi (Good-sized Optional Open interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
 * Labels
@@ -32,10 +34,6 @@ Important things:
 * [![api_mini.png](https://s11.postimg.org/qmudcpq83/api_mini.png)](https://postimg.org/image/99k2xuuwv/) Flexible API
 * [![shapes_mini.png](https://s13.postimg.org/4oi73j13b/shapes_mini.png)](https://postimg.org/image/gqdkxoabn/) Flexible shapes and colors
 * [![theme_mini.png](https://s3.postimg.org/3kob6oir7/theme_mini.png)](https://postimg.org/image/vkseqym7j/) Easy theme system
-
-### Some screenshots
-
-![image](https://s12.postimg.org/4c2itvfil/image.png)
 
 ### Current limitations:
 
