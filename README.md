@@ -1,6 +1,6 @@
 ![image](https://s9.postimg.org/be956a3j3/logo_gooi_0.0.4.png)
 
-# _Gooi_ ~ Android-Oriented GUI Library
+# _GOOi_ ~ Android-Oriented GUI Library
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
 [![Version](http://img.shields.io/:version-0.0.4-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
