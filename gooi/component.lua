@@ -1,42 +1,28 @@
---[[
-
-Copyright (c) 2015-2017 Gustavo Alberto Lara Gómez
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-]]
-
 component = {}
 component.__index = component
+component.colors = {
+    blue = {2, 117, 216, 255},
+    green = {92, 184, 92, 255},
+    cyan = {91, 192, 222, 255},
+    orange = {240, 173, 78, 255},
+    red = {217, 83, 79, 255},
+    black = {0, 0, 0, 255},
+    white = {255, 255, 255, 255},
+    clearGray = {247, 247, 247, 255},
+    darkGray = {41, 43, 44, 255},
+    darkGrayAlpha = {41, 43, 44, 150},
+}
 component.style = {
-    bgColor = {12, 183, 242, 170}, -- LOVE blue
-    fgColor = {255, 255, 255, 255}, -- Foreground color
+    bgColor = component.colors.blue,
+    fgColor = component.colors.white, -- Foreground color
     tooltipFont = love.graphics.newFont(love.window.toPixels(11)), -- tooltips are smaller than the main font
     radius = 3, -- radius for the outer shapes of components
     innerRadius = 3, -- For the inner ones
-    showBorder = false, -- border for components
-    borderColor = {12, 183, 242, 255},
+    showBorder = true, -- border for components
+    borderColor = component.colors.blue,
     borderWidth = 2, -- in pixels
-    borderStyle = "rough", -- or "smooth"
+    borderStyle = "smooth", -- or "smooth"
     font = love.graphics.newFont(love.window.toPixels(13)),
-    mode3d = false, -- gives that subtle gradient on the given color
-    glass = false -- for a glass effect (horizon reflection)
 }
 
 local currId = -1
@@ -133,11 +119,11 @@ function component.new(t, x, y, w, h, group)
 		return self
 	end
 	function c:noGlass()
-		self.style.glass = false
+		self.glass = false
 		return self
 	end
 	function c:no3D()
-		self.style.mode3d = false
+		self.mode3d = false
 		return self
 	end
 	
@@ -175,6 +161,54 @@ function component.new(t, x, y, w, h, group)
 		self.imgGlass:setFilter("linear", "linear")
 	end
 
+    function c:makeShadow()
+        self.heightShadow = 6
+        self.imgDataShadow = love.image.newImageData(1, self.heightShadow)
+        self.imgDataShadow:setPixel(0, 0, 0, 0, 0, 80)
+        self.imgDataShadow:setPixel(0, 1, 0, 0, 0, 30)
+        self.imgDataShadow:setPixel(0, 2, 0, 0, 0, 5)
+        
+        self.imgShadow = love.graphics.newImage(self.imgDataShadow)
+        self.imgShadow:setFilter("linear", "linear")
+    end
+    c:makeShadow()
+
+    function c:primary()
+        self:bg(component.colors.blue)
+        return self
+    end
+    function c:success()
+        self:bg(component.colors.green)
+        return self
+    end
+    function c:info()
+        self:bg(component.colors.cyan)
+        return self
+    end
+    function c:warning()
+        self:bg(component.colors.orange)
+        return self
+    end
+    function c:danger()
+        self:bg(component.colors.red)
+        return self
+    end
+    function c:secondary()
+        self:bg(component.colors.clearGray)
+        self:fg(component.colors.darkGray)
+        return self
+    end
+    function c:inverted()
+        self:bg(component.colors.darkGray)
+        self:fg(component.colors.clearGray)
+        return self
+    end
+
+    function c:opacity(o)
+        self.style.bgColor[4] = o * 255
+        return self
+    end
+
 	c:make3d()
 	
 	return setmetatable(c, component)
@@ -185,17 +219,16 @@ end
 --------------------------   Draw the component  ---------------------------
 ----------------------------------------------------------------------------
 function component:draw()-- Every component has the same base:
-	love.graphics.setLineWidth(self.h / 25)
 	local style = self.style
 	if self.opaque and self.visible then
-		local focusColorChange = 20
+		local focusColorChange = 15
 		local fs = - 1
 		if not self.enabled then focusColorChange = 0 end
 		local newColor = style.bgColor
 		-- Generate bgColor for over and pressed:
 		if self:overIt() and self.type ~= "label" then
 			if not self.pressed then fs = 1 end
-			newColor = changeBrig(newColor, 20 * fs)
+			newColor = changeBrig(newColor, focusColorChange * fs)
 			if self.tooltip then
 				self.timerTooltip = self.timerTooltip + love.timer.getDelta()
 				if self.timerTooltip >= 0.5 then
@@ -215,17 +248,16 @@ function component:draw()-- Every component has the same base:
 
 		local radiusCorner = style.radius
 
-		function mask()
-			love.graphics.rectangle("fill",
-				math.floor(self.x),
-				math.floor(self.y),
-				math.floor(self.w),
-				math.floor(self.h),
-				radiusCorner,
-				radiusCorner,
-				50)
-		end
-		love.graphics.stencil(mask, "replace", 1)
+		love.graphics.stencil(function()
+            love.graphics.rectangle("fill",
+                math.floor(self.x),
+                math.floor(self.y),
+                math.floor(self.w),
+                math.floor(self.h),
+                self.style.radius,
+                self.style.radius,
+                50)
+        end, "replace", 1)
 		love.graphics.setStencilTest("greater", 0)
 		local scaleY = 1
 		local img = self.img3D
@@ -239,11 +271,11 @@ function component:draw()-- Every component has the same base:
 			end
 		end
 		-- Correct light effect when 2 modes are set:
-		if style.mode3d and style.glass then
+		if self.mode3d and self.glass then
 			scaleY = -1
 		end
 
-		if style.mode3d then
+		if self.mode3d then
 			love.graphics.setColor(255, 255, 255, style.bgColor[4] or 255)
 			if not self.enabled then
 				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 255)
@@ -263,12 +295,12 @@ function component:draw()-- Every component has the same base:
 				math.floor(self.y),
 				math.floor(self.w),
 				math.floor(self.h),
-				radiusCorner,
-				radiusCorner,
+				self.style.radius,
+				self.style.radius,
 				50)
 		end
 
-		if style.glass then
+		if self.glass then
 			love.graphics.setColor(255, 255, 255)
 			love.graphics.draw(self.imgGlass,
 				self.x,
@@ -277,32 +309,53 @@ function component:draw()-- Every component has the same base:
 				math.floor(self.w),
 				self.h / 4)
 		end
+
 		love.graphics.setStencilTest()
 
 		-- Border:
-		love.graphics.setLineStyle(style.borderStyle)
 		if style.showBorder then
-			love.graphics.setColor(style.borderColor)
+			love.graphics.setColor(newColor)
 			if not self.enabled then
 				love.graphics.setColor(63, 63, 63)
 			end
-			local prevLineW = love.graphics.getLineWidth()
-			love.graphics.setLineWidth(style.borderWidth)
 			love.graphics.rectangle("line",
 				math.floor(self.x),
 				math.floor(self.y),
 				math.floor(self.w),
 				math.floor(self.h),
-				radiusCorner,
-				radiusCorner,
+				self.style.radius,
+				self.style.radius,
 				50)
-			love.graphics.setLineWidth(prevLineW)
 		end
-		love.graphics.setLineStyle("rough")
-
-		-- Restore paint:
-		love.graphics.setColor(255, 255, 255)
 	end
+end
+
+function component:drawShadowPressed()
+    if self.pressed and self.type == "button" and self.shadow then
+        love.graphics.stencil(function()
+            love.graphics.rectangle("fill",
+                math.floor(self.x),
+                math.floor(self.y),
+                math.floor(self.w),
+                math.floor(self.h),
+                self.style.radius,
+                self.style.radius,
+                50)
+        end, "replace", 1)
+        love.graphics.setStencilTest("greater", 0)
+
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.draw(self.imgShadow,
+            self.x + self.w / 2,
+            self.y + self.h / 2,
+            0,
+            math.floor(self.w),
+            self.h / self.heightShadow,
+            self.imgShadow:getWidth() / 2,
+            self.imgShadow:getHeight() / 2
+        )
+        love.graphics.setStencilTest()
+    end
 end
 
 function component:setVisible(b)
@@ -320,8 +373,8 @@ function component:setEnabled(b)
 		for i = 1, #self.sons do
 			local c = self.sons[i].ref
 			c.enabled = b
-			c.style.glass = b
-			c.style.mode3d = b
+			c.glass = b
+			c.mode3d = b
 		end
 	end
 end
