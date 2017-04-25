@@ -14,6 +14,7 @@ function love.load()
     fontDir = "/fonts/"
     style = {
         font = gr.newFont(fontDir.."Arimo-Bold.ttf", 13),
+        radius = 5,
         innerRadius = 3,
         showBorder = true,
     }
@@ -73,7 +74,7 @@ function love.load()
     )
     rad2 = gooi.newRadio({y = 130, h = 22, w = 80, text = "two", radioGroup = "g1"})
     rad3 = gooi.newRadio({y = 160, h = 22, w = 80, text = "three", radioGroup = "g1"})
-    knob1 = gooi.newKnob({x = 110, y = 100, value = 0.9, size = 82})
+    knob1 = gooi.newKnob({x = 110, y = 100, value = 0.75, size = 82})
     -- Anoher radio group:
     rad4 = gooi.newRadio(
         {y = 100, x = 200, w = 80, h = 22,  text = "Apr", radioGroup = "g2", selected = true}

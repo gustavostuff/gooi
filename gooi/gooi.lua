@@ -623,9 +623,6 @@ function gooi.newText(params)
     function f:drawSpecifics(fg)
         local mC = self.h / 8
         love.graphics.setColor(0, 0, 0)
-        if gooi.focused == self then
-            love.graphics.setColor(31, 31, 31)
-        end
         love.graphics.rectangle("fill",
             self.x + mC,
             self.y + mC,
@@ -663,7 +660,6 @@ function gooi.newText(params)
             )
 
             love.graphics.setStencilTest()
-
             charDisplacement = charDisplacement + letter.w
             if i == self.indexCursor then
                 self:drawCursor(charDisplacement + self.mt, mC)
@@ -672,6 +668,17 @@ function gooi.newText(params)
         if self.indexCursor == 0 then
             self:drawCursor(self.mt, mC)
         end
+
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.rectangle("line",
+            self.x + mC,
+            self.y + mC,
+            self.w - mC * 2,
+            self.h - mC * 2,
+            self.style.innerRadius,
+            self.style.innerRadius,
+            circleRes
+        )
     end
 
     function f:drawCursor(disp, mC)
@@ -879,6 +886,15 @@ function gooi.newBar(params)
             barWidth,
             self.h - marginBars * 2)
         love.graphics.setStencilTest()
+        love.graphics.setColor(self.style.bgColor)
+        love.graphics.rectangle("line",
+                self.x + marginBars,
+                self.y + marginBars,
+                self.w - marginBars * 2,
+                self.h - marginBars * 2,
+                self.style.innerRadius,
+                self.style.innerRadius,
+                circleRes)
     end
     function p:changeValue(amount, dt)
         if amount > 1 then amount = 1 end
@@ -1279,7 +1295,7 @@ function gooi.newKnob(params)
     k.value = k.pivotValue
 
     k.initialAngle = 0
-    k.finalAngle = 180
+    k.finalAngle = 360
 
     function k:getValue()
         return gooi.round(self.value, 2)
@@ -1297,10 +1313,13 @@ function gooi.newKnob(params)
     function k:drawSpecifics(fg)
         local bg = self.style.bgColor
         love.graphics.setColor(0, 0, 0)
-        love.graphics.circle("line",
+        love.graphics.arc("line",
+            "open",
             self.xKnob,
             self.yKnob,
             self.radKnob,
+            math.rad(180 + self.finalAngle * self.value),
+            math.rad(180 + self.finalAngle),
             circleRes)
 
         love.graphics.setColor(fg)
@@ -1313,7 +1332,7 @@ function gooi.newKnob(params)
             self.yKnob,
             self.radKnob,
             math.rad(180 + self.initialAngle),
-            math.rad(180 + self.finalAngle * 2 * self.value),
+            math.rad(180 + self.finalAngle * self.value),
             circleRes)
     end
 
