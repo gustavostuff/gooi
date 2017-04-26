@@ -856,7 +856,7 @@ function gooi.newBar(params)
     end
     p:rebuild()
     function p:drawSpecifics(fg)
-        love.graphics.setColor(0, 0, 0)
+        love.graphics.setColor(self.style.bgColor)
         local marginBars = (self.h / 8)
         local function maskBar()
             love.graphics.rectangle("fill",
@@ -886,7 +886,7 @@ function gooi.newBar(params)
             barWidth,
             self.h - marginBars * 2)
         love.graphics.setStencilTest()
-        love.graphics.setColor(self.style.bgColor)
+        love.graphics.setColor(fg)
         love.graphics.rectangle("line",
                 self.x + marginBars,
                 self.y + marginBars,
