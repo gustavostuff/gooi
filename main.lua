@@ -87,7 +87,7 @@ function love.load()
     )
 
     txt1 = gooi.newText({y = 270, w = 180, h = 22}):setText("A text field")
-    bar1 = gooi.newBar({y = 240, w = 180, h = 22, value = 0}):increaseAt(0.1)
+    bar1 = gooi.newBar({y = 240, w = 180, h = 22, value = 0}):increaseAt(0.1):bg("#00000000")
     joy1 = gooi.newJoy({x = 120, y = 420, size = 150}):
         setImage(imgDir.."cat.png"):noSpring():noGlass():opacity(0.7)
     vertSlider =  gooi.newSlider(
@@ -122,7 +122,7 @@ function love.load()
     pGame:add(joyShipDigital, "b-l")
     pGame:add(gooi.newLabel({w = 180, text = "(Game Layout demo)"}):left(), "t-l")
     pGame:add(gooi.newLabel({text = "Score: 702013"}):left(), "t-l")
-    pGame:add(gooi.newBar({value = 1, w = 100})
+    pGame:add(gooi.newBar({value = 1, w = 100}):bg("#00000000")
     :decreaseAt(0.1), "t-r"):fg("#FFFFFF")
 
     -----------------------------------------------
@@ -180,7 +180,7 @@ function love.load()
         :onRelease(function(c)
             pGrid.layout.debug = not pGrid.layout.debug
         end),
-        gooi.newBar({value = 0}):setRadius(0, 20):fg(component.colors.orange)
+        gooi.newBar({value = 0}):setRadius(0, 20):fg(component.colors.orange):bg("#00000000")
         :increaseAt(0.05),
         gooi.newSpinner():setRadius(0, 0),
         gooi.newLabel({text = "This is a\nmultiline\nlabel\ncentered"}):center(),
