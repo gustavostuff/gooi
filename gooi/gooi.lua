@@ -836,7 +836,7 @@ function gooi.newBar(params)
     local p = {}
 
     x, y, w, h = gooi.checkBounds(
-        defaultText,
+        "..........",
         params.x or 10,
         params.y or 10,
         params.w or gooi.unit * 5,
@@ -1888,6 +1888,7 @@ function gooi.draw(group)
 
     love.graphics.setColor(255, 255, 255)
     love.graphics.setLineWidth(gooi.unit / 10)
+    love.graphics.setLineStyle("smooth")
 
     for k, comp in pairs(gooi.components) do
 
