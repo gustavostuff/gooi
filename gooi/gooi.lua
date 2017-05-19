@@ -857,7 +857,7 @@ function gooi.newBar(params)
     p:rebuild()
     function p:drawSpecifics(fg)
         love.graphics.setColor(self.style.bgColor)
-        local marginBars = (self.h / 8)
+        local marginBars = 0 -- (self.h / 8)
         local function maskBar()
             love.graphics.rectangle("fill",
                 self.x + marginBars,
@@ -869,6 +869,17 @@ function gooi.newBar(params)
                 circleRes)
         end
         maskBar()
+
+        love.graphics.setColor(self.style.bgColor)
+        love.graphics.rectangle("fill",
+            self.x + marginBars,
+            self.y + marginBars,
+            self.w,
+            self.h,
+            self.style.innerRadius,
+            self.style.innerRadius,
+            circleRes
+        )
 
         love.graphics.setColor(self.style.fgColor)
         if not self.enabled then
@@ -1911,7 +1922,9 @@ function gooi.draw(group)
         if not comp.noFlag and not comp.okFlag and not comp.yesFlag
         and not comp.lblFlag then
             if actualGroup == comp.group and comp.visible then
-                comp:draw()-- Draw the base.
+                if comp.type ~= "progressbar" then
+                    comp:draw()-- Draw the base.
+                end
 
                 love.graphics.setFont(gooi.getFont(comp))-- Specific or a common font.
 
