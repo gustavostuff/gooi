@@ -455,13 +455,7 @@ function gooi.newCheck(params)
     end
     chb:rebuild()
     function chb:drawSpecifics(fg)
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.circle("fill",
-            self.x + self.h / 2,
-            self.y + self.h / 2,
-            self.h / 3,
-            circleRes
-        )
+        love.graphics.setColor(fg)
         love.graphics.circle("line",
             self.x + self.h / 2,
             self.y + self.h / 2,
@@ -469,24 +463,11 @@ function gooi.newCheck(params)
             circleRes
         )
 
-        love.graphics.setColor(fg)
         if self.checked then
-            love.graphics.arc("fill",
-                "closed",
+            love.graphics.circle("fill",
                 self.x + self.h / 2,
                 self.y + self.h / 2,
                 self.h / 3,
-                math.rad(-50),
-                math.rad(140),
-                circleRes
-            )
-            love.graphics.arc("line",
-                "closed",
-                self.x + self.h / 2,
-                self.y + self.h / 2,
-                self.h / 3,
-                math.rad(-50),
-                math.rad(140),
                 circleRes
             )
         end
