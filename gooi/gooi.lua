@@ -1345,7 +1345,11 @@ function gooi.newKnob(params)
         end
 
         --If it's at the start or the end, keep it there within the first and last quarter
-        if not ((startAngle < .25 or angle < .25) and (startAngle > .75 or angle > .75)) then
+        if startAngle < .25 and angle > .75 then
+            self.changedValue = 0
+        elseif angle < .25 and startAngle > .75 then
+            self.changedValue = 1
+        else
             self.changedValue = angle
         end
 
