@@ -1305,13 +1305,13 @@ function gooi.newKnob(params)
         local bg = self.style.bgColor
         love.graphics.setColor(0, 0, 0)
         love.graphics.arc("line",
-        "open",
-        self.xKnob,
-        self.yKnob,
-        self.radKnob,
-        math.rad(180 + self.finalAngle * self.value),
-        math.rad(180 + self.finalAngle),
-        circleRes)
+            "open",
+            self.xKnob,
+            self.yKnob,
+            self.radKnob,
+            math.rad(180 + self.finalAngle * self.value),
+            math.rad(180 + self.finalAngle),
+            circleRes)
 
         love.graphics.setColor(fg)
         if not self.enabled then
