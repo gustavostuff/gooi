@@ -327,15 +327,15 @@ function gooi.newSlider(params)
             local mC = self.w / 8 -- Margin corner.
             local rad = self.w * .4
             local side = self.w - mC * 2
-            
+
             love.graphics.setColor(fg)
             if self.pressed or self.touch then rad = rad * .5 end
-        
+
             local lineSpace = self.h - self.w
             local xPivotIndicator = self.x + self.w / 2 - side / 2
             local yPivotIndicator = self.y + self.h - (self.w / 2 +
                 self.value * lineSpace + side / 2)
-            
+
 
             love.graphics.circle("line",
                 xPivotIndicator + side / 2,
@@ -355,7 +355,7 @@ function gooi.newSlider(params)
             end
         else
             local mC = self.h / 8 -- Margin corner.
-            local rad = self.h * .4 
+            local rad = self.h * .4
             local side = self.h - mC * 2
 
             love.graphics.setColor(fg)
@@ -474,7 +474,7 @@ function gooi.newCheck(params)
 
         -- text of the checkbox:
         love.graphics.setColor(fg)
-        love.graphics.print(self.text, 
+        love.graphics.print(self.text,
             math.floor(self.x + self.h * 1.2),
             math.floor(self.y + self.h / 2 - gooi.getFont(self):getHeight() / 2))
     end
@@ -600,7 +600,7 @@ function gooi.newText(params)
         return l
     end
     f.indexCursor = 0
-    
+
     function f:drawSpecifics(fg)
         local mC = self.h / 8
         love.graphics.setColor(0, 0, 0)
@@ -616,7 +616,7 @@ function gooi.newText(params)
 
         love.graphics.setColor(fg)
         local charDisplacement = 0
-        
+
         for i = 1, #self.letters do
             local letter = self.letters[i]
             love.graphics.stencil(function()
@@ -708,7 +708,6 @@ function gooi.newText(params)
                 end
             end
         end
-        
     end
 
     function f:setToRepeat(key)
@@ -866,7 +865,7 @@ function gooi.newBar(params)
         if not self.enabled then
             love.graphics.setColor(63, 63, 63)
         end
-        
+
         local barWidth = self.value * (self.w - marginBars * 2)
         -- Mask for drawing:
         love.graphics.stencil(maskBar, "replace", 1)
@@ -1109,7 +1108,7 @@ function gooi.newJoy(params)
         if directions and
         directions ~= "4" and
         directions ~= "8" then
-            
+
         end
         self.digital = directions or "8"
         return self
@@ -1250,7 +1249,7 @@ function gooi.newJoy(params)
     function s:theX() return (self.x) + (self.r) end
     function s:theY() return (self.y) + (self.r) end
 
-    
+
 
     return gooi.storeComponent(s, id)
 end
@@ -1319,25 +1318,40 @@ function gooi.newKnob(params)
             love.graphics.setColor(63, 63, 63)
         end
         love.graphics.arc("line",
-            "open",
-            self.xKnob,
-            self.yKnob,
-            self.radKnob,
-            math.rad(180 + self.initialAngle),
-            math.rad(180 + self.finalAngle * self.value),
-            circleRes)
+        "open",
+        self.xKnob,
+        self.yKnob,
+        self.radKnob,
+        math.rad(180 + self.initialAngle),
+        math.rad(180 + self.finalAngle * self.value),
+        circleRes)
     end
 
     function k:turn()
-        local y = love.mouse.getY() / gooi.sy
-        
+        local x, y = love.mouse.getX() / gooi.sx, love.mouse.getY() / gooi.sy
+        local centerX, centerY = self.x + self.w / 2, self.y + self.h / 2
+
+        local startAngle = self.value
+
         if self.touch then
-            y = self.touch.y
+            x, y = self.touch.x, self.touch.y
         end
 
-        local dy = self.pivotY - y
+        local angle = math.atan2((centerY - y), (centerX - x)) / 2 / math.pi
 
-        self.changedValue = (self.pivotValue + (dy / self.h / 2))
+        --math.atan goes negative after 180 degrees
+        if angle < 0 then
+            angle = 1 + angle
+        end
+
+        --If it's at the start or the end, keep it there within the first and last quarter
+        if startAngle < .25 and angle > .75 then
+            self.changedValue = 0
+        elseif angle < .25 and startAngle > .75 then
+            self.changedValue = 1
+        else
+            self.changedValue = angle
+        end
 
         if self.changedValue > 1 then self.changedValue = 1 end
         if self.changedValue < 0 then self.changedValue = 0 end
@@ -1469,12 +1483,12 @@ function gooi.newPanel(params)
                     local c = params[i]
                     local cell = self.layout:nextCell(c)
 
-                    
+
 
                     if not cell then
                         error("Insufficient cells in grid layout")
                     end
-                    
+
                     -- Set bounds according to the parent layout:
                     c:setBounds(cell.x, cell.y, cell.w, cell.h)
                     c.ongrid = true
