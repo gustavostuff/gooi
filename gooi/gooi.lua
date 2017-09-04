@@ -793,6 +793,14 @@ function gooi.newText(params)
         return self
     end
 
+    function f:getText()
+      local text = ""
+        for i = 1, #self.letters do
+            text = text..self.letters[i].char
+        end
+      return text
+    end
+
     function f:specialKey(k)
         return k == gooi.bs or
                k == gooi.del or
