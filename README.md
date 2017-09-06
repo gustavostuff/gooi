@@ -1,7 +1,7 @@
 ![image](https://s9.postimg.org/be956a3j3/logo_gooi_0.0.4.png)
 
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
-[![Version](http://img.shields.io/:version-0.0.4-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
+[![Version](http://img.shields.io/:version-0.0.5-green.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
 [![Captura_de_pantalla_2017-09-06_15-52-30.png](https://s26.postimg.org/alszn47yx/Captura_de_pantalla_2017-09-06_15-52-30.png)](https://postimg.org/image/5zwvermfp/)
 
