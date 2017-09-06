@@ -14,8 +14,6 @@ function love.load()
     fontDir = "/fonts/"
     style = {
         font = gr.newFont(fontDir.."Arimo-Bold.ttf", 13),
-        radius = 5,
-        innerRadius = 3,
         showBorder = true,
     }
     gooi.setStyle(style)
@@ -81,7 +79,7 @@ function love.load()
     )
     rad5 = gooi.newRadio(
         {y = 130, x = 200, w = 80, h = 22,  text = "May", radioGroup = "g2"}
-    )
+    ):setBGImage("imgs/testBgComp.png"):fg({250, 0, 0})
     rad6 = gooi.newRadio(
         {y = 160, x = 200, w = 80, h = 22,  text = "Jun", radioGroup = "g2"}
     )

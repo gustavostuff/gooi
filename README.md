@@ -3,7 +3,7 @@
 [![License](http://img.shields.io/:license-MIT-blue.svg)](https://github.com/tavuntu/gooi/blob/master/LICENSE.md)
 [![Version](http://img.shields.io/:version-0.0.4-blue.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
-![image](https://s27.postimg.org/nc18pfdmb/image.png)
+[![Captura_de_pantalla_2017-09-06_15-52-30.png](https://s26.postimg.org/alszn47yx/Captura_de_pantalla_2017-09-06_15-52-30.png)](https://postimg.org/image/5zwvermfp/)
 
 GOOi (Good-sized Optional Open interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
@@ -37,7 +37,7 @@ Important things:
 
 * A panel shouldn't be added inside another panel
 * Text in text fields is limited to the component width
-* Not resposive design
+* Not resposive design (yet)
 
 GOOi is still a work in progress, thanks for your feedback!
 

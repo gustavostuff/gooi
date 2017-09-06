@@ -16,11 +16,11 @@ component.style = {
     bgColor = component.colors.blue,
     fgColor = component.colors.white, -- Foreground color
     tooltipFont = love.graphics.newFont(love.window.toPixels(11)), -- tooltips are smaller than the main font
-    radius = 3, -- radius for the outer shapes of components
-    innerRadius = 3, -- For the inner ones
+    radius = love.window.toPixels(3), -- radius for the outer shapes of components
+    innerRadius = love.window.toPixels(3), -- For the inner ones
     showBorder = true, -- border for components
     borderColor = component.colors.blue,
-    borderWidth = 2, -- in pixels
+    borderWidth = love.window.toPixels(2), -- in pixels
     borderStyle = "smooth", -- or "smooth"
     font = love.graphics.newFont(love.window.toPixels(13)),
 }
@@ -249,15 +249,15 @@ function component:draw()-- Every component has the same base:
 		local radiusCorner = style.radius
 
 		love.graphics.stencil(function()
-            love.graphics.rectangle("fill",
-                math.floor(self.x),
-                math.floor(self.y),
-                math.floor(self.w),
-                math.floor(self.h),
-                self.style.radius,
-                self.style.radius,
-                50)
-        end, "replace", 1)
+      love.graphics.rectangle("fill",
+        math.floor(self.x),
+        math.floor(self.y),
+        math.floor(self.w),
+        math.floor(self.h),
+        self.style.radius,
+        self.style.radius,
+        50)
+    end, "replace", 1)
 		love.graphics.setStencilTest("greater", 0)
 		local scaleY = 1
 		local img = self.img3D
@@ -270,6 +270,7 @@ function component:draw()-- Every component has the same base:
 				end
 			end
 		end
+
 		-- Correct light effect when 2 modes are set:
 		if self.mode3d and self.glass then
 			scaleY = -1
@@ -291,8 +292,8 @@ function component:draw()-- Every component has the same base:
 
 		else
 			love.graphics.rectangle("fill",
-				math.floor(self.x),
-				math.floor(self.y),
+        math.floor(self.x),
+        math.floor(self.y),
 				math.floor(self.w),
 				math.floor(self.h),
 				self.style.radius,
@@ -310,6 +311,15 @@ function component:draw()-- Every component has the same base:
 				self.h / 4)
 		end
 
+    if self.bgImage then
+      love.graphics.setColor(255, 255, 255)
+      love.graphics.draw(self.bgImage,
+        math.floor(self.x),
+        math.floor(self.y),
+        0,
+        self.w / self.bgImage:getWidth(),
+        self.h / self.bgImage:getHeight())
+    end
 		love.graphics.setStencilTest()
 
 		-- Border:
@@ -488,6 +498,15 @@ function component:setBounds(x, y, w, h)
 	end
 
 	return self
+end
+
+function component:setBGImage(image)
+  if type(image) == "string" then
+    image = love.graphics.newImage(image)
+  end
+
+  self.bgImage = image
+  return self
 end
 
 function component:setOpaque(b)

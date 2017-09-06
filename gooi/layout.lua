@@ -1,6 +1,7 @@
 layout = {}
 layout.__index = layout
-layout.padding = 3
+layout.padding = love.window.toPixels(5)
+layout.paddingGrid = love.window.toPixels(3)
 function layout.new(specs)
 	local l ={}
 	l.specs = specs
@@ -83,21 +84,23 @@ function layout.new(specs)
 			end
 		end
 		function l:init(panel)
+      local pad = self.paddingGrid * 2
+      local fw, fh = panel.w - pad, panel.h - pad
 			for theRow = 1, self.gridRows do
 				self.gridCells[theRow] = {}
 				for theCol = 1, self.gridCols do
 					self.gridCells[theRow][theCol] =
 					{
 						on = true,
-						x = math.floor(panel.x + ((theCol - 1) * panel.w / self.gridCols + self.padding)),
-						y = math.floor(panel.y + ((theRow - 1) * panel.h / self.gridRows + self.padding)),
-						w = (panel.w / self.gridCols - self.padding * 2),
-						h = (panel.h / self.gridRows - self.padding * 2),
+						x = math.floor(panel.x + ((theCol - 1) * fw / self.gridCols)) + pad,
+						y = math.floor(panel.y + ((theRow - 1) * fh / self.gridRows)) + pad,
+						w = (fw / self.gridCols) - pad,
+						h = (fh / self.gridRows) - pad,
 						row = theRow,
 						col = theCol,
 						rowspan = 1,
 						colspan = 1,
-						padding = self.padding
+            padding = self.paddingGrid
 					}
 				end
 			end

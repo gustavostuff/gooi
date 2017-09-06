@@ -34,7 +34,7 @@ gooi.smallerSide = function()
     return smallerSide
 end
 
-local circleRes = 50
+local circleRes = 30
 
 ----------------------------------------------------------------------------
 ----------------------------------------------------------------------------
@@ -885,7 +885,7 @@ function gooi.newBar(params)
             barWidth,
             self.h - marginBars * 2)
         love.graphics.setStencilTest()
-        love.graphics.setColor(fg)
+        love.graphics.setColor(0, 0, 0)
         love.graphics.rectangle("line",
                 self.x + marginBars,
                 self.y + marginBars,
