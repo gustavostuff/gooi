@@ -2325,7 +2325,7 @@ function gooi.checkBounds(text, x, y, w, h, t)
 end
 
 function gooi.getFont(comp)
-    if comp and comp.style.font then
+    if comp and comp.style and comp.style.font then
         return comp.style.font
     end
     return gooi.font or gooi.defaultFont
