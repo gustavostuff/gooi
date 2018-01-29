@@ -786,6 +786,8 @@ function gooi.newText(params)
     end
 
     function f:setText(text)
+        self.indexCursor = 0
+        self.letters = {}
         for i = 1, string.utf8len(text) do
             local char = string.utf8sub(text, i, i)
             self:typeText(char)
