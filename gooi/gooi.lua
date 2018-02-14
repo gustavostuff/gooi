@@ -1600,7 +1600,7 @@ end
 
 --*********************************************
 --*********************************************
---            Special dialog widgets:           
+--            Special dialog widgets:
 --*********************************************
 --*********************************************
 
@@ -1627,7 +1627,7 @@ function gooi.dialog(params, kind)
         positiveBtnTxt = params.okText or positiveBtnTxt
         negativeBtnTxt = params.cancelText or negativeBtnTxt
 
-        local w, h = love.graphics.getWidth(), love.graphics.getHeight()
+        local w, h = love.graphics.getWidth() / gooi.sx, love.graphics.getHeight() / gooi.sy
 
         local smaller = gooi.smallerSide()
 
@@ -1640,10 +1640,10 @@ function gooi.dialog(params, kind)
         end
 
         gooi.panelDialog = gooi.newPanel({
-            x = math.floor(w / 2 - gooi.dialogW / 2),
-            y = math.floor(h / 2 - gooi.dialogH / 2),
-            w = math.floor(gooi.dialogW),
-            h = math.floor(gooi.dialogH),
+            x = math.floor(w / 2 - gooi.dialogW / 2 / gooi.sx),
+            y = math.floor(h / 2 - gooi.dialogH / 2 / gooi.sy),
+            w = math.floor(gooi.dialogW / gooi.sx),
+            h = math.floor(gooi.dialogH / gooi.sy),
             layout = "grid 3x3"}
         )
 
