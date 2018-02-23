@@ -3,16 +3,18 @@ gooi.__index = gooi
 gooi.components = {}
 gooi.dialogFOK = function() end
 gooi.showingDialog = false
+gooi.desktop = false
+gooi.vibration = false
+gooi.delayVibration = 0
 gooi.dialogMsg = ""
 gooi.dialogH = 0
 gooi.dialogW = 0
-gooi.desktop = false
 gooi.canvas = love.graphics.newCanvas(love.graphics.getWidth(), love.graphics.getHeight())
 gooi.sx = 1
 gooi.sy = 1
 gooi.defaultFont = love.graphics.newFont(love.window.toPixels(13))
 gooi.font = defaultFont
-gooi.unit = love.window.toPixels(25)
+gooi.unit = 25
 gooi.bs = "backspace"
 gooi.del = "delete"
 gooi.r = "right"
@@ -28,6 +30,11 @@ end
 
 function gooi.roughShapes()
     gooi.lineStyle = "rough"
+end
+
+function gooi.vibrate(s)
+    gooi.vibration = true
+    gooi.delayVibration = s or 0.035
 end
 
 gooi.smallerSide = function()
@@ -342,7 +349,7 @@ function gooi.draw(group)
     local compWithTooltip = nil -- Just for desktop.
 
     love.graphics.setColor(255, 255, 255)
-    love.graphics.setLineWidth(gooi.unit / 10)
+    love.graphics.setLineWidth(2)
     love.graphics.setLineStyle(gooi.lineStyle)
 
     for k, comp in pairs(gooi.components) do

@@ -89,11 +89,9 @@ function gooi.newText(params)
     end
 
     function f:drawCursor(disp, mC)
-        local prevLineS = love.graphics.getLineStyle()
         if self.showingCursor then
             if self == gooi.focused then
                 self.xCursor = self.x + mC + disp - self.dispHiddenChar
-                love.graphics.setLineStyle("rough")
                 love.graphics.line(
                     math.floor(self.xCursor),
                     math.floor(self.y + mC + gooi.unit / 15),
@@ -102,7 +100,6 @@ function gooi.newText(params)
                 )
             end
         end
-        love.graphics.setLineStyle(prevLineS)
     end
 
     function f:updateCursor(key, dt)

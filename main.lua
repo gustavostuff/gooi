@@ -264,7 +264,6 @@ function love.draw()
 end
 
 function love.mousereleased(x, y, button) gooi.released() end
-function love.mousemoved(x, y, dx, dy, istouch) gooi.moved() end
 function love.mousepressed(x, y, button)  gooi.pressed() end
 
 function love.textinput(text)

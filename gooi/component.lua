@@ -400,6 +400,10 @@ function component:wasReleased()
 			love.keyboard.setTextInput(true) 
 		end
 	end
+
+	if gooi.vibration and b then
+		love.system.vibrate(gooi.delayVibration)
+	end
 	return b
 end
 

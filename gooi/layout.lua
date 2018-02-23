@@ -1,7 +1,7 @@
 layout = {}
 layout.__index = layout
-layout.padding = love.window.toPixels(5)
-layout.paddingGrid = love.window.toPixels(3)
+layout.padding = 5
+layout.paddingGrid = 3
 function layout.new(specs)
 	local l ={}
 	l.specs = specs
