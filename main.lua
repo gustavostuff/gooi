@@ -5,7 +5,7 @@ function love.load()
     kb = love.keyboard
     mo = love.mouse
 
-    gr.setBackgroundColor(0, 63, 127)
+    gr.setBackgroundColor(127, 127, 127)
 
     function width() return gr.getWidth() end
     function height() return gr.getHeight() end
@@ -15,6 +15,7 @@ function love.load()
     style = {
         font = gr.newFont(fontDir.."Arimo-Bold.ttf", 13),
         showBorder = true,
+        bgColor = {53, 56, 54}
     }
     gooi.setStyle(style)
     gooi.desktopMode()
@@ -155,7 +156,7 @@ function love.load()
         gooi.newButton({text = "Alert btn", icon = imgDir.."medal.png"}):center():secondary()
         :onRelease(function()
             gr.setBackgroundColor(r2(), r2(), r2())
-            gooi.alert({text = "The background has changed!"})
+            gooi.alert({text = "The background has changed!\ndeal with it!"})
         end):inverted(),
         gooi.newButton({text = "Confirm btn", icon = imgDir.."medal.png"}):right():secondary()
         :onRelease(function()
@@ -204,6 +205,10 @@ function love.update(dt)
     -- move ship with analog joystick:
     ship.x = (ship.x + joyShip:xValue() * dt * 150)
     ship.y = (ship.y + joyShip:yValue() * dt * 150)
+    if     kb.isDown("a") then ship.x = ship.x - dt * 150 
+    elseif kb.isDown("d") then ship.x = ship.x + dt * 150 end
+    if     kb.isDown("w") then ship.y = ship.y - dt * 150 
+    elseif kb.isDown("s") then ship.y = ship.y + dt * 150 end
     -- with digital:
     local dir = joyShipDigital:direction()
     if dir:match("l") then
@@ -225,7 +230,7 @@ function love.update(dt)
 
     -- Move bullets:
     for i = #bullets, 1, -1 do
-        bullets[i].y = bullets[i].y - dt * 800
+        bullets[i].y = bullets[i].y - dt * 1400
         if bullets[i].y < -100 then
             table.remove(bullets, i)
         end
@@ -259,6 +264,7 @@ function love.draw()
 end
 
 function love.mousereleased(x, y, button) gooi.released() end
+function love.mousemoved(x, y, dx, dy, istouch) gooi.moved() end
 function love.mousepressed(x, y, button)  gooi.pressed() end
 
 function love.textinput(text)

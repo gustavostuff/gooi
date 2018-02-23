@@ -1,3 +1,5 @@
+-- parent base:
+
 component = {}
 component.__index = component
 component.colors = {
@@ -16,8 +18,8 @@ component.style = {
     bgColor = component.colors.blue,
     fgColor = component.colors.white, -- Foreground color
     tooltipFont = love.graphics.newFont(love.window.toPixels(11)), -- tooltips are smaller than the main font
-    radius = love.window.toPixels(3), -- radius for the outer shapes of components
-    innerRadius = love.window.toPixels(3), -- For the inner ones
+    radius = 2, -- raw pixels
+    innerRadius = 2, -- raw pixels
     showBorder = true, -- border for components
     borderColor = component.colors.blue,
     borderWidth = love.window.toPixels(2), -- in pixels
@@ -30,6 +32,8 @@ function genId()
 	currId = currId + 1
 	return currId;
 end
+
+local circleRes = 30
 
 ----------------------------------------------------------------------------
 --------------------------   Component creator  ----------------------------
@@ -54,8 +58,14 @@ function component.new(t, x, y, w, h, group)
 	end
 	c.timerTooltip = 0
 	c.showTooltip = false
-	function c:setTooltip(text)
-		self.tooltip = text
+	function c:setTooltip(text, reset)
+		self.tooltip = text or self.tooltip
+
+		if reset then
+			self.timerTooltip = 0
+			self.showTooltip = false
+		end
+
 		return self
 	end
 	c.touch = nil-- Stores the touch which is on this component.
@@ -173,26 +183,13 @@ function component.new(t, x, y, w, h, group)
     end
     c:makeShadow()
 
-    function c:primary()
-        self:bg(component.colors.blue)
-        return self
-    end
-    function c:success()
-        self:bg(component.colors.green)
-        return self
-    end
-    function c:info()
-        self:bg(component.colors.cyan)
-        return self
-    end
-    function c:warning()
-        self:bg(component.colors.orange)
-        return self
-    end
-    function c:danger()
-        self:bg(component.colors.red)
-        return self
-    end
+    function c:primary()  self:bg(component.colors.blue);   return self end
+    function c:success()  self:bg(component.colors.green);  return self end
+    function c:info()     self:bg(component.colors.cyan);   return self end
+    function c:warning()  self:bg(component.colors.orange); return self end
+    function c:danger()   self:bg(component.colors.red);    return self end
+    function c:opacity(o) self.style.bgColor[4] = o * 255;  return self end
+
     function c:secondary()
         self:bg(component.colors.clearGray)
         self:fg(component.colors.darkGray)
@@ -204,10 +201,6 @@ function component.new(t, x, y, w, h, group)
         return self
     end
 
-    function c:opacity(o)
-        self.style.bgColor[4] = o * 255
-        return self
-    end
 
 	c:make3d()
 	
@@ -249,14 +242,14 @@ function component:draw()-- Every component has the same base:
 		local radiusCorner = style.radius
 
 		love.graphics.stencil(function()
-      love.graphics.rectangle("fill",
-        math.floor(self.x),
-        math.floor(self.y),
-        math.floor(self.w),
-        math.floor(self.h),
-        self.style.radius,
-        self.style.radius,
-        50)
+	  	love.graphics.rectangle("fill",
+		    math.floor(self.x),
+		    math.floor(self.y),
+		    math.floor(self.w),
+		    math.floor(self.h),
+		    self.style.radius,
+		    self.style.radius,
+		    circleRes)
     end, "replace", 1)
 		love.graphics.setStencilTest("greater", 0)
 		local scaleY = 1
@@ -282,8 +275,8 @@ function component:draw()-- Every component has the same base:
 				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 255)
 			end
 			love.graphics.draw(img,
-				self.x + self.w / 2,
-				self.y + self.h / 2,
+				math.floor(self.x + self.w / 2),
+				math.floor(self.y + self.h / 2),
 				0,
 				math.floor(self.w),
 				self.h / 2 * scaleY,
@@ -292,13 +285,14 @@ function component:draw()-- Every component has the same base:
 
 		else
 			love.graphics.rectangle("fill",
-        math.floor(self.x),
-        math.floor(self.y),
+		        math.floor(self.x),
+		        math.floor(self.y),
 				math.floor(self.w),
 				math.floor(self.h),
 				self.style.radius,
 				self.style.radius,
-				50)
+				50
+			)
 		end
 
 		if self.glass then
@@ -512,18 +506,6 @@ end
 function component:setOpaque(b)
 	self.opaque = b
 	return self
-end
-
--- Thanks to Boolsheet:
-function roundRect(x, y, w, h, r)
-	r = r or h / 4
-	love.graphics.rectangle("fill", x, y + r, w, h - r * 2)
-	love.graphics.rectangle("fill", x + r, y, w - r * 2, r)
-	love.graphics.rectangle("fill", x + r, y + h - r, w - r * 2, r)
-	love.graphics.arc("fill", x + r, y + r, r, left, top)
-	love.graphics.arc("fill", x + w - r, y + r, r, -bottom, right)
-	love.graphics.arc("fill", x + w - r, y + h - r, r, right, bottom)
-	love.graphics.arc("fill", x + r, y + h - r, r, bottom, left)
 end
 
 function changeBrig(color, amount)
