@@ -5,6 +5,8 @@
 
 [![demo_new.png](https://s17.postimg.org/oda606t1b/demo_new.png)](https://postimg.org/image/oda606t17/)
 
+[![pixelated.png](https://s17.postimg.org/z6vgdhr73/pixelated.png)](https://postimg.org/image/64h6ao4x7/)
+
 GOOi (Good-sized Optional Open interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
 * Labels
