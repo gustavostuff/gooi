@@ -35,7 +35,7 @@ function layout.new(specs)
 					for j = 1, self.gridCols do
 						local cell = self.gridCells[i][j]
 						if cell.on then
-							love.graphics.setColor(255, 0, 255)
+							love.graphics.setColor(1, 0, 1)
 							love.graphics.rectangle("line", cell.x, cell.y, cell.w, cell.h)
 						end
 					end

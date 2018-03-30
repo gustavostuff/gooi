@@ -3,16 +3,16 @@
 component = {}
 component.__index = component
 component.colors = {
-    blue = {2, 117, 216, 255},
-    green = {92, 184, 92, 255},
-    cyan = {91, 192, 222, 255},
-    orange = {240, 173, 78, 255},
-    red = {217, 83, 79, 255},
-    black = {0, 0, 0, 255},
-    white = {255, 255, 255, 255},
-    clearGray = {247, 247, 247, 255},
-    darkGray = {41, 43, 44, 255},
-    darkGrayAlpha = {41, 43, 44, 150},
+    blue = {0.01, 0.46, 0.85, 1.0},
+    green = {0.36, 0.72, 0.36, 1.0},
+    cyan = {0.36, 0.75, 0.87, 1.0},
+    orange = {0.94, 0.68, 0.31, 1.0},
+    red = {0.85, 0.33, 0.31, 1.0},
+    black = {0.0, 0.0, 0.0, 1.0},
+    white = {1.0, 1.0, 1.0, 1.0},
+    clearGray = {0.97, 0.97, 0.97, 1.0},
+    darkGray = {0.16, 0.17, 0.17, 1.0},
+    darkGrayAlpha = {0.16, 0.17, 0.17, 0.59},
 }
 component.style = {
     bgColor = component.colors.blue,
@@ -91,7 +91,7 @@ function component.new(t, x, y, w, h, group)
 			color = gooi.toRGBA(color)
 		end
 		self.style.bgColor = color
-		self.style.borderColor = {color[1], color[2], color[3], 255}
+		self.style.borderColor = {color[1], color[2], color[3], 1}
 		self:make3d()
 		return self
 	end
@@ -119,10 +119,10 @@ function component.new(t, x, y, w, h, group)
 		if not w then return self.style.borderWidth, self.style.borderColor; end
 
 		self.style.borderWidth = w
-		self.style.borderColor = color or {12, 183, 242, 255}
+		self.style.borderColor = color or {0.05, 0.72, 0.95, 1}
 		if type(color) == "string" then
 			self.style.borderColor = gooi.toRGBA(color)
-			self.style.borderColor[4] = 255
+			self.style.borderColor[4] = 1
 		end
 		self.style.borderStyle = style or "smooth"
 		self.style.showBorder = true
@@ -136,7 +136,7 @@ function component.new(t, x, y, w, h, group)
 		self.mode3d = false
 		return self
 	end
-	
+
 	c.style = gooi.deepcopy(component.style)
 
 	function c:make3d()
@@ -144,11 +144,11 @@ function component.new(t, x, y, w, h, group)
 		self.colorTop = self.style.bgColor
 		self.colorBot = self.style.bgColor
 
-		self.colorTop = changeBrig(self.style.bgColor, 15)
-		self.colorBot = changeBrig(self.style.bgColor, -15)
+		self.colorTop = changeBrig(self.style.bgColor, 0.06)
+		self.colorBot = changeBrig(self.style.bgColor, -0.06)
 
-		self.colorTopHL = changeBrig(self.style.bgColor, 25)
-		self.colorBotHL = changeBrig(self.style.bgColor, -5)
+		self.colorTopHL = changeBrig(self.style.bgColor, 0.1)
+		self.colorBotHL = changeBrig(self.style.bgColor, -0.02)
 
 		self.imgData3D = love.image.newImageData(1, 2)
 		self.imgData3D:setPixel(0, 0, self.colorTop[1], self.colorTop[2], self.colorTop[3], self.colorTop[4])
@@ -165,8 +165,8 @@ function component.new(t, x, y, w, h, group)
 		self.img3DHL:setFilter("linear", "linear")
 
 		self.imgDataGlass = love.image.newImageData(1, 2)
-		self.imgDataGlass:setPixel(0, 0, 255, 255, 255, 80)
-		self.imgDataGlass:setPixel(0, 1, 255, 255, 255, 40)
+		self.imgDataGlass:setPixel(0, 0, 1, 1, 1, 0.31)
+		self.imgDataGlass:setPixel(0, 1, 1, 1, 1, 0.16)
 		self.imgGlass = love.graphics.newImage(self.imgDataGlass)
 		self.imgGlass:setFilter("linear", "linear")
 	end
@@ -174,10 +174,10 @@ function component.new(t, x, y, w, h, group)
     function c:makeShadow()
         self.heightShadow = 6
         self.imgDataShadow = love.image.newImageData(1, self.heightShadow)
-        self.imgDataShadow:setPixel(0, 0, 0, 0, 0, 80)
-        self.imgDataShadow:setPixel(0, 1, 0, 0, 0, 30)
-        self.imgDataShadow:setPixel(0, 2, 0, 0, 0, 5)
-        
+        self.imgDataShadow:setPixel(0, 0, 0, 0, 0, 0.31)
+        self.imgDataShadow:setPixel(0, 1, 0, 0, 0, 0.12)
+        self.imgDataShadow:setPixel(0, 2, 0, 0, 0, 0.02)
+
         self.imgShadow = love.graphics.newImage(self.imgDataShadow)
         self.imgShadow:setFilter("linear", "linear")
     end
@@ -188,7 +188,7 @@ function component.new(t, x, y, w, h, group)
     function c:info()     self:bg(component.colors.cyan);   return self end
     function c:warning()  self:bg(component.colors.orange); return self end
     function c:danger()   self:bg(component.colors.red);    return self end
-    function c:opacity(o) self.style.bgColor[4] = o * 255;  return self end
+    function c:opacity(o) self.style.bgColor[4] = o;        return self end
 
     function c:secondary()
         self:bg(component.colors.clearGray)
@@ -203,7 +203,7 @@ function component.new(t, x, y, w, h, group)
 
 
 	c:make3d()
-	
+
 	return setmetatable(c, component)
 end
 
@@ -214,7 +214,7 @@ end
 function component:draw()-- Every component has the same base:
 	local style = self.style
 	if self.opaque and self.visible then
-		local focusColorChange = 15
+		local focusColorChange = 0.06
 		local fs = - 1
 		if not self.enabled then focusColorChange = 0 end
 		local newColor = style.bgColor
@@ -236,7 +236,7 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setColor(newColor)
 
 		if not self.enabled then
-			love.graphics.setColor(63, 63, 63, style.bgColor[4] or 255)
+			love.graphics.setColor(1/4, 1/4, 1/4, style.bgColor[4] or 1)
 		end
 
 		local radiusCorner = style.radius
@@ -270,9 +270,9 @@ function component:draw()-- Every component has the same base:
 		end
 
 		if self.mode3d then
-			love.graphics.setColor(255, 255, 255, style.bgColor[4] or 255)
+			love.graphics.setColor(1, 1, 1, style.bgColor[4] or 1)
 			if not self.enabled then
-				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 255)
+				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 1)
 			end
 			love.graphics.draw(img,
 				math.floor(self.x + self.w / 2),
@@ -296,7 +296,7 @@ function component:draw()-- Every component has the same base:
 		end
 
 		if self.glass then
-			love.graphics.setColor(255, 255, 255)
+			love.graphics.setColor(1, 1, 1)
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
@@ -306,7 +306,7 @@ function component:draw()-- Every component has the same base:
 		end
 
     if self.bgImage then
-      love.graphics.setColor(255, 255, 255)
+			love.graphics.setColor(1, 1, 1)
       love.graphics.draw(self.bgImage,
         math.floor(self.x),
         math.floor(self.y),
@@ -320,7 +320,7 @@ function component:draw()-- Every component has the same base:
 		if style.showBorder then
 			love.graphics.setColor(newColor)
 			if not self.enabled then
-				love.graphics.setColor(63, 63, 63)
+				love.graphics.setColor(1/4, 1/4, 1/4)
 			end
 			love.graphics.rectangle("line",
 				math.floor(self.x),
@@ -348,7 +348,7 @@ function component:drawShadowPressed()
         end, "replace", 1)
         love.graphics.setStencilTest("greater", 0)
 
-        love.graphics.setColor(255, 255, 255)
+        love.graphics.setColor(1, 1, 1)
         love.graphics.draw(self.imgShadow,
             self.x + self.w / 2,
             self.y + self.h / 2,
@@ -397,7 +397,7 @@ function component:wasReleased()
 	local b = self:overIt() and self.enabled and self.visible
 	if self.type == "text" then
 		if b then
-			love.keyboard.setTextInput(true) 
+			love.keyboard.setTextInput(true)
 		end
 	end
 
@@ -517,7 +517,7 @@ function changeBrig(color, amount)
 		color = gooi.toRGBA(color)
 	end
 
-	local r, g, b, a = color[1], color[2], color[3], color[4] or 255
+	local r, g, b, a = color[1], color[2], color[3], color[4] or 1
 
 	r = r + amount
 	g = g + amount
@@ -525,16 +525,16 @@ function changeBrig(color, amount)
 	--a = a + amount
 
 	if r < 0 then r = 0 end
-	if r > 255 then r = 255 end
+	if r > 1 then r = 1 end
 
 	if g < 0 then g = 0 end
-	if g > 255 then g = 255 end
+	if g > 1 then g = 1 end
 
 	if b < 0 then b = 0 end
-	if b > 255 then b = 255 end
+	if b > 1 then b = 1 end
 
 	--if a < 0 then a = 0 end
-	--if a > 255 then a = 255 end
+	--if a > 1 then a = 1 end
 
 	return {r, g, b, a}
 end

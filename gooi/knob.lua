@@ -55,7 +55,7 @@ function gooi.newKnob(params)
 
         love.graphics.setColor(fg)
         if not self.enabled then
-            love.graphics.setColor(63, 63, 63)
+            love.graphics.setColor(1/4, 1/4, 1/4)
         end
         love.graphics.arc("line",
         "open",
