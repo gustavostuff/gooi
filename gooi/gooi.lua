@@ -337,6 +337,7 @@ end
 
 -- Draw the stuff:
 function gooi.draw(group)
+    love.graphics.origin() --to take in account scale,translate,rotate
     local actualGroup = group or "default"
 
     local prevFont  = love.graphics.getFont()
