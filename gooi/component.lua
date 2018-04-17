@@ -3,16 +3,16 @@
 component = {}
 component.__index = component
 component.colors = {
-    blue = {2, 117, 216, 255},
-    green = {92, 184, 92, 255},
-    cyan = {91, 192, 222, 255},
-    orange = {240, 173, 78, 255},
-    red = {217, 83, 79, 255},
-    black = {0, 0, 0, 255},
-    white = {255, 255, 255, 255},
-    clearGray = {247, 247, 247, 255},
-    darkGray = {41, 43, 44, 255},
-    darkGrayAlpha = {41, 43, 44, 150},
+    blue = {2/255, 117/255, 216/255, 255/255},
+    green = {92/255, 184/255, 92/255, 255/255},
+    cyan = {91/255, 192/255, 222/255, 255/255},
+    orange = {240/255, 173/255, 78/255, 255/255},
+    red = {217/255, 83/255, 79/255, 255/255},
+    black = {0, 0, 0, 255/255},
+    white = {255/255, 255/255, 255/255, 255/255},
+    clearGray = {247/255, 247/255, 247/255, 255/255},
+    darkGray = {41/255, 43/255, 44/255, 255/255},
+    darkGrayAlpha = {41/255, 43/255, 44/255, 150/255},
 }
 component.style = {
     bgColor = component.colors.blue,
@@ -236,7 +236,7 @@ function component:draw()-- Every component has the same base:
 		love.graphics.setColor(newColor)
 
 		if not self.enabled then
-			love.graphics.setColor(63, 63, 63, style.bgColor[4] or 255)
+			love.graphics.setColor(63/255, 63/255, 63/255, style.bgColor[4]/255 or 255/255)
 		end
 
 		local radiusCorner = style.radius
@@ -270,9 +270,9 @@ function component:draw()-- Every component has the same base:
 		end
 
 		if self.mode3d then
-			love.graphics.setColor(255, 255, 255, style.bgColor[4] or 255)
+			love.graphics.setColor(255/255, 255/255, 255/255, style.bgColor[4]/255 or 255/255)
 			if not self.enabled then
-				love.graphics.setColor(0, 0, 0, style.bgColor[4] or 255)
+				love.graphics.setColor(0, 0, 0, style.bgColor[4]/255 or 255/255)
 			end
 			love.graphics.draw(img,
 				math.floor(self.x + self.w / 2),
@@ -296,7 +296,7 @@ function component:draw()-- Every component has the same base:
 		end
 
 		if self.glass then
-			love.graphics.setColor(255, 255, 255)
+			love.graphics.setColor(255/255, 255/255, 255/255)
 			love.graphics.draw(self.imgGlass,
 				self.x,
 				self.y,
@@ -306,7 +306,7 @@ function component:draw()-- Every component has the same base:
 		end
 
     if self.bgImage then
-      love.graphics.setColor(255, 255, 255)
+      love.graphics.setColor(255/255, 255/255, 255/255)
       love.graphics.draw(self.bgImage,
         math.floor(self.x),
         math.floor(self.y),
@@ -320,7 +320,7 @@ function component:draw()-- Every component has the same base:
 		if style.showBorder then
 			love.graphics.setColor(newColor)
 			if not self.enabled then
-				love.graphics.setColor(63, 63, 63)
+				love.graphics.setColor(63/255, 63/255, 63/255)
 			end
 			love.graphics.rectangle("line",
 				math.floor(self.x),
@@ -348,7 +348,7 @@ function component:drawShadowPressed()
         end, "replace", 1)
         love.graphics.setStencilTest("greater", 0)
 
-        love.graphics.setColor(255, 255, 255)
+        love.graphics.setColor(255/255, 255/255, 255/255)
         love.graphics.draw(self.imgShadow,
             self.x + self.w / 2,
             self.y + self.h / 2,

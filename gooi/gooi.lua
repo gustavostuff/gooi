@@ -337,6 +337,7 @@ end
 
 -- Draw the stuff:
 function gooi.draw(group)
+    love.graphics.origin() --to take in account scale,translate,rotate
     local actualGroup = group or "default"
 
     local prevFont  = love.graphics.getFont()
@@ -348,7 +349,7 @@ function gooi.draw(group)
 
     local compWithTooltip = nil -- Just for desktop.
 
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(255/255, 255/255, 255/255)
     love.graphics.setLineWidth(2)
     love.graphics.setLineStyle(gooi.lineStyle)
 
@@ -415,7 +416,7 @@ function gooi.draw(group)
             xTT = xTT - ttf:getWidth(text)
         end
 
-        love.graphics.setColor(0, 0, 0, 150)
+        love.graphics.setColor(0, 0, 0, 150/255)
         love.graphics.rectangle("fill",
             xTT - httf,
             math.floor((love.mouse.getY() / gooi.sy) - httf * 1.5),
@@ -433,7 +434,7 @@ function gooi.draw(group)
         love.graphics.setFont(gooi.getFont(self))-- Specific or a common font.
         local w, h = gooi.canvas:getWidth(), gooi.canvas:getHeight()
 
-        love.graphics.setColor(0, 0, 0, 127)
+        love.graphics.setColor(0, 0, 0, 127/255)
         love.graphics.rectangle("fill", 0, 0,
             love.graphics.getWidth(),
             love.graphics.getHeight())
