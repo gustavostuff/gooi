@@ -66,9 +66,8 @@ function gooi.newLabel(params)
         end
         if self.icon then
             local xImg = math.floor(self.x + self.h / 2)
-            love.graphics.setColor(255/255, 255/255, 255/255)
-            if not self.enabled then love.graphics.setColor(63/255, 63/255, 63/255) end
-
+            love.graphics.setColor(1, 1, 1)
+            if not self.enabled then love.graphics.setColor(1/4, 1/4, 1/4) end
             if t:len() == 0 then
                 xImg = math.floor(self.x + self.w / 2)
             end

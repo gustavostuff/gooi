@@ -47,7 +47,7 @@ function gooi.newPanel(params)
     end
     function p:drawSpecifics(fg)
         if self.layout.kind == "grid" then
-            love.graphics.setColor(0, 0, 0, 127)
+            love.graphics.setColor(0, 0, 0, 0.5)
             self.layout:drawCells()
         end
     end

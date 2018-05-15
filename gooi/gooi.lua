@@ -349,7 +349,7 @@ function gooi.draw(group)
 
     local compWithTooltip = nil -- Just for desktop.
 
-    love.graphics.setColor(255/255, 255/255, 255/255)
+    love.graphics.setColor(1, 1, 1)
     love.graphics.setLineWidth(2)
     love.graphics.setLineStyle(gooi.lineStyle)
 
@@ -380,7 +380,7 @@ function gooi.draw(group)
 
                 local fg = comp.style.fgColor
                 if not comp.enabled then
-                    fg = {31, 31, 31}
+                    fg = {0.12, 0.12, 0.12}
                 end
 
                 ------------------------------------------------------------
@@ -416,7 +416,7 @@ function gooi.draw(group)
             xTT = xTT - ttf:getWidth(text)
         end
 
-        love.graphics.setColor(0, 0, 0, 150/255)
+        love.graphics.setColor(0, 0, 0, 0.6)
         love.graphics.rectangle("fill",
             xTT - httf,
             math.floor((love.mouse.getY() / gooi.sy) - httf * 1.5),
@@ -434,7 +434,7 @@ function gooi.draw(group)
         love.graphics.setFont(gooi.getFont(self))-- Specific or a common font.
         local w, h = gooi.canvas:getWidth(), gooi.canvas:getHeight()
 
-        love.graphics.setColor(0, 0, 0, 127/255)
+        love.graphics.setColor(0, 0, 0, 0.5)
         love.graphics.rectangle("fill", 0, 0,
             love.graphics.getWidth(),
             love.graphics.getHeight())
@@ -496,9 +496,11 @@ end
 
 function gooi.toRGBA(hex)
     hex = hex:gsub("#","")
-    color = {tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))}
+    color = {tonumber("0x"..hex:sub(1,2))/255,
+             tonumber("0x"..hex:sub(3,4))/255,
+             tonumber("0x"..hex:sub(5,6))/255}
     if string.len(hex) >= 8 then
-        table.insert(color, tonumber("0x"..hex:sub(7, 8)))
+        table.insert(color, tonumber("0x"..hex:sub(7, 8))/255)
     end
     return color
 end
@@ -807,6 +809,6 @@ function split(inputstr, sep)
 end
 
 function invert(color)
-    local r, g, b, a = color[1], color[2], color[3], color[4] or 255
-    return {255 - r, 255 - g, 255 - b, a}
+    local r, g, b, a = color[1], color[2], color[3], color[4] or 1
+    return {1 - r, 1 - g, 1 - b, a}
 end

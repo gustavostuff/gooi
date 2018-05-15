@@ -5,7 +5,7 @@ function love.load()
     kb = love.keyboard
     mo = love.mouse
 
-    gr.setBackgroundColor(127, 127, 127)
+    gr.setBackgroundColor(0.5, 0.5, 0.5)
 
     function width() return gr.getWidth() end
     function height() return gr.getHeight() end
@@ -15,11 +15,11 @@ function love.load()
     style = {
         font = gr.newFont(fontDir.."Arimo-Bold.ttf", 13),
         showBorder = true,
-        bgColor = {53, 56, 54}
+        bgColor = {0.208, 0.220, 0.222}
     }
     gooi.setStyle(style)
     gooi.desktopMode()
-    
+
     gooi.shadow()
     --gooi.mode3d()
     --gooi.glass()
@@ -80,7 +80,7 @@ function love.load()
     )
     rad5 = gooi.newRadio(
         {y = 130, x = 200, w = 80, h = 22,  text = "May", radioGroup = "g2"}
-    ):setBGImage("imgs/testBgComp.png"):fg({250, 0, 0})
+    ):setBGImage("imgs/testBgComp.png"):fg({1, 0, 0})
     rad6 = gooi.newRadio(
         {y = 160, x = 200, w = 80, h = 22,  text = "Jun", radioGroup = "g2"}
     )
@@ -172,7 +172,7 @@ function love.load()
                 cancelText = "Nope"
             })
         end),
-        gooi.newSlider():border(3, "#00ff00"):fg({255, 255, 0}):danger(),
+        gooi.newSlider():border(3, "#00ff00"):fg({1, 1, 0}):danger(),
         gooi.newCheck({text = "Debug"})
         :setRadius(12, 10):bg(component.colors.orange)
         :fg("#00ffff"):border(1, "#ffff00")
@@ -205,9 +205,9 @@ function love.update(dt)
     -- move ship with analog joystick:
     ship.x = (ship.x + joyShip:xValue() * dt * 150)
     ship.y = (ship.y + joyShip:yValue() * dt * 150)
-    if     kb.isDown("a") then ship.x = ship.x - dt * 150 
+    if     kb.isDown("a") then ship.x = ship.x - dt * 150
     elseif kb.isDown("d") then ship.x = ship.x + dt * 150 end
-    if     kb.isDown("w") then ship.y = ship.y - dt * 150 
+    if     kb.isDown("w") then ship.y = ship.y - dt * 150
     elseif kb.isDown("s") then ship.y = ship.y + dt * 150 end
     -- with digital:
     local dir = joyShipDigital:direction()
@@ -224,7 +224,7 @@ function love.update(dt)
     end
 
 
-    
+
     if ship.x > width() then ship.x = width() end
     if ship.x < 0 then ship.x = width() end
 
@@ -250,11 +250,11 @@ function love.draw()
             imgBullet:getHeight() / 2)
     end
 
-    gr.setColor(0, 0, 0, 127)
+    gr.setColor(0, 0, 0, 0.5)
     gr.rectangle("line", pGame.x, pGame.y, pGame.w, pGame.h)
     gr.rectangle("line", pGrid.x, pGrid.y, pGrid.w, pGrid.h)
-    
-    gr.setColor(255, 255, 255)
+
+    gr.setColor(1, 1, 1)
     gr.draw(ship.img, ship.x, ship.y, 0, 4, 4,
         ship.img:getWidth() / 2,
         ship.img:getHeight() / 2)
@@ -283,5 +283,5 @@ function quit()
     love.event.quit()
 end
 
-function r() return love.math.random(0, 255) end
-function r2() return love.math.random(0, 127) end
+--function r() return love.math.random(0, 1) end
+function r2() return love.math.random(0, 0.5) end

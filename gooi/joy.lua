@@ -71,7 +71,7 @@ function gooi.newJoy(params)
     function s:drawStick()
         local fg = self.style.fgColor
         if self.image then
-            love.graphics.setColor(255/255, 255/255, 255/255, fg[4]/255 or 255/255)
+            love.graphics.setColor(1, 1, 1, fg[4] or 1)
             local sx = self.rStick * 2 / self.image:getWidth()
             local sy = self.rStick * 2 / self.image:getHeight()
             local x, y = self.xStick, self.yStick

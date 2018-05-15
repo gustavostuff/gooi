@@ -72,13 +72,16 @@ function gooi.newButton(params)
             if t:len() == 0 then
                 xImg = math.floor(self.x + self.w / 2)
             end
-            love.graphics.setColor(255/255, 255/255, 255/255)
-            if not self.enabled then love.graphics.setColor(63/255, 63/255, 63/255) end
+            love.graphics.setColor(1, 1, 1)
+            if not self.enabled then love.graphics.setColor(1/4, 1/4, 1/4) end
             love.graphics.draw(self.icon, xImg, math.floor(self.y + self.h / 2), 0, 1, 1,
                 math.floor(self.icon:getWidth() / 2),
                 math.floor(self.icon:getHeight() / 2))
         end
         love.graphics.setColor(fg)
+    
+    
+    
         local yLine = yLocal + self.y + self.h / 2
         yLine = yLine - (gooi.getFont(self):getHeight()) * #self.textParts / 2
         for i = 1, #self.textParts do
