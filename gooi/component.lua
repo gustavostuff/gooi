@@ -306,6 +306,7 @@ function component:draw()-- Every component has the same base:
 		end
 
     if self.bgImage then
+
 			love.graphics.setColor(1, 1, 1)
       love.graphics.draw(self.bgImage,
         math.floor(self.x),
@@ -320,6 +321,7 @@ function component:draw()-- Every component has the same base:
 		if style.showBorder then
 			love.graphics.setColor(newColor)
 			if not self.enabled then
+
 				love.graphics.setColor(1/4, 1/4, 1/4)
 			end
 			love.graphics.rectangle("line",
@@ -347,7 +349,6 @@ function component:drawShadowPressed()
                 50)
         end, "replace", 1)
         love.graphics.setStencilTest("greater", 0)
-
         love.graphics.setColor(1, 1, 1)
         love.graphics.draw(self.imgShadow,
             self.x + self.w / 2,

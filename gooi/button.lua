@@ -17,7 +17,9 @@ function gooi.newButton(params)
         params.h or theH * 2,
         "button"
     )
-
+    
+	local yLocal = params.yLocal or 0
+    
     b = component.new("button", x, y, w, h, params.group)
     b = gooi.setStyleComp(b)
     b.text = params.text or defaultText
@@ -77,7 +79,10 @@ function gooi.newButton(params)
                 math.floor(self.icon:getHeight() / 2))
         end
         love.graphics.setColor(fg)
-        local yLine = self.y + self.h / 2
+    
+    
+    
+        local yLine = yLocal + self.y + self.h / 2
         yLine = yLine - (gooi.getFont(self):getHeight()) * #self.textParts / 2
         for i = 1, #self.textParts do
             local part = self.textParts[i]
