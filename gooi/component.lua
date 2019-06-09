@@ -398,7 +398,7 @@ function component:wasReleased()
 	local b = self:overIt() and self.enabled and self.visible
 	if self.type == "text" then
 		if b then
-			love.keyboard.setTextInput(true)
+			love.keyboard.setTextInput(true, self.x, self.y, self.w, self.h)
 		end
 	end
 
