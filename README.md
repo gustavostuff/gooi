@@ -6,7 +6,7 @@
 [![Version](http://img.shields.io/:version-0.0.7-green.svg)](https://github.com/tavuntu/gooi/wiki/Change-Log#002)
 
 
-GOOi (Good-sized Optional Open interface) is an Android-oriented [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
+GOOi (Good-sized Optional Open interface) is a [LÖVE](https://love2d.org/) library to create Graphical User Interfaces. These are the supported components (see the [Wiki](https://github.com/tavuntu/gooi/wiki) for details):
 
 * Labels
 * Tooltips
