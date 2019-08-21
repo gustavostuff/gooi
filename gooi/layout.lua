@@ -2,10 +2,12 @@ layout = {}
 layout.__index = layout
 layout.padding = 5
 layout.paddingGrid = 3
+
 function layout.new(specs)
 	local l ={}
 	l.specs = specs
-	l.padding = layout.padding
+  l.padding = layout.padding
+  
 	if l.specs:sub(0, 4) == "grid" then
 		local function split(inputstr, sep)
 			if sep == nil then
@@ -18,7 +20,7 @@ function layout.new(specs)
 			end
 			return t
 		end
-		-- Separate 'grid' and size 'MxN':
+		
 		local aux = split(l.specs, " ")
 		l.kind = aux[1]
 		l.size = aux[2]

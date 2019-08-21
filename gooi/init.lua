@@ -29,20 +29,20 @@ local BASE = (...) .. '.'
 assert(not BASE:match('%.init%.$'), "Invalid require path `"..(...).."' (drop the `.init').")
 
 return {
-	utf8 = require(BASE .. 'utf8'), 
-	gooi = require(BASE .. 'gooi'),
-	component = require(BASE .. 'component'),
-	layout = require(BASE .. 'layout'),
-	------------ components:
-	label = require(BASE .. "label"),
-	button = require(BASE .. "button"),
-	slider = require(BASE .. "slider"),
-	checkbox = require(BASE .. "checkbox"),
-	radio = require(BASE .. "radio"),
-	text = require(BASE .. "text"),
-	bar = require(BASE .. "bar"),
-	spinner = require(BASE .. "spinner"),
-	joy = require(BASE .. "joy"),
-	knob = require(BASE .. "knob"),
-	panel = require(BASE .. "panel"),
+  utf8 = require(BASE .. 'utf8'), 
+  gooi = require(BASE .. 'gooi'),
+  component = require(BASE .. 'component'),
+  layout = require(BASE .. 'layout'),
+  ------------ components:
+  label = require(BASE .. "label"),
+  button = require(BASE .. "button"),
+  slider = require(BASE .. "slider"),
+  checkbox = require(BASE .. "checkbox"),
+  radio = require(BASE .. "radio"),
+  text = require(BASE .. "text"),
+  bar = require(BASE .. "bar"),
+  spinner = require(BASE .. "spinner"),
+  joy = require(BASE .. "joy"),
+  knob = require(BASE .. "knob"),
+  panel = require(BASE .. "panel"),
 }
