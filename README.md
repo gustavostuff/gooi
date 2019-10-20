@@ -1,4 +1,4 @@
-[![gooi-logo.png](https://i.postimg.cc/8c7WnP7Y/gooi-logo.png)](https://postimg.cc/Mf8vnwb0)
+[![gooi.png](https://i.postimg.cc/zXcQbXq0/gooi.png)](https://postimg.cc/crfhPWgn)
 
 [![Captura_de_pantalla_2018-05-15_13-50-37.png](https://s31.postimg.cc/5i29d9awr/Captura_de_pantalla_2018-05-15_13-50-37.png)](https://postimg.cc/image/k19eeo41j/)
 
