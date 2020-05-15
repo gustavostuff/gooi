@@ -1,3 +1,5 @@
+### :warning: GOOi won't be maintained anymore, there's a new project that aims to replace it: [urutora](https://github.com/tavuntu/urutora)
+
 [![gooi.png](https://i.postimg.cc/zXcQbXq0/gooi.png)](https://postimg.cc/crfhPWgn)
 
 [![Captura_de_pantalla_2018-05-15_13-50-37.png](https://s31.postimg.cc/5i29d9awr/Captura_de_pantalla_2018-05-15_13-50-37.png)](https://postimg.cc/image/k19eeo41j/)
