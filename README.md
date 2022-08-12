@@ -41,6 +41,4 @@ It features:
 * Text in text fields is limited to the component width
 * Not resposive design (yet)
 
-GOOi is still a work in progress, thanks for your feedback!
-
 Forum thread: https://love2d.org/forums/viewtopic.php?f=5&t=79751
