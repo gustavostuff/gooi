@@ -22,7 +22,7 @@ component.style = {
   innerRadius = 2, -- raw pixels
   showBorder = true, -- border for components
   borderColor = component.colors.blue,
-  borderWidth = love.window.toPixels(2), -- in pixels
+  borderWidth = 2, -- in pixels
   borderStyle = "smooth", -- or "smooth"
   font = love.graphics.newFont(13),
 }
