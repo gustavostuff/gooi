@@ -1,4 +1,6 @@
-### There's a new project that aims to replace GOOi: [urutora](https://github.com/tavuntu/urutora)
+### This is a fork where GOOi doesn't pollute the global namespace, and to keep GOOi compatible for future versions of LÖVE.
+
+[Tavuntu](https://github.com/tavuntu)'s new project that aims to replace GOOi: [urutora](https://github.com/tavuntu/urutora)
 
 [![gooi.png](https://i.postimg.cc/zXcQbXq0/gooi.png)](https://postimg.cc/crfhPWgn)
 
